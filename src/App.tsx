@@ -6,13 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ROICalculatorPage from "./pages/ROICalculator";
 import InvestorsPage from "./pages/InvestorsPage";
+import HowItWorksPage from "./pages/HowItWorksPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const placeholderRoutes = [
-  "/how-it-works",
   "/use-cases",
   "/demo",
   "/pricing",
@@ -31,6 +31,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/roi-calculator" element={<ROICalculatorPage />} />
           <Route path="/investors" element={<InvestorsPage />} />
           {placeholderRoutes.map((path) => (
