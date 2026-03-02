@@ -24,7 +24,7 @@ export default function AboutPage() {
       <Navbar />
       <div className="pt-[72px]">
         {/* Hero */}
-        <section className="relative py-24 md:py-32 overflow-hidden">
+        <section className="relative py-12 md:py-16 overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 bg-gradient-hero" />
           <div className="absolute inset-0 opacity-[0.03]" style={{
