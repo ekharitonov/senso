@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -21,32 +21,41 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-20 md:py-28 bg-teal-light">
-      <div className="container mx-auto px-4">
-        <motion.h2
+    <section className="py-24 md:py-32 bg-background">
+      <div className="container mx-auto px-6">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-heading font-bold text-foreground text-center mb-14"
+          className="text-center max-w-2xl mx-auto mb-16"
         >
-          What Leaders Say
-        </motion.h2>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-4 block">
+            Testimonials
+          </span>
+          <h2 className="text-headline md:text-display-sm text-foreground">
+            What leaders say
+          </h2>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-2xl p-7 border border-border hover:shadow-card-hover transition-all duration-300"
             >
-              <Quote className="w-8 h-8 text-teal mb-4 opacity-40" />
-              <p className="text-foreground text-sm leading-relaxed mb-6 italic">"{t.quote}"</p>
-              <div>
+              <div className="flex gap-1 mb-5">
+                {[...Array(5)].map((_, j) => (
+                  <Star key={j} className="w-4 h-4 fill-accent text-accent" />
+                ))}
+              </div>
+              <p className="text-foreground text-sm leading-relaxed mb-6">"{t.quote}"</p>
+              <div className="border-t border-border pt-4">
                 <p className="font-semibold text-sm text-foreground">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.company}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{t.company}</p>
               </div>
             </motion.div>
           ))}

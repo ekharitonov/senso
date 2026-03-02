@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const visibleProblems = ["Task Execution", "Email Management", "Calendar Scheduling"];
 const hiddenProblems = [
   "Cultural Misalignment",
-  "Interpersonal Friction",
+  "Interpersonal Friction", 
   "Siloed Decision-Making",
   "Political Dynamics",
   "Trust Deficits",
@@ -12,84 +12,98 @@ const hiddenProblems = [
 
 export default function ProblemSection() {
   return (
-    <section className="py-20 md:py-28 bg-card">
-      <div className="container mx-auto px-4">
+    <section className="py-24 md:py-32 bg-background">
+      <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-card-foreground mb-4">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-4 block">
+            The Problem
+          </span>
+          <h2 className="text-headline md:text-display-sm text-foreground mb-6">
             Enterprise AI solves what you can see.{" "}
-            <span className="text-teal">SENSO solves what you can't.</span>
+            <span className="text-gradient-brand">SENSO solves what you can't.</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-body-lg text-muted-foreground">
             70% of workplace challenges are invisible — hidden below the surface in culture, politics, and human dynamics.
           </p>
         </motion.div>
 
         {/* Iceberg visual */}
-        <div className="max-w-2xl mx-auto relative">
-          {/* Water line */}
-          <div className="relative">
-            {/* Above */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-teal-light rounded-t-2xl p-6 md:p-8"
-            >
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 font-semibold">
+        <div className="max-w-2xl mx-auto">
+          {/* Above waterline */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-card rounded-t-2xl p-8 border border-border border-b-0 shadow-elevated"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-3 h-3 rounded-full bg-muted-foreground/30" />
+              <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-semibold">
                 What AI solves today — 24–30%
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {visibleProblems.map((p) => (
-                  <span key={p} className="px-3 py-1.5 rounded-full bg-card text-sm text-card-foreground border border-border">
-                    {p}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {visibleProblems.map((p) => (
+                <span key={p} className="px-4 py-2 rounded-lg bg-secondary text-sm text-secondary-foreground font-medium">
+                  {p}
+                </span>
+              ))}
+            </div>
+          </motion.div>
 
-            {/* Divider */}
-            <div className="h-1 bg-accent w-full" />
-
-            {/* Below */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-primary rounded-b-2xl p-6 md:p-8"
-            >
-              <p className="text-xs uppercase tracking-wider text-primary-foreground/50 mb-3 font-semibold">
-                What SENSO uncovers — 70%
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {hiddenProblems.map((p) => (
-                  <span key={p} className="px-3 py-1.5 rounded-full bg-primary-foreground/10 text-sm text-primary-foreground/80 border border-primary-foreground/20">
-                    {p}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
+          {/* Waterline divider */}
+          <div className="relative h-1">
+            <div className="absolute inset-0 bg-gradient-teal" />
+            <div className="absolute inset-0 bg-gradient-teal blur-sm opacity-50" />
           </div>
 
-          {/* Supporting stats */}
-          <div className="grid grid-cols-3 gap-4 mt-8 text-center">
+          {/* Below waterline */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-hero rounded-b-2xl p-8 border border-primary-foreground/10 border-t-0"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-3 h-3 rounded-full bg-teal animate-glow-pulse" />
+              <span className="text-xs uppercase tracking-[0.15em] text-primary-foreground/40 font-semibold">
+                What SENSO uncovers — 70%
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {hiddenProblems.map((p) => (
+                <span key={p} className="px-4 py-2 rounded-lg bg-primary-foreground/8 text-sm text-primary-foreground/80 font-medium border border-primary-foreground/10">
+                  {p}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="grid grid-cols-3 gap-6 mt-10"
+          >
             {[
               { value: "$150–200K", label: "Avg. manager cost" },
               { value: "70%", label: "Time on coordination" },
               { value: "3–6 mo", label: "Traditional consulting" },
             ].map((s) => (
-              <div key={s.label}>
-                <div className="text-xl font-bold text-teal">{s.value}</div>
-                <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
+              <div key={s.label} className="text-center">
+                <div className="text-xl md:text-2xl font-heading font-bold text-accent">{s.value}</div>
+                <div className="text-xs text-muted-foreground mt-1 font-medium">{s.label}</div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
