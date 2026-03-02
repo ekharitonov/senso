@@ -35,7 +35,7 @@ export default function WedgeSection() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto perspective-[1200px]">
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {/* Traditional */}
           <motion.div
             initial={{ opacity: 0, x: -30, rotateY: 5 }}
