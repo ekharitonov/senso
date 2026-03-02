@@ -50,7 +50,8 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="text-[2rem] sm:text-[2.6rem] md:text-[3.5rem] lg:text-[4.5rem] font-heading font-extrabold text-primary-foreground leading-[1.1] tracking-tight mb-6 md:mb-8"
             >
-              Your organization has problems AI can't see.{" "}
+              Your organization has problems AI can't see.
+              <br />
               <motion.span
                 className="text-gradient-brand"
                 initial={{ opacity: 0 }}
