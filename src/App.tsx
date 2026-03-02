@@ -11,12 +11,12 @@ import UseCasesPage from "./pages/UseCasesPage";
 import AboutPage from "./pages/AboutPage";
 import DemoPage from "./pages/DemoPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const placeholderRoutes = [
-  "/pricing",
   "/case-studies",
   "/blog",
   "/open-source",
@@ -37,6 +37,7 @@ const App = () => (
           <Route path="/investors" element={<InvestorsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/demo" element={<DemoPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
           {placeholderRoutes.map((path) => (
             <Route key={path} path={path} element={<PlaceholderPage />} />
           ))}
