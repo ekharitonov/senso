@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import ParticleField from "./ParticleField";
 
 const footerLinks = [
   {
@@ -37,30 +39,58 @@ export default function Footer() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute inset-0 bg-teal/5" />
-        <div className="absolute top-0 left-1/3 w-[600px] h-[300px] rounded-full bg-teal/5 blur-[100px]" />
+        <ParticleField />
+        
+        {/* Animated glow */}
+        <motion.div
+          className="absolute top-0 left-1/3 w-[600px] h-[300px] rounded-full bg-teal/5 blur-[100px]"
+          animate={{ x: [0, 50, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
 
-        <div className="relative container mx-auto px-4 sm:px-6 py-14 md:py-20 text-center">
-          <h2 className="text-2xl sm:text-headline md:text-display-sm text-primary-foreground mb-4">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 py-14 md:py-20 text-center">
+          <motion.h2
+            className="text-2xl sm:text-headline md:text-display-sm text-primary-foreground mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
             Ready to see what your
             <br />
             organization is hiding?
-          </h2>
-          <p className="text-body-lg text-primary-foreground/50 mb-10 max-w-xl mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-body-lg text-primary-foreground/50 mb-10 max-w-xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
             Join the executives who chose visibility over assumptions.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
             <Link to="/contact">
-              <Button variant="hero" size="lg" className="group">
-                Request Pilot
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Button variant="hero" size="lg" className="group">
+                  Request Pilot
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </motion.div>
             </Link>
             <Link to="/investors">
-              <Button variant="hero-ghost" size="lg">
-                Schedule Investor Call
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Button variant="hero-ghost" size="lg">
+                  Schedule Investor Call
+                </Button>
+              </motion.div>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 
