@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import ROICalculatorPage from "./pages/ROICalculator";
+import InvestorsPage from "./pages/InvestorsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -13,13 +15,11 @@ const placeholderRoutes = [
   "/how-it-works",
   "/use-cases",
   "/demo",
-  "/roi-calculator",
   "/pricing",
   "/case-studies",
   "/blog",
   "/open-source",
   "/about",
-  "/investors",
   "/contact",
 ];
 
@@ -31,6 +31,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/roi-calculator" element={<ROICalculatorPage />} />
+          <Route path="/investors" element={<InvestorsPage />} />
           {placeholderRoutes.map((path) => (
             <Route key={path} path={path} element={<PlaceholderPage />} />
           ))}
