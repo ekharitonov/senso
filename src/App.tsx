@@ -7,13 +7,13 @@ import Index from "./pages/Index";
 import ROICalculatorPage from "./pages/ROICalculator";
 import InvestorsPage from "./pages/InvestorsPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
+import UseCasesPage from "./pages/UseCasesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const placeholderRoutes = [
-  "/use-cases",
   "/demo",
   "/pricing",
   "/case-studies",
@@ -32,6 +32,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/use-cases" element={<UseCasesPage />} />
           <Route path="/roi-calculator" element={<ROICalculatorPage />} />
           <Route path="/investors" element={<InvestorsPage />} />
           {placeholderRoutes.map((path) => (
