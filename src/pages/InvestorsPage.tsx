@@ -130,6 +130,33 @@ export default function InvestorsPage() {
         </div>
       </section>
 
+      {/* Why 0% Churn */}
+      <section className="py-20 md:py-28 bg-background">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto"
+          >
+            <div className="rounded-2xl border border-accent/30 p-8 md:p-10 bg-card glow-teal-subtle">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-4 block">
+                The Organize Effect
+              </span>
+              <h2 className="text-headline md:text-display-sm text-card-foreground mb-6">
+                Why 0% churn
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Most AI tools are projects — they deliver output and get replaced. SENSO becomes infrastructure. The fifth step — <span className="text-accent font-semibold">Organize</span> — embeds persistent agents into the client's operational rhythm: live culture dashboards, proactive dysfunction monitoring, early warning systems.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Like Datadog for servers, but for organizational health. Clients don't leave because SENSO isn't a project. It's the operating system.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Funding & Unit Economics */}
       <section className="py-20 md:py-28 bg-background">
         <div className="container mx-auto px-6">

@@ -33,22 +33,32 @@ const steps = [
   {
     icon: Search,
     title: "Sense",
-    desc: "AI agents continuously monitor organizational signals — communications, decisions, and team dynamics.",
+    subtitle: "Diagnosing dysfunction, reading the landscape",
+    desc: "AI agents continuously scan organizational signals — communication breakdowns, decision bottlenecks, and team dynamics that humans normalize but shouldn't.",
   },
   {
     icon: MessageCircle,
     title: "Engage",
-    desc: "Structured conversations with key stakeholders surface hidden patterns and friction points.",
+    subtitle: "Structured dialogue, asking the uncomfortable questions",
+    desc: "Confidential 1-on-1 conversations with stakeholders using clinical interview methodology. No blame, no politics — just root causes that surveys and town halls never surface.",
   },
   {
     icon: Compass,
     title: "Navigate",
-    desc: "Agents map political landscapes and cultural dynamics to identify the real blockers.",
+    subtitle: "Coordinating cross-functional work, mediating friction",
+    desc: "Agents map political landscapes in real time: who blocks whom, which alliances drive decisions, where cultural misalignment silently kills projects.",
   },
   {
     icon: CheckCircle,
     title: "Solve",
-    desc: "Actionable insights and intervention strategies delivered in a comprehensive 50-page report.",
+    subtitle: "Accelerating outcomes, compressing decision cycles",
+    desc: "All insights synthesized into a 50-page organizational health report in 48 hours. Not generic recommendations — specific dysfunction patterns with traceable evidence from real conversations.",
+  },
+  {
+    icon: Layers,
+    title: "Organize",
+    subtitle: "From one-time diagnostic to permanent infrastructure",
+    desc: "SENSO doesn't leave after the report. Agents remain embedded: live culture dashboard, proactive monitoring, early detection of new dysfunction before it becomes a crisis. This is why we have 0% churn.",
   },
 ];
 
@@ -304,11 +314,11 @@ export default function HowItWorksPage() {
               The Process
             </span>
             <h2 className="text-headline md:text-display-sm text-card-foreground">
-              Four intelligent steps from diagnosis to resolution
+              Five intelligent steps from diagnosis to lasting change
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto mb-20">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 max-w-6xl mx-auto mb-20">
             {steps.map((step, i) => (
               <motion.div
                 key={step.title}
@@ -325,7 +335,8 @@ export default function HowItWorksPage() {
                   <div className="text-xs font-bold uppercase tracking-[0.15em] text-accent/50 mb-1.5">
                     Step {i + 1}
                   </div>
-                  <h3 className="font-heading font-bold text-lg text-foreground mb-2">{step.title}</h3>
+                  <h3 className="font-heading font-bold text-base md:text-lg text-foreground mb-1">{step.title}</h3>
+                  <p className="text-xs text-accent/70 font-medium mb-2">{step.subtitle}</p>
                   <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
                 </div>
               </motion.div>
