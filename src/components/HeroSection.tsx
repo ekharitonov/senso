@@ -16,8 +16,17 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/80 to-transparent" />
 
-      {/* Glow accents */}
-      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-teal/5 blur-[120px] animate-glow-pulse" />
+      {/* Animated glow orbs */}
+      <motion.div
+        className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-teal/5 blur-[120px]"
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 left-1/3 w-[300px] h-[300px] rounded-full bg-teal/3 blur-[100px]"
+        animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 py-24 md:py-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -42,7 +51,14 @@ export default function HeroSection() {
               className="text-[2rem] sm:text-[2.6rem] md:text-[3.5rem] lg:text-[4.5rem] font-heading font-extrabold text-primary-foreground leading-[1.1] tracking-tight mb-6 md:mb-8"
             >
               Your organization has problems AI can't see.{" "}
-              <span className="text-gradient-brand">SENSO can.</span>
+              <motion.span
+                className="text-gradient-brand"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+              >
+                SENSO can.
+              </motion.span>
             </motion.h1>
 
             <motion.p
@@ -62,17 +78,43 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <Link to="/contact">
-                 <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                  Schedule a Briefing
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  <Button variant="hero" size="lg" className="group w-full sm:w-auto">
+                    Schedule a Briefing
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </motion.div>
               </Link>
               <Link to="/demo">
-                <Button variant="hero-ghost" size="lg">
-                  <Play className="w-4 h-4" />
-                  See the Platform
-                </Button>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  <Button variant="hero-ghost" size="lg">
+                    <Play className="w-4 h-4" />
+                    See the Platform
+                  </Button>
+                </motion.div>
               </Link>
+            </motion.div>
+
+            {/* Trust indicator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="mt-12 flex items-center gap-3"
+            >
+              <div className="flex -space-x-2">
+                {["SC", "MT", "DK", "JL"].map((initials, i) => (
+                  <div
+                    key={initials}
+                    className="w-8 h-8 rounded-full bg-gradient-to-br from-teal/40 to-teal/10 border-2 border-navy-deep flex items-center justify-center"
+                  >
+                    <span className="text-[10px] font-bold text-teal-bright">{initials}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-primary-foreground/30">
+                Trusted by C-level executives at leading organizations
+              </p>
             </motion.div>
           </div>
 
