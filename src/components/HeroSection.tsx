@@ -86,7 +86,7 @@ export default function HeroSection() {
             <img
               src={networkGraph}
               alt="SENSO organizational network graph"
-              className="w-full max-w-lg opacity-90 mix-blend-lighten animate-glow-pulse"
+              className="w-full max-w-lg animate-glow-pulse"
               style={{ animationDuration: "6s" }}
             />
           </motion.div>
