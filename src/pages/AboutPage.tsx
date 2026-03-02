@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink } from "lucide-react";
+import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const credentials = [
@@ -172,6 +172,160 @@ export default function AboutPage() {
                   </motion.div>
                 </div>
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Origin Story Section */}
+        <section className="relative py-20 md:py-28 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-hero" />
+          <div className="absolute inset-0 opacity-[0.02]" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--accent)) 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }} />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-[0.04]"
+            style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }} />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-4xl mx-auto">
+              {/* Section Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="text-center mb-16"
+              >
+                <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-accent/30 text-accent bg-accent/5 mb-6">
+                  The Origin Story
+                </span>
+                <h2 className="text-3xl md:text-5xl font-heading font-bold text-primary-foreground leading-tight">
+                  Why SENSO <span className="text-gradient-brand">Exists</span>
+                </h2>
+              </motion.div>
+
+              {/* Story Timeline */}
+              <div className="relative">
+                {/* Vertical line */}
+                <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent/40 via-accent/20 to-transparent" />
+
+                {/* Block 1: The Question */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="relative pl-16 md:pl-20 mb-12"
+                >
+                  <div className="absolute left-3 md:left-5 top-1 w-7 h-7 rounded-full bg-accent/20 border-2 border-accent flex items-center justify-center">
+                    <Heart className="w-3.5 h-3.5 text-accent" />
+                  </div>
+                  <div className="p-6 md:p-8 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06]">
+                    <p className="text-lg md:text-xl text-primary-foreground/90 leading-relaxed italic mb-4">
+                      "SENSO didn't start as a startup. It started as a question."
+                    </p>
+                    <p className="text-primary-foreground/60 leading-relaxed">
+                      In 2024, Eugene Kharitonov created a private community for executives and entrepreneurs — <span className="text-accent font-semibold">Homo Amans Space</span>. "Homo Amans" is Latin for "the loving human." Not Homo Economicus (the rational human), not Homo Faber (the making human) — but a human for whom relationships, trust, and authenticity are the foundation, not a side effect.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Block 2: The Space */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="relative pl-16 md:pl-20 mb-12"
+                >
+                  <div className="absolute left-3 md:left-5 top-1 w-7 h-7 rounded-full bg-accent/20 border-2 border-accent flex items-center justify-center">
+                    <Users className="w-3.5 h-3.5 text-accent" />
+                  </div>
+                  <div className="p-6 md:p-8 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06]">
+                    <p className="text-primary-foreground/60 leading-relaxed">
+                      The idea was simple: create a space where successful people can be real. Not networking for business cards. Not a mastermind for self-promotion. A space where a CEO can say <span className="text-primary-foreground/90 font-medium">"I don't know what to do"</span> — and that's okay. Where a conflict between co-founders can be discussed without fear of leaks. Where <span className="text-primary-foreground/90 font-medium">"what truly concerns you?"</span> matters more than <span className="text-primary-foreground/90 font-medium">"what do you do?"</span>
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Block 3: The Bot */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="relative pl-16 md:pl-20 mb-12"
+                >
+                  <div className="absolute left-3 md:left-5 top-1 w-7 h-7 rounded-full bg-accent/20 border-2 border-accent flex items-center justify-center">
+                    <Sparkles className="w-3.5 h-3.5 text-accent" />
+                  </div>
+                  <div className="p-6 md:p-8 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06]">
+                    <p className="text-primary-foreground/60 leading-relaxed mb-4">
+                      To support the community, a Telegram bot was built on a <span className="text-accent font-semibold">multi-agent architecture</span>: a Matcher Agent found pairs "with similar questions," a Context Generator explained "why you should talk," a Nudge Orchestrator gently encouraged reciprocity, and a Feedback Analyst extracted patterns from responses.
+                    </p>
+                    <div className="p-4 rounded-lg bg-accent/5 border border-accent/15">
+                      <p className="text-sm text-primary-foreground/70 leading-relaxed">
+                        <span className="text-accent font-semibold">The key principle:</span> the bot is not an obedient assistant. It's an independent mediator. It can refuse a request, remind about reciprocity, ask an uncomfortable question neutrally. This autonomy within rules is what makes it trustworthy — people told the AI things they would never say to HR or a colleague.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Block 4: The Discovery */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="relative pl-16 md:pl-20 mb-12"
+                >
+                  <div className="absolute left-3 md:left-5 top-1 w-7 h-7 rounded-full bg-accent/20 border-2 border-accent flex items-center justify-center">
+                    <MessageCircle className="w-3.5 h-3.5 text-accent" />
+                  </div>
+                  <div className="p-6 md:p-8 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06]">
+                    <p className="text-lg text-primary-foreground/90 font-medium mb-3">Then came the discovery.</p>
+                    <p className="text-primary-foreground/60 leading-relaxed mb-4">
+                      Executives using the bot started saying: <span className="text-primary-foreground/90 italic">"I need this for my company. Not a networking bot, but a system that sees what I can't see in my organization."</span> They described the same problems: projects stalling for invisible reasons, good people leaving while engagement surveys showed everything was fine, conflicts between leaders that everyone saw but nobody named aloud.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Block 5: The Birth */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="relative pl-16 md:pl-20 mb-12"
+                >
+                  <div className="absolute left-3 md:left-5 top-1 w-7 h-7 rounded-full bg-accent flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
+                  </div>
+                  <div className="p-6 md:p-8 rounded-xl bg-accent/5 border border-accent/20">
+                    <p className="text-primary-foreground/70 leading-relaxed mb-4">
+                      And so from the philosophy of Homo Amans, <span className="text-accent font-bold">SENSO was born</span> — a system that transfers the same principles from a private community into the corporate environment. The five steps of SENSO (<span className="text-primary-foreground/90 font-medium">Sense, Engage, Navigate, Solve, Organize</span>) are a formalization of what naturally happened in Homo Amans Space: sensing real problems, engaging through trust, navigating through politics, solving through data, and organizing sustainable change.
+                    </p>
+                    <p className="text-primary-foreground/70 leading-relaxed mb-4">
+                      The <span className="text-accent font-semibold">"Trojan Horse" philosophy</span> from Homo Amans became SENSO's architectural principle: a person comes for utilitarian value (diagnostics, a report) — and receives transformation, because the environment is designed so that honesty becomes safe.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Final Quote */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.5 }}
+                  className="ml-16 md:ml-20 mt-8"
+                >
+                  <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-accent/10 via-accent/5 to-transparent border border-accent/20 text-center">
+                    <p className="text-lg md:text-xl text-primary-foreground/90 leading-relaxed italic font-medium">
+                      "SENSO is not an AI tool that solves a business problem. It's a continuation of the belief that organizations — like people — become better when it's safe to be real."
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </div>
         </section>
