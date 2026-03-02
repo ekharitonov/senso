@@ -1,0 +1,182 @@
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { motion } from "framer-motion";
+import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const credentials = [
+  { icon: Briefcase, label: "Enterprise", text: "15+ years at GE, 3M, Walmart" },
+  { icon: GraduationCap, label: "Education", text: "M.S. CS · M.Eng. · MBA · INSEAD · Stanford d.school" },
+  { icon: Shield, label: "Certifications", text: "AWS Architecture · IBM AI · Duke MLOps · Stanford AI Healthcare · MIT Fintech" },
+  { icon: Award, label: "Recognition", text: "IEEE Senior Member · White House AI Judge · NSF I-Corps · HBR Speaker · Board Member" },
+];
+
+const stats = [
+  { value: "2", label: "AI Agents", suffix: "" },
+  { value: "20", label: "C-Level Executives", suffix: "+" },
+  { value: "8,500", label: "Autonomous Interactions", suffix: "+" },
+  { value: "0", label: "Churn Rate", suffix: "%" },
+];
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen bg-primary">
+      <Navbar />
+      <div className="pt-[72px]">
+        {/* Hero */}
+        <section className="relative py-24 md:py-32 overflow-hidden">
+          {/* Background effects */}
+          <div className="absolute inset-0 bg-gradient-hero" />
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--accent)) 1px, transparent 0)`,
+            backgroundSize: '48px 48px'
+          }} />
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }} />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-6"
+            >
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-accent/30 text-accent bg-accent/5 mb-6">
+                About SENSO
+              </span>
+              <h1 className="text-4xl md:text-6xl font-heading font-bold text-primary-foreground leading-tight">
+                Built by an Engineer Who<br />
+                <span className="text-gradient-brand">Lived the Problem</span>
+              </h1>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Founder Section */}
+        <section className="relative py-20 md:py-28">
+          <div className="absolute inset-0 bg-primary" />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-5xl mx-auto">
+              {/* Founder Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="relative rounded-2xl overflow-hidden"
+              >
+                {/* Animated border */}
+                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-accent/40 via-accent/10 to-accent/30" />
+
+                <div className="relative bg-primary rounded-2xl p-8 md:p-12">
+                  {/* Header */}
+                  <div className="flex flex-col md:flex-row items-start gap-8 mb-10">
+                    {/* Avatar */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="relative shrink-0"
+                    >
+                      <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 flex items-center justify-center">
+                        <span className="text-4xl md:text-5xl font-heading font-bold text-accent">EK</span>
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-accent flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-accent-foreground" />
+                      </div>
+                    </motion.div>
+
+                    {/* Name & Title */}
+                    <div className="flex-1">
+                      <h2 className="text-3xl md:text-4xl font-heading font-bold text-primary-foreground mb-2">
+                        Eugene Kharitonov
+                      </h2>
+                      <p className="text-accent text-lg font-semibold mb-4">
+                        Founder & Technical Architect
+                      </p>
+                      <p className="text-primary-foreground/60 text-base leading-relaxed max-w-2xl">
+                        15+ years scaling enterprise products at GE, 3M, and Walmart. Built SENSO's entire production system solo — from architecture to deployment to 20 executive pilots.
+                      </p>
+
+                      {/* Social links */}
+                      <div className="flex items-center gap-3 mt-5">
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-primary-foreground/70 border border-primary-foreground/10 hover:border-accent/40 hover:text-accent transition-all duration-200 bg-primary-foreground/5">
+                          <Linkedin className="w-4 h-4" /> LinkedIn
+                        </a>
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-primary-foreground/70 border border-primary-foreground/10 hover:border-accent/40 hover:text-accent transition-all duration-200 bg-primary-foreground/5">
+                          <Github className="w-4 h-4" /> GitHub
+                        </a>
+                        <a href="https://ieee-collabratec.ieee.org" target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-primary-foreground/70 border border-primary-foreground/10 hover:border-accent/40 hover:text-accent transition-all duration-200 bg-primary-foreground/5">
+                          <ExternalLink className="w-4 h-4" /> IEEE Collaboratec
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Credentials Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                    {credentials.map((cred, i) => (
+                      <motion.div
+                        key={cred.label}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.1 * i }}
+                        className="flex items-start gap-4 p-4 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06] hover:border-accent/20 transition-colors duration-300"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                          <cred.icon className="w-5 h-5 text-accent" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-accent/70 mb-1">{cred.label}</p>
+                          <p className="text-sm text-primary-foreground/80 leading-relaxed">{cred.text}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Stats */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="rounded-xl bg-gradient-to-r from-accent/10 via-accent/5 to-accent/10 border border-accent/20 p-6 md:p-8"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-widest text-accent/60 mb-5 text-center">
+                      Built the Entire Production System Solo
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      {stats.map((stat, i) => (
+                        <motion.div
+                          key={stat.label}
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          whileInView={{ scale: 1, opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+                          className="text-center"
+                        >
+                          <div className="text-3xl md:text-4xl font-heading font-bold text-accent mb-1">
+                            {stat.value}{stat.suffix}
+                          </div>
+                          <div className="text-xs text-primary-foreground/50 font-medium uppercase tracking-wide">
+                            {stat.label}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <Footer />
+    </div>
+  );
+}
