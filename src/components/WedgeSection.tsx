@@ -85,7 +85,7 @@ export default function WedgeSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, type: "spring" }}
             whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-            className="relative bg-gradient-hero rounded-2xl p-8 border border-accent/30 glow-teal-subtle overflow-hidden"
+            className="relative bg-gradient-hero rounded-2xl p-8 border border-accent/30 glow-teal-subtle"
           >
             {/* Animated shimmer */}
             <motion.div
