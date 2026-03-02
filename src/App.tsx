@@ -8,6 +8,7 @@ import ROICalculatorPage from "./pages/ROICalculator";
 import InvestorsPage from "./pages/InvestorsPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import UseCasesPage from "./pages/UseCasesPage";
+import AboutPage from "./pages/AboutPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -19,7 +20,6 @@ const placeholderRoutes = [
   "/case-studies",
   "/blog",
   "/open-source",
-  "/about",
   "/contact",
 ];
 
@@ -35,6 +35,7 @@ const App = () => (
           <Route path="/use-cases" element={<UseCasesPage />} />
           <Route path="/roi-calculator" element={<ROICalculatorPage />} />
           <Route path="/investors" element={<InvestorsPage />} />
+          <Route path="/about" element={<AboutPage />} />
           {placeholderRoutes.map((path) => (
             <Route key={path} path={path} element={<PlaceholderPage />} />
           ))}
