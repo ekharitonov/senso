@@ -22,10 +22,10 @@ export default function PlaceholderPage() {
   const title = pageTitles[pathname] || "Page";
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-primary">
       <Navbar />
-      <div className="pt-16">
-        <div className="bg-primary py-20">
+      <div className="pt-[72px]">
+        <div className="py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary-foreground mb-4">
               {title}
