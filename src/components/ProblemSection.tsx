@@ -70,7 +70,7 @@ export default function ProblemSection() {
               className="flex justify-center relative"
             >
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-64 h-64 bg-teal/8 rounded-full blur-[80px]" />
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-[0_8px_60px_-12px_hsl(178_42%_48%/0.25),0_4px_25px_-5px_hsl(220_50%_14%/0.15)] ring-1 ring-white/20">
+              <div className="relative z-10 rounded-3xl overflow-hidden shadow-[0_20px_80px_-10px_hsl(178_42%_48%/0.35),0_10px_40px_-8px_hsl(220_50%_14%/0.3),0_4px_16px_-4px_hsl(220_50%_14%/0.2)] ring-1 ring-white/20">
                 {/* Glass highlight overlay */}
                 <div className="absolute inset-0 z-20 pointer-events-none rounded-3xl bg-gradient-to-br from-white/15 via-transparent to-transparent" />
                 <div className="absolute inset-0 z-20 pointer-events-none rounded-3xl bg-gradient-to-t from-black/10 via-transparent to-white/5" />
