@@ -116,9 +116,9 @@ export default function ROICalculatorPage() {
 
               <div className="p-8">
                 {/* Chart */}
-                <div className="h-64 mb-6">
+                <div className="h-72 mb-6">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} barSize={80}>
+                    <BarChart data={chartData} barSize={80} margin={{ top: 30, right: 10, left: 10, bottom: 0 }}>
                       <XAxis
                         dataKey="name"
                         tick={{ fontSize: 12, fontWeight: 600 }}
