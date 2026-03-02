@@ -19,7 +19,7 @@ export default function HeroSection() {
       {/* Glow accents */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-teal/5 blur-[120px] animate-glow-pulse" />
 
-      <div className="relative z-10 container mx-auto px-6 py-32">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-24 md:py-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left — text */}
           <div>
@@ -39,10 +39,9 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-[3.2rem] md:text-[4rem] lg:text-[4.8rem] font-heading font-extrabold text-primary-foreground leading-[1.05] tracking-tight mb-8"
+              className="text-[2rem] sm:text-[2.6rem] md:text-[3.5rem] lg:text-[4.5rem] font-heading font-extrabold text-primary-foreground leading-[1.1] tracking-tight mb-6 md:mb-8"
             >
-              Your organization has problems AI can't see.
-              <br />
+              Your organization has problems AI can't see.{" "}
               <span className="text-gradient-brand">SENSO can.</span>
             </motion.h1>
 
@@ -50,7 +49,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-lg md:text-xl text-primary-foreground/50 max-w-lg mb-10 leading-relaxed"
+              className="text-base md:text-xl text-primary-foreground/50 max-w-lg mb-8 md:mb-10 leading-relaxed"
             >
               Persistent AI agents that diagnose, navigate, and solve the invisible
               dysfunction costing your company millions.
@@ -63,8 +62,8 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <Link to="/contact">
-                <Button variant="hero" size="lg" className="group">
-                  Get Your 48-Hour Strategic Health Check
+                 <Button variant="hero" size="lg" className="group w-full sm:w-auto">
+                  Get Your 48-Hour Health Check
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>

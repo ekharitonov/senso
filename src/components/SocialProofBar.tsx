@@ -41,8 +41,8 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {
 export default function SocialProofBar() {
   return (
     <section className="bg-primary border-y border-primary-foreground/5">
-      <div className="container mx-auto px-6 py-10">
-        <div className="flex flex-wrap justify-center items-center divide-x divide-primary-foreground/10">
+      <div className="container mx-auto px-4 sm:px-6 py-8 md:py-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 md:divide-x md:divide-primary-foreground/10">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -50,12 +50,12 @@ export default function SocialProofBar() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="flex items-baseline gap-3 px-8 md:px-12 py-2"
+              className="flex flex-col items-center md:items-baseline md:flex-row gap-1 md:gap-3 px-4 md:px-10 py-2"
             >
-              <span className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-primary-foreground tracking-tight">
+              <span className="text-2xl sm:text-3xl md:text-5xl font-heading font-extrabold text-primary-foreground tracking-tight">
                 <AnimatedNumber value={stat.value} suffix={stat.suffix} />
               </span>
-              <span className="text-sm md:text-base text-primary-foreground/40 font-medium">
+              <span className="text-xs md:text-sm text-primary-foreground/40 font-medium text-center md:text-left">
                 {stat.label}
               </span>
             </motion.div>

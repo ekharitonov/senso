@@ -30,8 +30,8 @@ const steps = [
 
 export default function SensoFlowSection() {
   return (
-    <section className="py-24 md:py-32 bg-card">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-32 bg-card">
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,7 +46,7 @@ export default function SensoFlowSection() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-4 gap-5 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 max-w-5xl mx-auto">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}
