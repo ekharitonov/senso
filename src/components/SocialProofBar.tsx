@@ -2,10 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 const stats = [
-  { value: 2, suffix: "", label: "Production Agents" },
-  { value: 20, suffix: "", label: "C-Level Executives" },
-  { value: 8500, suffix: "+", label: "Messages" },
-  { value: 0, suffix: "%", label: "Churn" },
+  { value: 48, suffix: "h", label: "Time to Diagnosis" },
+  { value: 200, suffix: "K+", label: "Saved per Client" },
+  { value: 50, suffix: "pg", label: "Actionable Reports" },
+  { value: 0, suffix: "%", label: "Client Churn" },
 ];
 
 function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import heroBg from "@/assets/hero-bg.jpg";
-import networkGraph from "@/assets/network-graph.png";
+import NetworkGraphAnimation from "@/components/NetworkGraphAnimation";
 import { ArrowRight, Play } from "lucide-react";
 
 export default function HeroSection() {
@@ -63,32 +63,27 @@ export default function HeroSection() {
             >
               <Link to="/contact">
                  <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                  Get Your 48-Hour Health Check
+                  Schedule a Briefing
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link to="/demo">
                 <Button variant="hero-ghost" size="lg">
                   <Play className="w-4 h-4" />
-                  See It In Action
+                  See the Platform
                 </Button>
               </Link>
             </motion.div>
           </div>
 
-          {/* Right — network graph */}
+          {/* Right — live network animation */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="hidden lg:flex justify-center items-center"
           >
-            <img
-              src={networkGraph}
-              alt="SENSO organizational network graph"
-              className="w-full max-w-lg mix-blend-lighten animate-glow-pulse"
-              style={{ animationDuration: "6s" }}
-            />
+            <NetworkGraphAnimation />
           </motion.div>
         </div>
       </div>

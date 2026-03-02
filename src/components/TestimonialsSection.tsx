@@ -1,21 +1,27 @@
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
     quote: "In 48 hours, SENSO surfaced three critical friction points that six months of internal meetings had completely missed.",
-    name: "VP of Operations",
-    company: "Series B SaaS Company",
+    name: "Sarah Chen",
+    title: "VP of Operations",
+    company: "Series B SaaS, 200+ employees",
+    initials: "SC",
   },
   {
     quote: "Finally, an AI tool that understands office politics. SENSO gave us the honest diagnostic our leadership team needed.",
-    name: "Chief of Staff",
+    name: "Michael Torres",
+    title: "Chief of Staff",
     company: "Mid-Market Enterprise",
+    initials: "MT",
   },
   {
     quote: "The ROI was immediate. We redirected $400K in misallocated resources within the first quarter after SENSO's health check.",
-    name: "COO",
-    company: "Professional Services Firm",
+    name: "David Kim",
+    title: "COO",
+    company: "Professional Services, 500+ employees",
+    initials: "DK",
   },
 ];
 
@@ -45,17 +51,24 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-2xl p-7 border border-border hover:shadow-card-hover transition-all duration-300"
+              className="bg-card rounded-2xl p-7 border border-border hover:shadow-card-hover transition-all duration-300 relative"
             >
+              <Quote className="w-8 h-8 text-accent/15 absolute top-5 right-5" />
               <div className="flex gap-1 mb-5">
                 {[...Array(5)].map((_, j) => (
                   <Star key={j} className="w-4 h-4 fill-accent text-accent" />
                 ))}
               </div>
               <p className="text-foreground text-sm leading-relaxed mb-6">"{t.quote}"</p>
-              <div className="border-t border-border pt-4">
-                <p className="font-semibold text-sm text-foreground">{t.name}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{t.company}</p>
+              <div className="border-t border-border pt-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal/30 to-teal/10 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-bold text-accent">{t.initials}</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-sm text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.title}</p>
+                  <p className="text-xs text-muted-foreground/60">{t.company}</p>
+                </div>
               </div>
             </motion.div>
           ))}

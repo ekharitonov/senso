@@ -1,9 +1,11 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofBar from "@/components/SocialProofBar";
+import TrustedByBar from "@/components/TrustedByBar";
 import ProblemSection from "@/components/ProblemSection";
 import SensoFlowSection from "@/components/SensoFlowSection";
 import UseCasesPreview from "@/components/UseCasesPreview";
+import SecuritySection from "@/components/SecuritySection";
 import WedgeSection from "@/components/WedgeSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
@@ -14,9 +16,11 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SocialProofBar />
+      <TrustedByBar />
       <ProblemSection />
       <SensoFlowSection />
       <UseCasesPreview />
+      <SecuritySection />
       <WedgeSection />
       <TestimonialsSection />
       <Footer />
