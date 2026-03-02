@@ -70,11 +70,18 @@ export default function ProblemSection() {
               className="flex justify-center relative"
             >
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-64 h-64 bg-teal/8 rounded-full blur-[80px]" />
-              <img
-                src={icebergImg}
-                alt="Organizational iceberg — 70% of problems are invisible"
-                className="w-48 sm:w-64 md:w-80 lg:w-96 drop-shadow-2xl relative z-10 rounded-3xl"
-              />
+              <div className="relative z-10 rounded-3xl overflow-hidden shadow-[0_8px_60px_-12px_hsl(178_42%_48%/0.25),0_4px_25px_-5px_hsl(220_50%_14%/0.15)] ring-1 ring-white/20">
+                {/* Glass highlight overlay */}
+                <div className="absolute inset-0 z-20 pointer-events-none rounded-3xl bg-gradient-to-br from-white/15 via-transparent to-transparent" />
+                <div className="absolute inset-0 z-20 pointer-events-none rounded-3xl bg-gradient-to-t from-black/10 via-transparent to-white/5" />
+                {/* Inner border glow */}
+                <div className="absolute inset-0 z-20 pointer-events-none rounded-3xl ring-1 ring-inset ring-white/10" />
+                <img
+                  src={icebergImg}
+                  alt="Organizational iceberg — 70% of problems are invisible"
+                  className="w-48 sm:w-64 md:w-80 lg:w-96 block"
+                />
+              </div>
             </motion.div>
 
             {/* Right labels — hidden */}
