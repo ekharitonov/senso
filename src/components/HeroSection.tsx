@@ -68,8 +68,9 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-base md:text-xl text-primary-foreground/50 max-w-lg mb-8 md:mb-10 leading-relaxed"
             >
-              Persistent AI agents that diagnose, navigate, and solve the invisible
-              dysfunction costing your company millions.
+              Persistent AI agents that sense dysfunction, engage stakeholders,
+              navigate politics, solve root causes, and organize lasting change —
+              so your company stops bleeding millions on invisible overhead.
             </motion.p>
 
             <motion.div

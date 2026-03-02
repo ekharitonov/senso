@@ -1,31 +1,42 @@
 import { motion } from "framer-motion";
-import { Search, MessageCircle, Compass, CheckCircle } from "lucide-react";
+import { Search, MessageCircle, Compass, CheckCircle, Building2 } from "lucide-react";
 import { useRef } from "react";
 
 const steps = [
   {
     icon: Search,
     title: "Sense",
-    desc: "AI agents continuously monitor organizational signals — communications, decisions, and team dynamics.",
+    subtitle: "Diagnosing dysfunction, reading the landscape",
+    desc: "AI agents continuously scan organizational signals — communication breakdowns, decision bottlenecks, and team dynamics that humans normalize but shouldn't.",
     gradient: "from-teal via-teal-bright to-teal",
   },
   {
     icon: MessageCircle,
     title: "Engage",
-    desc: "Structured conversations with key stakeholders surface hidden patterns and friction points.",
+    subtitle: "Structured dialogue, asking the uncomfortable questions",
+    desc: "Confidential 1-on-1 conversations with stakeholders using clinical interview methodology. No blame, no politics — just root causes that surveys and town halls never surface.",
     gradient: "from-teal-bright via-teal to-teal-bright",
   },
   {
     icon: Compass,
     title: "Navigate",
-    desc: "Agents map political landscapes and cultural dynamics to identify the real blockers.",
+    subtitle: "Coordinating cross-functional work, mediating friction",
+    desc: "Agents map political landscapes in real time: who blocks whom, which alliances drive decisions, where cultural misalignment silently kills projects.",
     gradient: "from-teal via-teal-bright to-teal",
   },
   {
     icon: CheckCircle,
     title: "Solve",
-    desc: "Actionable insights and intervention strategies delivered in a comprehensive 50-page report.",
+    subtitle: "Accelerating outcomes, compressing decision cycles",
+    desc: "All insights synthesized into a 50-page organizational health report in 48 hours. Not generic recommendations — specific dysfunction patterns with traceable evidence from real conversations.",
     gradient: "from-teal-bright via-teal to-teal-bright",
+  },
+  {
+    icon: Building2,
+    title: "Organize",
+    subtitle: "From one-time diagnostic to permanent infrastructure",
+    desc: "SENSO doesn't leave after the report. Agents remain embedded: live culture dashboard, proactive monitoring, early detection of new dysfunction before it becomes a crisis. This is why we have 0% churn.",
+    gradient: "from-teal via-teal-bright to-teal",
   },
 ];
 
@@ -53,7 +64,7 @@ export default function SensoFlowSection() {
             How It Works
           </span>
           <h2 className="text-headline md:text-display-sm text-card-foreground">
-            Four intelligent steps from diagnosis to resolution
+            Five intelligent steps from diagnosis to lasting change
           </h2>
         </motion.div>
 
@@ -83,39 +94,39 @@ export default function SensoFlowSection() {
           </motion.svg>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 max-w-5xl mx-auto relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 max-w-6xl mx-auto relative z-10">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}
               initial={{ opacity: 0, y: 32, scale: 0.95 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.6, type: "spring", stiffness: 100 }}
+              transition={{ delay: i * 0.12, duration: 0.6, type: "spring", stiffness: 100 }}
               className="relative group"
             >
-              <div className="bg-background rounded-2xl p-6 border border-border group-hover:border-accent/40 transition-all duration-500 h-full relative overflow-hidden">
+              <div className="bg-background rounded-2xl p-5 md:p-6 border border-border group-hover:border-accent/40 transition-all duration-500 h-full relative overflow-hidden">
                 {/* Hover glow effect */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-teal/5 via-transparent to-teal/3 rounded-2xl" />
                 
                 <div className="relative z-10">
                   <motion.div
-                    className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/20 to-teal/5 flex items-center justify-center mb-5 relative"
+                    className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal/20 to-teal/5 flex items-center justify-center mb-4 relative"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    {/* Animated ring */}
                     <motion.div
                       className="absolute inset-0 rounded-2xl border border-accent/20"
                       animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
                       transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                     />
-                    <step.icon className="w-6 h-6 text-accent" />
+                    <step.icon className="w-5 h-5 text-accent" />
                   </motion.div>
                   
-                  <div className="text-xs font-bold uppercase tracking-[0.15em] text-accent/60 mb-2">
+                  <div className="text-xs font-bold uppercase tracking-[0.15em] text-accent/60 mb-1.5">
                     Step {i + 1}
                   </div>
-                  <h3 className="font-heading font-bold text-lg text-foreground mb-3">{step.title}</h3>
+                  <h3 className="font-heading font-bold text-base md:text-lg text-foreground mb-1">{step.title}</h3>
+                  <p className="text-xs text-accent/70 font-medium mb-2">{step.subtitle}</p>
                   <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
                 </div>
               </div>
