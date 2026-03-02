@@ -39,8 +39,8 @@ export default function Footer() {
         <div className="absolute inset-0 bg-teal/5" />
         <div className="absolute top-0 left-1/3 w-[600px] h-[300px] rounded-full bg-teal/5 blur-[100px]" />
 
-        <div className="relative container mx-auto px-6 py-20 text-center">
-          <h2 className="text-headline md:text-display-sm text-primary-foreground mb-4">
+        <div className="relative container mx-auto px-4 sm:px-6 py-14 md:py-20 text-center">
+          <h2 className="text-2xl sm:text-headline md:text-display-sm text-primary-foreground mb-4">
             Ready to see what your
             <br />
             organization is hiding?
@@ -65,9 +65,9 @@ export default function Footer() {
       </div>
 
       {/* Links */}
-      <div className="bg-navy-deep py-14 border-t border-primary-foreground/5">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div className="bg-navy-deep py-10 md:py-14 border-t border-primary-foreground/5">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-md bg-gradient-teal flex items-center justify-center">

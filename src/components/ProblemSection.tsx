@@ -4,15 +4,15 @@ import { Users, GitFork, Layers } from "lucide-react";
 
 export default function ProblemSection() {
   return (
-    <section className="py-24 md:py-32 bg-background overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-32 bg-background overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center max-w-4xl mx-auto mb-8"
         >
-          <h2 className="text-display-sm md:text-display font-heading font-extrabold text-foreground leading-tight">
+          <h2 className="text-headline md:text-display-sm lg:text-display font-heading font-extrabold text-foreground leading-tight">
             Enterprise AI solves what you can see.
             <br />
             <span className="text-gradient-brand">SENSO solves what you can't.</span>
@@ -51,7 +51,7 @@ export default function ProblemSection() {
               <img
                 src={icebergImg}
                 alt="Organizational iceberg — 70% of problems are invisible"
-                className="w-64 md:w-80 lg:w-96 drop-shadow-2xl"
+                className="w-48 sm:w-64 md:w-80 lg:w-96 drop-shadow-2xl"
               />
             </motion.div>
 

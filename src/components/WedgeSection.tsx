@@ -5,8 +5,8 @@ import { Clock, DollarSign, FileText, X, Check, ArrowRight } from "lucide-react"
 
 export default function WedgeSection() {
   return (
-    <section className="py-24 md:py-32 bg-card">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-32 bg-card">
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
