@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { teamMembers } from "../DashboardData";
+import { teamMembers, avatarMap } from "../DashboardData";
 
 const keyGaps = [
   { icon: "📊", source: "Jira", text: "Claims burnout but takes +30% tasks above capacity", severity: "high" as const },
@@ -91,9 +91,13 @@ export default function TeamSection() {
                 onClick={() => setSelectedMember(i)}>
                 <td className="py-3 px-4 text-foreground font-medium">
                   <div className="flex items-center gap-2">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold border ${selectedMember === i ? "text-teal border-teal/40 bg-teal/10" : "text-teal border-border bg-card"}`}>
-                      {p.name.split(" ").map(w => w[0]).join("")}
-                    </div>
+                    {avatarMap[p.name] ? (
+                      <img src={avatarMap[p.name]} alt={p.name} className={`w-7 h-7 rounded-lg object-cover border ${selectedMember === i ? "border-teal/40" : "border-border"}`} />
+                    ) : (
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold border ${selectedMember === i ? "text-teal border-teal/40 bg-teal/10" : "text-teal border-border bg-card"}`}>
+                        {p.name.split(" ").map(w => w[0]).join("")}
+                      </div>
+                    )}
                     <span className="text-sm">{p.name}</span>
                   </div>
                 </td>
@@ -115,7 +119,11 @@ export default function TeamSection() {
           <div key={i} onClick={() => setSelectedMember(i)}
             className={`bg-card/50 border rounded-xl p-3 cursor-pointer transition-colors ${selectedMember === i ? "border-teal/40 bg-teal/5" : "border-border"}`}>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-card flex items-center justify-center text-[10px] font-bold text-teal border border-border">{p.name.split(" ").map(w => w[0]).join("")}</div>
+              {avatarMap[p.name] ? (
+                <img src={avatarMap[p.name]} alt={p.name} className="w-7 h-7 rounded-lg object-cover border border-border" />
+              ) : (
+                <div className="w-7 h-7 rounded-lg bg-card flex items-center justify-center text-[10px] font-bold text-teal border border-border">{p.name.split(" ").map(w => w[0]).join("")}</div>
+              )}
               <div>
                 <div className="text-sm font-medium">{p.name}</div>
                 <div className="text-[10px] text-muted-foreground">{p.role}</div>
@@ -128,8 +136,11 @@ export default function TeamSection() {
 
       {/* ═══ COACHING PREP ═══ */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-        <h2 className="font-heading text-lg font-bold">
-          Coaching Prep: <span className="text-muted-foreground font-normal">Meeting with {member.name}</span>
+        <h2 className="font-heading text-lg font-bold flex items-center gap-3">
+          {avatarMap[member.name] && (
+            <img src={avatarMap[member.name]} alt={member.name} className="w-10 h-10 rounded-xl object-cover border-2 border-teal/30 shadow-lg" />
+          )}
+          <span>Coaching Prep: <span className="text-muted-foreground font-normal">Meeting with {member.name}</span></span>
         </h2>
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
