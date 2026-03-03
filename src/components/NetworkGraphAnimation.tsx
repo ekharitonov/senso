@@ -58,25 +58,25 @@ export default function NetworkGraphAnimation() {
     // --- Create nodes ---
     // 16 face nodes at varying sizes, depths, and pulse states
     const facePositions = [
-      // Inner ring — large, bright
-      { angle: -0.3, dist: 85, r: 32, fade: "bright" as const, ps: 0.6 },
-      { angle: 0.8, dist: 100, r: 30, fade: "bright" as const, ps: 0.5 },
-      { angle: 2.0, dist: 90, r: 34, fade: "bright" as const, ps: 0.7 },
-      { angle: 3.5, dist: 95, r: 31, fade: "bright" as const, ps: 0.55 },
-      // Mid ring — medium, some fading
-      { angle: 0.2, dist: 165, r: 26, fade: "growing" as const, ps: 0.9 },
-      { angle: 1.3, dist: 175, r: 24, fade: "dim" as const, ps: 1.2 },
-      { angle: 2.5, dist: 160, r: 27, fade: "bright" as const, ps: 0.8 },
-      { angle: 3.8, dist: 170, r: 23, fade: "fading" as const, ps: 1.0 },
-      { angle: 4.8, dist: 155, r: 25, fade: "growing" as const, ps: 0.7 },
-      { angle: 5.6, dist: 180, r: 22, fade: "dim" as const, ps: 1.3 },
-      // Outer ring — smaller, dim/fading
-      { angle: 0.6, dist: 235, r: 18, fade: "fading" as const, ps: 1.4 },
-      { angle: 1.7, dist: 245, r: 17, fade: "dim" as const, ps: 1.6 },
-      { angle: 2.9, dist: 230, r: 19, fade: "fading" as const, ps: 1.1 },
-      { angle: 4.2, dist: 250, r: 16, fade: "dim" as const, ps: 1.5 },
-      { angle: 5.1, dist: 225, r: 18, fade: "growing" as const, ps: 0.9 },
-      { angle: 5.9, dist: 240, r: 17, fade: "fading" as const, ps: 1.2 },
+      // Inner ring — large, bright (spread wider)
+      { angle: -0.4, dist: 110, r: 28, fade: "bright" as const, ps: 0.6 },
+      { angle: 0.9, dist: 120, r: 26, fade: "bright" as const, ps: 0.5 },
+      { angle: 2.1, dist: 115, r: 28, fade: "bright" as const, ps: 0.7 },
+      { angle: 3.6, dist: 118, r: 27, fade: "bright" as const, ps: 0.55 },
+      // Mid ring — medium (more spacing)
+      { angle: 0.1, dist: 195, r: 22, fade: "growing" as const, ps: 0.9 },
+      { angle: 1.2, dist: 205, r: 20, fade: "dim" as const, ps: 1.2 },
+      { angle: 2.4, dist: 190, r: 23, fade: "bright" as const, ps: 0.8 },
+      { angle: 3.7, dist: 200, r: 20, fade: "fading" as const, ps: 1.0 },
+      { angle: 4.9, dist: 185, r: 21, fade: "growing" as const, ps: 0.7 },
+      { angle: 5.7, dist: 210, r: 19, fade: "dim" as const, ps: 1.3 },
+      // Outer ring — smaller (pushed out)
+      { angle: 0.5, dist: 270, r: 16, fade: "fading" as const, ps: 1.4 },
+      { angle: 1.6, dist: 280, r: 15, fade: "dim" as const, ps: 1.6 },
+      { angle: 2.8, dist: 265, r: 16, fade: "fading" as const, ps: 1.1 },
+      { angle: 4.1, dist: 285, r: 14, fade: "dim" as const, ps: 1.5 },
+      { angle: 5.2, dist: 260, r: 15, fade: "growing" as const, ps: 0.9 },
+      { angle: 5.9, dist: 275, r: 14, fade: "fading" as const, ps: 1.2 },
     ];
 
     const allNodes: NetNode[] = facePositions.map((p, i) => ({
