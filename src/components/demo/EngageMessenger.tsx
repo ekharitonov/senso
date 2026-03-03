@@ -36,7 +36,7 @@ export default function EngageMessenger() {
             <div className="px-2 py-1 text-[rgba(255,255,255,0.35)] flex items-center gap-1.5"><span className="text-[rgba(255,255,255,0.2)]">#</span> general</div>
             <div className="px-2 py-1 text-white/90 bg-[rgba(129,140,248,0.15)] rounded font-medium flex items-center gap-1.5"><span className="text-[rgba(129,140,248,0.6)]">#</span> project-alpha</div>
             <div className="mt-2 text-[9px] font-bold text-[rgba(255,255,255,0.3)] uppercase tracking-wider px-2 py-1">Direct Messages</div>
-            <div className="px-2 py-1 text-[rgba(255,255,255,0.35)] flex items-center gap-1.5"><img src={face1} className="w-3.5 h-3.5 rounded-full object-cover" alt="" /> Sarah M.</div>
+            <div className="px-2 py-1 text-[rgba(255,255,255,0.35)] flex items-center gap-1.5"><img src={face2} className="w-3.5 h-3.5 rounded-full object-cover" alt="" /> Sarah M.</div>
           </div>
         </div>
 
@@ -58,8 +58,8 @@ export default function EngageMessenger() {
             <div className="flex-1 px-4 py-3 space-y-3.5 overflow-hidden">
               {/* Blurred messages */}
               {[
-                { img: face1, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
-                { img: face2, name: "David L.", time: "9:22 AM", widths: [210, 170, 80] },
+                { img: face2, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
+                { img: face1, name: "David L.", time: "9:22 AM", widths: [210, 170, 80] },
                 { img: face3, name: "James K.", time: "9:38 AM", widths: [160, 200, 120, 90] },
               ].map((msg, i) => (
                 <div key={i} className="flex gap-2 items-start">
