@@ -94,7 +94,6 @@ export default function EngageMessenger() {
               {/* Blurred messages */}
               {[
                 { img: face2, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
-                { img: face1, name: "David L.", time: "9:22 AM", widths: [210, 170, 80] },
               ].map((msg, i) => (
                 <div key={i} className="flex gap-2 items-start">
                   <img src={msg.img} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
