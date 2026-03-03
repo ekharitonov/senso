@@ -257,16 +257,18 @@ export default function DemoPage() {
   const [salary, setSalary] = useState(130000);
   const [emailInput, setEmailInput] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [userClicked, setUserClicked] = useState(false);
 
   const p = phases[activePhase];
 
-  // Auto-advance walkthrough
+  // Auto-advance walkthrough (only if user hasn't clicked)
   useEffect(() => {
+    if (userClicked) return;
     const t = setInterval(() => {
       setActivePhase(prev => (prev + 1) % 5);
     }, 8000);
     return () => clearInterval(t);
-  }, [activePhase]);
+  }, [activePhase, userClicked]);
 
   // Diagnostic handler
   const handleDxAnswer = (ans: string) => {
@@ -342,7 +344,7 @@ export default function DemoPage() {
           {/* Phase selector */}
           <div className="flex gap-1.5 mb-9 flex-wrap">
             {phases.map((ph, i) => (
-              <button key={ph.key} onClick={() => setActivePhase(i)}
+              <button key={ph.key} onClick={() => { setActivePhase(i); setUserClicked(true); }}
                 className="text-xs font-medium px-5 py-2.5 rounded-[10px] cursor-pointer transition-all duration-300 relative overflow-hidden"
                 style={{
                   fontWeight: i === activePhase ? 700 : 500,
@@ -482,7 +484,20 @@ export default function DemoPage() {
                     Live Dashboard · {p.key} Phase
                   </span>
                 </div>
-                <div className="p-4 sm:p-6">
+                <div className="p-4 sm:p-6 dark" style={{
+                  '--background': '222 55% 8%',
+                  '--foreground': '210 40% 95%',
+                  '--card': '220 50% 12%',
+                  '--card-foreground': '210 40% 95%',
+                  '--border': '220 30% 20%',
+                  '--muted': '220 40% 16%',
+                  '--muted-foreground': '210 20% 60%',
+                  '--primary': '178 42% 48%',
+                  '--secondary': '220 40% 18%',
+                  '--secondary-foreground': '210 40% 95%',
+                  '--accent': '178 42% 48%',
+                  color: 'hsl(210 40% 95%)',
+                } as React.CSSProperties}>
                   {activePhase === 0 && <OverviewSection />}
                   {activePhase === 1 && <TeamSection />}
                   {activePhase === 2 && <NetworkSection />}
