@@ -37,7 +37,7 @@ export default function NetworkGraphAnimation() {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const size = 520;
+    const size = 620;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
     canvas.style.width = `${size}px`;
@@ -59,24 +59,24 @@ export default function NetworkGraphAnimation() {
     // 16 face nodes at varying sizes, depths, and pulse states
     const facePositions = [
       // Inner ring — large, bright
-      { angle: -0.3, dist: 70, r: 28, fade: "bright" as const, ps: 0.6 },
-      { angle: 0.8, dist: 85, r: 26, fade: "bright" as const, ps: 0.5 },
-      { angle: 2.0, dist: 75, r: 30, fade: "bright" as const, ps: 0.7 },
-      { angle: 3.5, dist: 80, r: 27, fade: "bright" as const, ps: 0.55 },
+      { angle: -0.3, dist: 85, r: 32, fade: "bright" as const, ps: 0.6 },
+      { angle: 0.8, dist: 100, r: 30, fade: "bright" as const, ps: 0.5 },
+      { angle: 2.0, dist: 90, r: 34, fade: "bright" as const, ps: 0.7 },
+      { angle: 3.5, dist: 95, r: 31, fade: "bright" as const, ps: 0.55 },
       // Mid ring — medium, some fading
-      { angle: 0.2, dist: 135, r: 22, fade: "growing" as const, ps: 0.9 },
-      { angle: 1.3, dist: 145, r: 20, fade: "dim" as const, ps: 1.2 },
-      { angle: 2.5, dist: 130, r: 23, fade: "bright" as const, ps: 0.8 },
-      { angle: 3.8, dist: 140, r: 19, fade: "fading" as const, ps: 1.0 },
-      { angle: 4.8, dist: 125, r: 21, fade: "growing" as const, ps: 0.7 },
-      { angle: 5.6, dist: 150, r: 18, fade: "dim" as const, ps: 1.3 },
-      // Outer ring — small, dim/fading
-      { angle: 0.6, dist: 195, r: 15, fade: "fading" as const, ps: 1.4 },
-      { angle: 1.7, dist: 200, r: 14, fade: "dim" as const, ps: 1.6 },
-      { angle: 2.9, dist: 190, r: 16, fade: "fading" as const, ps: 1.1 },
-      { angle: 4.2, dist: 205, r: 13, fade: "dim" as const, ps: 1.5 },
-      { angle: 5.1, dist: 185, r: 15, fade: "growing" as const, ps: 0.9 },
-      { angle: 5.9, dist: 195, r: 14, fade: "fading" as const, ps: 1.2 },
+      { angle: 0.2, dist: 165, r: 26, fade: "growing" as const, ps: 0.9 },
+      { angle: 1.3, dist: 175, r: 24, fade: "dim" as const, ps: 1.2 },
+      { angle: 2.5, dist: 160, r: 27, fade: "bright" as const, ps: 0.8 },
+      { angle: 3.8, dist: 170, r: 23, fade: "fading" as const, ps: 1.0 },
+      { angle: 4.8, dist: 155, r: 25, fade: "growing" as const, ps: 0.7 },
+      { angle: 5.6, dist: 180, r: 22, fade: "dim" as const, ps: 1.3 },
+      // Outer ring — smaller, dim/fading
+      { angle: 0.6, dist: 235, r: 18, fade: "fading" as const, ps: 1.4 },
+      { angle: 1.7, dist: 245, r: 17, fade: "dim" as const, ps: 1.6 },
+      { angle: 2.9, dist: 230, r: 19, fade: "fading" as const, ps: 1.1 },
+      { angle: 4.2, dist: 250, r: 16, fade: "dim" as const, ps: 1.5 },
+      { angle: 5.1, dist: 225, r: 18, fade: "growing" as const, ps: 0.9 },
+      { angle: 5.9, dist: 240, r: 17, fade: "fading" as const, ps: 1.2 },
     ];
 
     const allNodes: NetNode[] = facePositions.map((p, i) => ({
@@ -93,14 +93,14 @@ export default function NetworkGraphAnimation() {
       fadePhase: Math.random() * Math.PI * 2,
     }));
 
-    // 18 small abstract dots
-    for (let i = 0; i < 18; i++) {
-      const angle = (i / 18) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-      const dist = 30 + Math.random() * 210;
+    // 22 small abstract dots for density
+    for (let i = 0; i < 22; i++) {
+      const angle = (i / 22) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+      const dist = 35 + Math.random() * 260;
       allNodes.push({
         x: cx + Math.cos(angle) * dist,
         y: cy + Math.sin(angle) * dist,
-        radius: 1.5 + Math.random() * 3,
+        radius: 1.5 + Math.random() * 3.5,
         vx: (Math.random() - 0.5) * 0.2,
         vy: (Math.random() - 0.5) * 0.2,
         brightness: 0.2 + Math.random() * 0.5,
@@ -119,7 +119,7 @@ export default function NetworkGraphAnimation() {
         const dx = allNodes[i].x - allNodes[j].x;
         const dy = allNodes[i].y - allNodes[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const threshold = (allNodes[i].imgIndex >= 0 && allNodes[j].imgIndex >= 0) ? 170 : 130;
+        const threshold = (allNodes[i].imgIndex >= 0 && allNodes[j].imgIndex >= 0) ? 200 : 155;
         if (dist < threshold) {
           edges.push({ from: i, to: j });
         }
@@ -140,60 +140,66 @@ export default function NetworkGraphAnimation() {
         n.y += n.vy;
         const dx = n.x - cx, dy = n.y - cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 220) { n.vx -= dx * 0.0004; n.vy -= dy * 0.0004; }
+        if (dist > 270) { n.vx -= dx * 0.0004; n.vy -= dy * 0.0004; }
         n.vx += (Math.random() - 0.5) * 0.006;
         n.vy += (Math.random() - 0.5) * 0.006;
         n.vx *= 0.997;
         n.vy *= 0.997;
       }
 
-      // Edge color palette: red, yellow, green, teal — each edge gets a seeded color that shifts over time
+      // Edge color palette — focused on red/yellow/green traffic light
       const edgeColors = [
-        { h: 0, s: 75, l: 55 },     // red
-        { h: 45, s: 90, l: 55 },    // yellow/amber
-        { h: 130, s: 60, l: 45 },   // green
+        { h: 0, s: 80, l: 55 },     // red
+        { h: 40, s: 95, l: 55 },    // yellow/amber
+        { h: 130, s: 65, l: 48 },   // green
         { h: 178, s: 42, l: 48 },   // teal (brand)
-        { h: 15, s: 80, l: 50 },    // orange
-        { h: 280, s: 50, l: 55 },   // purple accent
       ];
 
-      // Draw edges with shifting colors
+      // Draw edges — thicker, brighter, with color variation
       for (let ei = 0; ei < edges.length; ei++) {
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
         const dx = a.x - b.x, dy = a.y - b.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        // Each edge cycles through colors at its own phase
-        const colorPhase = Math.sin(time * 0.3 + ei * 1.7) * 0.5 + 0.5; // 0–1
+        const colorPhase = Math.sin(time * 0.25 + ei * 1.7) * 0.5 + 0.5;
         const colorIdx = Math.floor(colorPhase * edgeColors.length) % edgeColors.length;
         const c = edgeColors[colorIdx];
-        // Pulsing opacity: some edges flare up, others dim
-        const pulse = Math.sin(time * (0.5 + (ei % 7) * 0.15) + ei * 2.3);
-        const baseOp = Math.max(0, (1 - dist / 180)) * 0.25;
-        const op = baseOp * (0.5 + pulse * 0.5); // flares between ~0 and full
+        const pulse = Math.sin(time * (0.4 + (ei % 5) * 0.2) + ei * 2.3);
+        const baseOp = Math.max(0, (1 - dist / 210)) * 0.45;
+        const op = baseOp * (0.4 + pulse * 0.6);
+        // Line width varies: some thick, some thin
+        const lw = 1.0 + pulse * 1.2 + (ei % 3 === 0 ? 0.5 : 0);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         ctx.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, ${op})`;
-        ctx.lineWidth = 0.7 + pulse * 0.5;
+        ctx.lineWidth = lw;
         ctx.stroke();
       }
 
-      // Signal pulses — colored
-      for (let i = 0; i < 7; i++) {
-        const ei = Math.floor((time * 0.2 + i * 4.1) % edges.length);
+      // Many signal dots running along edges — 18 dots for density
+      for (let i = 0; i < 18; i++) {
+        const ei = Math.floor((time * 0.15 + i * 3.7) % edges.length);
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
-        const t = ((time * 0.35 + i * 1.9) % 1);
+        const t = ((time * (0.3 + (i % 4) * 0.1) + i * 1.3) % 1);
         const px = a.x + (b.x - a.x) * t;
         const py = a.y + (b.y - a.y) * t;
-        const pc = edgeColors[i % edgeColors.length];
-        const pulseAlpha = 0.4 + Math.sin(time * 2 + i) * 0.4;
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 6);
-        g.addColorStop(0, `hsla(${pc.h}, ${pc.s}%, ${pc.l + 15}%, ${pulseAlpha})`);
-        g.addColorStop(1, `hsla(${pc.h}, ${pc.s}%, ${pc.l}%, 0)`);
+        // Cycle through red, yellow, green
+        const dotColors = [
+          { h: 0, s: 85, l: 58 },   // red
+          { h: 45, s: 95, l: 58 },  // yellow
+          { h: 130, s: 70, l: 50 }, // green
+        ];
+        const dc = dotColors[i % 3];
+        const dotPulse = 0.5 + Math.sin(time * 3 + i * 2.1) * 0.5;
+        const dotRadius = 4 + dotPulse * 4;
+        const g = ctx.createRadialGradient(px, py, 0, px, py, dotRadius);
+        g.addColorStop(0, `hsla(${dc.h}, ${dc.s}%, ${dc.l + 15}%, ${dotPulse * 0.9})`);
+        g.addColorStop(0.5, `hsla(${dc.h}, ${dc.s}%, ${dc.l}%, ${dotPulse * 0.4})`);
+        g.addColorStop(1, `hsla(${dc.h}, ${dc.s}%, ${dc.l}%, 0)`);
         ctx.beginPath();
-        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
         ctx.fillStyle = g;
         ctx.fill();
       }
@@ -277,7 +283,7 @@ export default function NetworkGraphAnimation() {
   return (
     <canvas
       ref={canvasRef}
-      className="w-full max-w-[520px] h-auto aspect-square"
+      className="w-full max-w-[620px] h-auto aspect-square"
       style={{ imageRendering: "auto" }}
     />
   );
