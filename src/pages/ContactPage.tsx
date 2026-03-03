@@ -147,7 +147,7 @@ export default function ContactPage() {
                     </Button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-5 [&_input]:bg-[hsl(220_40%_22%)] [&_input]:border-[hsl(210_30%_35%)] [&_input]:text-primary-foreground [&_input]:placeholder:text-primary-foreground/50 [&_input]:focus:border-accent [&_textarea]:bg-[hsl(220_40%_22%)] [&_textarea]:border-[hsl(210_30%_35%)] [&_textarea]:text-primary-foreground [&_textarea]:placeholder:text-primary-foreground/50 [&_textarea]:focus:border-accent">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-primary-foreground/70">
@@ -158,7 +158,6 @@ export default function ContactPage() {
                           required
                           maxLength={100}
                           placeholder="Your name"
-                          className="bg-navy-deep/80 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent"
                         />
                       </div>
                       <div className="space-y-2">
@@ -169,7 +168,6 @@ export default function ContactPage() {
                           name="company"
                           maxLength={100}
                           placeholder="Company name"
-                          className="bg-navy-deep/80 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent"
                         />
                       </div>
                     </div>
@@ -184,7 +182,6 @@ export default function ContactPage() {
                         required
                         maxLength={255}
                         placeholder="you@company.com"
-                        className="bg-navy-deep/80 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent"
                       />
                     </div>
 
@@ -197,7 +194,6 @@ export default function ContactPage() {
                         type="tel"
                         maxLength={30}
                         placeholder="+1 (555) 000-0000"
-                        className="bg-navy-deep/80 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent"
                       />
                     </div>
 
@@ -210,7 +206,7 @@ export default function ContactPage() {
                         maxLength={1000}
                         rows={4}
                         placeholder="How can we help?"
-                        className="bg-navy-deep/80 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent resize-none"
+                        className="resize-none"
                       />
                     </div>
 
