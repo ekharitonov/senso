@@ -212,7 +212,7 @@ export default function AboutPage() {
                         Founder & Technical Architect
                       </p>
                       <p className="text-primary-foreground/60 text-base leading-relaxed max-w-2xl">
-                        15+ years scaling enterprise products at GE, 3M, and Walmart. Built SENSO's entire production system solo — from architecture to deployment to 20 executive pilots.
+                        15+ years scaling enterprise products at GE, 3M, and running his own consulting practice with Fortune 500 companies — understanding hands-on the challenges that kill culture, trust, and performance from the inside. Built SENSO's entire production system solo — from architecture to deployment to 20 executive pilots.
                       </p>
 
 
