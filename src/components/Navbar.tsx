@@ -19,14 +19,11 @@ const navItems = [
     children: [
       { label: "ROI Calculator", href: "/roi-calculator", desc: "Calculate your savings" },
       { label: "Pricing", href: "/pricing", desc: "Plans and packages" },
-      { label: "Case Studies", href: "/case-studies", desc: "Pilot results" },
     ],
   },
   {
     label: "Resources",
     children: [
-      { label: "Blog", href: "/blog", desc: "Insights & research" },
-      { label: "Open Source", href: "/open-source", desc: "GitHub & architecture" },
       { label: "About", href: "/about", desc: "Team & story" },
     ],
   },
