@@ -239,7 +239,7 @@ interface DxReport {
 }
 
 const sc = (v: number) => v >= 60 ? "#34D399" : v >= 40 ? "#F59E0B" : "#EF4444";
-const fmt = (n: number) => "$" + Math.round(n).toLocaleString();
+
 
 // ─── Shared Styles ───
 const cardStyle = "bg-[rgba(18,32,56,0.8)] backdrop-blur-xl border border-[rgba(78,205,196,0.08)] rounded-[20px] p-8 hover:border-[rgba(78,205,196,0.2)] transition-colors";
@@ -253,9 +253,6 @@ export default function DemoPage() {
   const [dxAnswers, setDxAnswers] = useState<string[]>([]);
   const [dxReport, setDxReport] = useState<DxReport | null>(null);
   const [dxLoading, setDxLoading] = useState(false);
-  const [employees, setEmployees] = useState(200);
-  const [managers, setManagers] = useState(20);
-  const [salary, setSalary] = useState(130000);
   const [emailInput, setEmailInput] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [userClicked, setUserClicked] = useState(false);
@@ -301,11 +298,6 @@ export default function DemoPage() {
     }
   };
 
-  // ROI calcs
-  const waste = managers * salary * 0.35;
-  const savings = waste * 0.30;
-  const payback = Math.round(15000 / (savings / 365));
-  const roi = Math.round(((savings - 15000) / 15000) * 100);
 
   return (
     <div className="min-h-screen bg-[#0B1628] text-[#EEF0F4]">
@@ -642,65 +634,21 @@ export default function DemoPage() {
 
         <div className="max-w-[200px] mx-auto h-px bg-gradient-to-r from-transparent via-[rgba(78,205,196,0.2)] to-transparent" />
 
-        {/* ═══ SECTION 3: ROI CALCULATOR ═══ */}
-        <section className="max-w-[960px] mx-auto px-7 py-24">
+        {/* ═══ SECTION 3: ROI CTA ═══ */}
+        <section className="max-w-[960px] mx-auto px-7 py-24 text-center">
           <p className={`${labelStyle} text-[#34D399]`}>ROI Calculator</p>
           <h2 className="font-heading font-bold text-[clamp(26px,4vw,38px)] leading-[1.1] mb-4">
             What is invisible dysfunction costing you?
           </h2>
-          <p className={`${bodyStyle} mb-10 max-w-[540px]`}>
-            Managers spend 30–40% of time on coordination overhead caused by misalignment, unclear ownership, and unresolved friction.
+          <p className={`${bodyStyle} mb-8 max-w-[540px] mx-auto`}>
+            Use our interactive calculator to estimate annual coordination waste and projected savings with SENSO.
           </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className={`${cardStyle} ${glowStyle}`}>
-              <div className="text-[10px] font-bold tracking-[0.2em] text-[rgba(255,255,255,0.3)] mb-6">YOUR ORGANIZATION</div>
-              {[
-                { label: "Employees", value: employees, set: setEmployees, min: 20, max: 2000, step: 10, format: (v: number) => String(v) },
-                { label: "Managers / Leaders", value: managers, set: setManagers, min: 2, max: 200, step: 1, format: (v: number) => String(v) },
-                { label: "Avg. Manager Salary", value: salary, set: setSalary, min: 60000, max: 300000, step: 5000, format: (v: number) => fmt(v) },
-              ].map(s => (
-                <div key={s.label} className="mb-7">
-                  <div className="flex justify-between mb-2.5">
-                    <span className="text-[13px] text-[rgba(238,240,244,0.55)]">{s.label}</span>
-                    <span className="text-base font-bold text-accent">{s.format(s.value)}</span>
-                  </div>
-                  <input type="range" min={s.min} max={s.max} step={s.step} value={s.value}
-                    onChange={e => s.set(Number(e.target.value))}
-                    className="w-full h-1.5 rounded-sm appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-[#0B1628] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(78,205,196,0.4)]"
-                    style={{
-                      background: `linear-gradient(to right, #4ECDC4 0%, #4ECDC4 ${((s.value - s.min) / (s.max - s.min)) * 100}%, rgba(255,255,255,0.08) ${((s.value - s.min) / (s.max - s.min)) * 100}%, rgba(255,255,255,0.08) 100%)`,
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className={`${cardStyle} !border-[rgba(239,68,68,0.2)] !bg-[rgba(239,68,68,0.04)]`}>
-                <div className="text-[10px] font-bold tracking-[0.15em] text-[#EF4444] mb-2">ANNUAL COORDINATION WASTE</div>
-                <div className="text-4xl font-extrabold text-[#EF4444]">{fmt(waste)}</div>
-                <div className="text-xs text-[rgba(238,240,244,0.35)] mt-1.5">35% of manager time lost to invisible overhead</div>
-              </div>
-              <div className={`${cardStyle} !border-[rgba(52,211,153,0.2)] !bg-[rgba(52,211,153,0.04)]`}>
-                <div className="text-[10px] font-bold tracking-[0.15em] text-[#34D399] mb-2">SENSO ANNUAL SAVINGS</div>
-                <div className="text-4xl font-extrabold text-[#34D399]">{fmt(savings)}</div>
-                <div className="text-xs text-[rgba(238,240,244,0.35)] mt-1.5">30% reduction in coordination dysfunction</div>
-              </div>
-              <div className="grid grid-cols-3 gap-2.5">
-                {[
-                  { label: "HEALTH CHECK", value: "$15K", color: "#EEF0F4" },
-                  { label: "PAYBACK", value: `${payback}d`, color: "#4ECDC4" },
-                  { label: "FIRST-YEAR ROI", value: `${roi}%`, color: "#34D399" },
-                ].map(m => (
-                  <div key={m.label} className={`${cardStyle} !p-4 text-center`}>
-                    <div className="text-[9px] font-bold tracking-[0.15em] text-[rgba(255,255,255,0.25)] mb-2">{m.label}</div>
-                    <div className="text-2xl font-extrabold" style={{ color: m.color }}>{m.value}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <a href="/roi-calculator">
+            <button className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-base bg-gradient-to-r from-accent to-[#34D399] text-[#0B1628] hover:brightness-110 transition-all shadow-[0_0_20px_rgba(78,205,196,0.3)]">
+              Calculate Your ROI
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </a>
         </section>
 
         {/* ═══ FINAL CTA ═══ */}
