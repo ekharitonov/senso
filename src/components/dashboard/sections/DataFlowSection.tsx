@@ -1,20 +1,25 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import slackLogo from "@/assets/logos/slack.svg";
+import teamsLogo from "@/assets/logos/teams.svg";
+import gmailLogo from "@/assets/logos/gmail.svg";
+import calendarLogo from "@/assets/logos/calendar.svg";
 
 /* ─── Integrations ─── */
 interface Integration {
   name: string;
   icon: string;
+  logo: string;
   status: "ok" | "processing" | "error";
   statusText: string;
   y: number;
 }
 
 const initialIntegrations: Integration[] = [
-  { name: "Slack", icon: "💬", status: "ok", statusText: "Connected: 15 min ago (OK)", y: 70 },
-  { name: "MS Teams", icon: "🟦", status: "ok", statusText: "Connected: 10 min ago (OK)", y: 210 },
-  { name: "Email", icon: "✉️", status: "processing", statusText: "Syncing... (Processing)", y: 350 },
-  { name: "Calendar", icon: "📅", status: "error", statusText: "Access error (Disconnected)", y: 490 },
+  { name: "Slack", icon: "💬", logo: slackLogo, status: "ok", statusText: "Connected: 15 min ago (OK)", y: 70 },
+  { name: "MS Teams", icon: "🟦", logo: teamsLogo, status: "ok", statusText: "Connected: 10 min ago (OK)", y: 210 },
+  { name: "Email", icon: "✉️", logo: gmailLogo, status: "processing", statusText: "Syncing... (Processing)", y: 350 },
+  { name: "Calendar", icon: "📅", logo: calendarLogo, status: "error", statusText: "Access error (Disconnected)", y: 490 },
 ];
 
 const statusDotColor = { ok: "hsl(160 60% 45%)", processing: "hsl(178 42% 48%)", error: "hsl(0 68% 50%)" };
@@ -208,9 +213,9 @@ export default function DataFlowSection() {
               <g key={`c-${integ.name}`}>
                 <rect x="38" y={y - 55} width="170" height="95" rx="14"
                   fill="hsl(222 55% 8%)" stroke="hsl(220 30% 20%)" strokeWidth="1.5" />
-                <rect x="78" y={y - 46} width="90" height="55" rx="10"
-                  fill="hsl(178 42% 48% / 0.08)" stroke="hsl(178 42% 48% / 0.15)" strokeWidth="1" />
-                <text x="123" y={y - 8} textAnchor="middle" fontSize="30">{integ.icon}</text>
+                <image href={integ.logo} x="95" y={y - 42} width="56" height="45"
+                  preserveAspectRatio="xMidYMid meet" opacity={integ.status === "error" ? 0.4 : 0.9}
+                  style={{ filter: "brightness(0) invert(1)" }} />
                 <text x="123" y={y + 26} textAnchor="middle"
                   fill="hsl(210 40% 95%)" fontSize="14" fontWeight="700" fontFamily="'Plus Jakarta Sans', sans-serif">
                   {integ.name}
