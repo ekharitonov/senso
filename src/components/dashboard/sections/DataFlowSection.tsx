@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import slackLogo from "@/assets/logos/slack.svg";
-import teamsLogo from "@/assets/logos/teams.svg";
-import gmailLogo from "@/assets/logos/gmail.svg";
-import calendarLogo from "@/assets/logos/calendar.svg";
+import slackLogo from "@/assets/logos/slack-color.png";
+import teamsLogo from "@/assets/logos/teams-color.png";
+import gmailLogo from "@/assets/logos/gmail-color.png";
+import calendarLogo from "@/assets/logos/calendar-color.png";
 
 /* ─── Integrations ─── */
 interface Integration {
@@ -213,9 +213,8 @@ export default function DataFlowSection() {
               <g key={`c-${integ.name}`}>
                 <rect x="38" y={y - 55} width="170" height="95" rx="14"
                   fill="hsl(222 55% 8%)" stroke="hsl(220 30% 20%)" strokeWidth="1.5" />
-                <image href={integ.logo} x="95" y={y - 42} width="56" height="45"
-                  preserveAspectRatio="xMidYMid meet" opacity={integ.status === "error" ? 0.4 : 0.9}
-                  style={{ filter: "brightness(0) invert(1)" }} />
+                <image href={integ.logo} x="97" y={y - 40} width="52" height="42"
+                  preserveAspectRatio="xMidYMid meet" opacity={integ.status === "error" ? 0.4 : 0.95} />
                 <text x="123" y={y + 26} textAnchor="middle"
                   fill="hsl(210 40% 95%)" fontSize="14" fontWeight="700" fontFamily="'Plus Jakarta Sans', sans-serif">
                   {integ.name}
