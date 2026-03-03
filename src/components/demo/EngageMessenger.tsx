@@ -56,8 +56,26 @@ export default function EngageMessenger() {
           <div className="flex-1 flex overflow-hidden">
             {/* Left: messages */}
             <div className="flex-1 px-4 py-3 space-y-3.5 overflow-hidden">
-              {/* Blurred messages */}
-              {/* Lisa T. — real message at top */}
+              {/* AMOS bot message first */}
+              <div className="flex gap-2 items-start">
+                <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-[9px] font-black text-black">A</span>
+                </div>
+                <div>
+                  <div className="flex items-baseline gap-1.5 mb-0.5">
+                    <span className="text-[11px] font-bold text-[#F59E0B]">AMOS</span>
+                    <span className="text-[9px] text-[rgba(245,158,11,0.4)]">APP</span>
+                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:02 AM</span>
+                  </div>
+                  <div className="bg-[rgba(245,158,11,0.06)] border border-[rgba(245,158,11,0.15)] rounded-lg px-3 py-2 inline-block max-w-[95%]">
+                    <span className="text-[11px] text-[rgba(255,255,255,0.75)] leading-snug">
+                      Hey team 👋 How's everyone feeling about the project-alpha timeline? Any blockers I can help clear? Would love to hear where things stand so we can support each other.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lisa T. responds */}
               <div className="flex gap-2 items-start">
                 <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
@@ -93,41 +111,6 @@ export default function EngageMessenger() {
                   </div>
                 </div>
               ))}
-
-              {/* AMOS bot message in the flow */}
-              <div className="flex gap-2 items-start">
-                <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="text-[9px] font-black text-black">A</span>
-                </div>
-                <div>
-                  <div className="flex items-baseline gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold text-[#F59E0B]">AMOS</span>
-                    <span className="text-[9px] text-[rgba(245,158,11,0.4)]">APP</span>
-                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:35 AM</span>
-                  </div>
-                  <div className="bg-[rgba(245,158,11,0.06)] border border-[rgba(245,158,11,0.15)] rounded-lg px-3 py-2 inline-block max-w-[95%]">
-                    <span className="text-[11px] text-[rgba(255,255,255,0.75)] leading-snug">
-                      Hey team 👋 How's everyone feeling about the project-alpha timeline? Any blockers I can help clear? Would love to hear where things stand so we can support each other.
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* More messages */}
-              <div className="flex gap-2 items-start">
-                <img src={face3} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
-                <div>
-                  <div className="flex items-baseline gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold text-white/70">James K.</span>
-                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:38 AM</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 160 }} />
-                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 120 }} />
-                  </div>
-                </div>
-              </div>
-
 
               {/* ── TOXIC MESSAGE ── */}
               <div className="flex gap-2 items-start">
