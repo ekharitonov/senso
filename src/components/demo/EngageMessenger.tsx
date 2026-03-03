@@ -60,7 +60,6 @@ export default function EngageMessenger() {
               {[
                 { img: face2, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
                 { img: face1, name: "David L.", time: "9:22 AM", widths: [210, 170, 80] },
-                { img: face3, name: "James K.", time: "9:38 AM", widths: [160, 200, 120, 90] },
               ].map((msg, i) => (
                 <div key={i} className="flex gap-2 items-start">
                   <img src={msg.img} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
@@ -78,7 +77,39 @@ export default function EngageMessenger() {
                 </div>
               ))}
 
-              {/* Small avatar + blurred lines */}
+              {/* AMOS bot message in the flow */}
+              <div className="flex gap-2 items-start">
+                <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-[9px] font-black text-black">A</span>
+                </div>
+                <div>
+                  <div className="flex items-baseline gap-1.5 mb-0.5">
+                    <span className="text-[11px] font-bold text-[#F59E0B]">AMOS</span>
+                    <span className="text-[9px] text-[rgba(245,158,11,0.4)]">APP</span>
+                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:35 AM</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="h-2 rounded-sm bg-[rgba(245,158,11,0.08)]" style={{ width: 200 }} />
+                    <div className="h-2 rounded-sm bg-[rgba(245,158,11,0.08)]" style={{ width: 150 }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* More messages */}
+              <div className="flex gap-2 items-start">
+                <img src={face3} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
+                <div>
+                  <div className="flex items-baseline gap-1.5 mb-0.5">
+                    <span className="text-[11px] font-bold text-white/70">James K.</span>
+                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:38 AM</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 160 }} />
+                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 120 }} />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex gap-2 items-start">
                 <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
@@ -107,23 +138,9 @@ export default function EngageMessenger() {
                         Marketing dropped the ball again, as usual. Nothing new.
                       </span>
                     </div>
-                    {/* Red warning emoji */}
                     <div className="absolute -top-1 -right-2 w-5 h-5 rounded-full bg-[rgba(239,68,68,0.15)] border border-[rgba(239,68,68,0.3)] flex items-center justify-center text-[10px]">
                       😠
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Another blurred message after */}
-              <div className="flex gap-2 items-start opacity-60">
-                <img src={face5} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
-                <div>
-                  <div className="flex items-baseline gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold text-white/70">Alex P.</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 140 }} />
                   </div>
                 </div>
               </div>
@@ -138,8 +155,8 @@ export default function EngageMessenger() {
               style={{ boxShadow: "-10px 0 40px rgba(245,158,11,0.04)" }}
             >
               <div className="flex items-center gap-1.5 mb-1">
-                <div className="w-5 h-5 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center text-[9px] font-black text-black">S</div>
-                <span className="text-[11px] font-extrabold text-white">SENSO Insight</span>
+                <div className="w-5 h-5 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center text-[9px] font-black text-black">A</div>
+                <span className="text-[11px] font-extrabold text-white">AMOS Insight</span>
               </div>
 
               <div className="text-[12px] font-bold text-white/90 leading-snug">
