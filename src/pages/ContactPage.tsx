@@ -124,7 +124,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8">
+              <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 backdrop-blur-md p-8">
                 {formStatus === "success" ? (
                   <motion.div
                     className="flex flex-col items-center justify-center py-16 text-center"
