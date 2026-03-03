@@ -7,7 +7,7 @@ import TeamSection from "@/components/dashboard/sections/TeamSection";
 import NetworkSection from "@/components/dashboard/sections/NetworkSection";
 import DiagnosticSection from "@/components/dashboard/sections/DiagnosticSection";
 import DataFlowSection from "@/components/dashboard/sections/DataFlowSection";
-import engageScreenshot from "@/assets/engage-messenger.png";
+import EngageMessenger from "@/components/demo/EngageMessenger";
 
 // ─── Network Graph SVG ───
 interface NodeData {
@@ -379,7 +379,7 @@ export default function DemoPage() {
                 </div>
                 <div className="flex-1 flex items-center relative">
                   {activePhase === 1 ? (
-                    <img src={engageScreenshot} alt="AI agent coaching in corporate messenger — detecting toxic patterns and suggesting constructive alternatives" className="w-full h-auto rounded-lg" />
+                    <EngageMessenger />
                   ) : (
                     <>
                       <NetworkGraph phase={activePhase} />
