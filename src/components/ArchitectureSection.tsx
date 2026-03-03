@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 const layers = [
   {
-    icon: Database,
-    label: "Intelligence Layer",
-    sublabel: "Organizational Memory",
-    brief: "Persistent knowledge graph that accumulates institutional patterns across every engagement.",
+    icon: Users,
+    label: "Strategic Layer",
+    sublabel: "Humans in Command",
+    brief: "Agents diagnose. Humans decide. Every critical action goes through a four-tier escalation protocol.",
   },
   {
     icon: Brain,
@@ -16,10 +16,10 @@ const layers = [
     brief: "Diagnostic, Cultural Sensing, Facilitation, and Synthesis agents — each with explicit escalation rules.",
   },
   {
-    icon: Users,
-    label: "Strategic Layer",
-    sublabel: "Humans in Command",
-    brief: "Agents diagnose. Humans decide. Every critical action goes through a four-tier escalation protocol.",
+    icon: Database,
+    label: "Intelligence Layer",
+    sublabel: "Organizational Memory",
+    brief: "Persistent knowledge graph that accumulates institutional patterns across every engagement.",
   },
 ];
 
