@@ -100,6 +100,28 @@ export default function AboutPage() {
                         15+ years scaling enterprise products at GE, 3M, and Walmart. Built SENSO's entire production system solo — from architecture to deployment to 20 executive pilots.
                       </p>
 
+                      {/* Company logos */}
+                      <div className="flex items-center gap-5 mt-5">
+                        <span className="text-[10px] uppercase tracking-widest text-primary-foreground/30 font-semibold">Previously at</span>
+                        <div className="flex items-center gap-4">
+                          {/* GE */}
+                          <div className="h-7 px-2 flex items-center rounded bg-primary-foreground/[0.04] border border-primary-foreground/[0.06]">
+                            <svg viewBox="0 0 100 100" className="h-5 w-5" fill="none">
+                              <circle cx="50" cy="50" r="46" stroke="currentColor" strokeWidth="4" className="text-primary-foreground/40" />
+                              <text x="50" y="58" textAnchor="middle" fontSize="36" fontWeight="bold" fontFamily="serif" className="fill-primary-foreground/50">GE</text>
+                            </svg>
+                          </div>
+                          {/* 3M */}
+                          <div className="h-7 px-3 flex items-center rounded bg-primary-foreground/[0.04] border border-primary-foreground/[0.06]">
+                            <span className="text-sm font-extrabold tracking-tight text-primary-foreground/50" style={{ fontFamily: 'Arial, sans-serif' }}>3M</span>
+                          </div>
+                          {/* Walmart */}
+                          <div className="h-7 px-3 flex items-center rounded bg-primary-foreground/[0.04] border border-primary-foreground/[0.06]">
+                            <span className="text-xs font-bold tracking-wide text-primary-foreground/50" style={{ fontFamily: 'Arial, sans-serif' }}>Walmart</span>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Social links */}
                       <div className="flex items-center gap-3 mt-5">
                         <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
