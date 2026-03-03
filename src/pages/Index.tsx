@@ -19,7 +19,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SocialProofBar />
-      <TrustedByBar />
+      {/* <TrustedByBar /> */}
       <ProblemSection />
       <SensoFlowSection />
       <ArchitectureSection />
