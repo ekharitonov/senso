@@ -289,7 +289,7 @@ export default function DataFlowSection() {
                 {/* Brand logo */}
                 {(() => {
                   const LogoComp = brandLogos[integ.name];
-                  return LogoComp ? <LogoComp x={111} y={y - 42} size={24} opacity={integ.status === "error" ? 0.4 : 1} /> : null;
+                  return LogoComp ? <LogoComp x={105} y={y - 46} size={36} opacity={integ.status === "error" ? 0.4 : 1} /> : null;
                 })()}
                 <text x="123" y={y + 26} textAnchor="middle"
                   fill="hsl(210 40% 95%)" fontSize="14" fontWeight="700" fontFamily="'Plus Jakarta Sans', sans-serif">
