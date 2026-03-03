@@ -21,11 +21,11 @@ const Index = () => {
       <SocialProofBar />
       {/* <TrustedByBar /> */}
       <ProblemSection />
+      <UseCasesPreview />
       <SensoFlowSection />
       <ArchitectureSection />
       <ITSecuritySection />
       <AIProSection />
-      <UseCasesPreview />
       <SecuritySection />
       <WedgeSection />
       {/* <TestimonialsSection /> */}
