@@ -21,8 +21,8 @@ import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink
 import { Button } from "@/components/ui/button";
 
 const BrandIcon = ({ src, alt }: { src: string; alt: string }) => (
-  <div className="w-11 h-11 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/[0.08] flex items-center justify-center p-2 group-hover/item:border-primary-foreground/15 transition-colors">
-    <img src={src} alt={alt} className="w-full h-full object-contain brightness-0 invert opacity-70 group-hover/item:opacity-100 transition-opacity" />
+  <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/[0.08] flex items-center justify-center p-1.5 group-hover/item:bg-white/15 group-hover/item:border-white/15 transition-all">
+    <img src={src} alt={alt} className="w-full h-full object-contain rounded-md" />
   </div>
 );
 
