@@ -193,26 +193,26 @@ export default function NetworkGraphAnimation() {
         ctx.stroke();
       }
 
-      // Many signal dots running along edges — 18 dots for density
-      for (let i = 0; i < 18; i++) {
-        const ei = Math.floor((time * 0.15 + i * 3.7) % edges.length);
+      // Signal dots — 40 flying dots in red, yellow, green
+      const dotColors = [
+        { h: 0, s: 85, l: 58 },   // red
+        { h: 45, s: 95, l: 58 },  // yellow
+        { h: 130, s: 70, l: 50 }, // green
+      ];
+      for (let i = 0; i < 40; i++) {
+        const ei = Math.floor((time * (0.1 + (i % 5) * 0.05) + i * 2.9) % edges.length);
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
-        const t = ((time * (0.3 + (i % 4) * 0.1) + i * 1.3) % 1);
+        const speed = 0.2 + (i % 6) * 0.08;
+        const t = ((time * speed + i * 1.1) % 1);
         const px = a.x + (b.x - a.x) * t;
         const py = a.y + (b.y - a.y) * t;
-        // Cycle through red, yellow, green
-        const dotColors = [
-          { h: 0, s: 85, l: 58 },   // red
-          { h: 45, s: 95, l: 58 },  // yellow
-          { h: 130, s: 70, l: 50 }, // green
-        ];
         const dc = dotColors[i % 3];
         const dotPulse = 0.5 + Math.sin(time * 3 + i * 2.1) * 0.5;
-        const dotRadius = 4 + dotPulse * 4;
+        const dotRadius = 3 + dotPulse * 4;
         const g = ctx.createRadialGradient(px, py, 0, px, py, dotRadius);
-        g.addColorStop(0, `hsla(${dc.h}, ${dc.s}%, ${dc.l + 15}%, ${dotPulse * 0.9})`);
-        g.addColorStop(0.5, `hsla(${dc.h}, ${dc.s}%, ${dc.l}%, ${dotPulse * 0.4})`);
+        g.addColorStop(0, `hsla(${dc.h}, ${dc.s}%, ${dc.l + 15}%, ${dotPulse * 0.95})`);
+        g.addColorStop(0.5, `hsla(${dc.h}, ${dc.s}%, ${dc.l}%, ${dotPulse * 0.5})`);
         g.addColorStop(1, `hsla(${dc.h}, ${dc.s}%, ${dc.l}%, 0)`);
         ctx.beginPath();
         ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
