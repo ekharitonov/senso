@@ -133,12 +133,12 @@ export default function EngageMessenger() {
               </motion.div>
             </div>
 
-            {/* 5. AMOS Insight panel — delay 3.8 */}
+            {/* 5. AMOS Insight panel — appears after toxic message */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, width: 0, padding: 0 }}
+              animate={{ opacity: 1, width: 260, padding: 16 }}
               transition={{ delay: 3.8, duration: 0.7, type: "spring", stiffness: 100 }}
-              className="w-[260px] border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] p-4 hidden md:flex flex-col gap-3 overflow-auto"
+              className="border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] hidden md:flex flex-col gap-3 overflow-hidden shrink-0"
               style={{ boxShadow: "-10px 0 40px rgba(245,158,11,0.04)" }}
             >
               <div className="flex items-center gap-1.5 mb-1">
