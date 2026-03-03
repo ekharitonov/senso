@@ -1,25 +1,95 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import slackLogo from "@/assets/logos/slack-color.png";
-import teamsLogo from "@/assets/logos/teams-color.png";
-import gmailLogo from "@/assets/logos/gmail-color.png";
-import calendarLogo from "@/assets/logos/calendar-color.png";
+
+/* ─── Brand-colored inline SVG logos ─── */
+function SlackLogo({ x, y, size, opacity = 1 }: { x: number; y: number; size: number; opacity?: number }) {
+  const s = size / 24;
+  return (
+    <g transform={`translate(${x}, ${y}) scale(${s})`} opacity={opacity}>
+      <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313z" fill="#E01E5A"/>
+      <path d="M8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312z" fill="#36C5F0"/>
+      <path d="M18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.27 0a2.528 2.528 0 0 1-2.522 2.521 2.528 2.528 0 0 1-2.52-2.521V2.522A2.528 2.528 0 0 1 15.165 0a2.528 2.528 0 0 1 2.521 2.522v6.312z" fill="#2EB67D"/>
+      <path d="M15.165 18.956a2.528 2.528 0 0 1 2.521 2.522A2.528 2.528 0 0 1 15.165 24a2.528 2.528 0 0 1-2.52-2.522v-2.522h2.52zm0-1.27a2.528 2.528 0 0 1-2.52-2.522 2.528 2.528 0 0 1 2.52-2.52h6.313A2.528 2.528 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.521h-6.313z" fill="#ECB22E"/>
+    </g>
+  );
+}
+
+function TeamsLogo({ x, y, size, opacity = 1 }: { x: number; y: number; size: number; opacity?: number }) {
+  const s = size / 24;
+  return (
+    <g transform={`translate(${x}, ${y}) scale(${s})`} opacity={opacity}>
+      <path d="M20.625 6.547h-2.344a3.281 3.281 0 1 0-3.281 3.28v2.345a2.344 2.344 0 0 0 2.344 2.344h3.28a2.344 2.344 0 0 0 2.345-2.344V8.89a2.344 2.344 0 0 0-2.344-2.344z" fill="#7B83EB"/>
+      <circle cx="17.813" cy="3.516" r="2.344" fill="#7B83EB"/>
+      <path d="M12.656 7.5H5.86a2.344 2.344 0 0 0-2.344 2.344v5.39a5.508 5.508 0 0 0 5.508 5.508 5.508 5.508 0 0 0 5.508-5.508V9.844A2.344 2.344 0 0 0 12.656 7.5z" fill="#5059C9"/>
+      <circle cx="9.258" cy="4.22" r="3.281" fill="#5059C9"/>
+    </g>
+  );
+}
+
+function GmailLogo({ x, y, size, opacity = 1 }: { x: number; y: number; size: number; opacity?: number }) {
+  const s = size / 24;
+  return (
+    <g transform={`translate(${x}, ${y}) scale(${s})`} opacity={opacity}>
+      <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.91 12 9.818l6.545-4.91 1.528-1.415C21.69 2.28 24 3.434 24 5.457z" fill="#EA4335"/>
+      <path d="M0 5.457v13.909c0 .904.732 1.636 1.636 1.636h3.819V11.73L12 16.64" fill="#4285F4"/>
+      <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64" fill="#34A853"/>
+      <path d="M0 5.457L5.455 4.91 12 9.818" fill="#C5221F" opacity="0.6"/>
+      <path d="M24 5.457L18.545 4.91 12 9.818" fill="#1A73E8" opacity="0.6"/>
+    </g>
+  );
+}
+
+function CalendarLogo({ x, y, size, opacity = 1 }: { x: number; y: number; size: number; opacity?: number }) {
+  const s = size / 24;
+  return (
+    <g transform={`translate(${x}, ${y}) scale(${s})`} opacity={opacity}>
+      <path d="M18.316 1.053h3.79A1.895 1.895 0 0 1 24 2.947v3.79h-5.684V1.052z" fill="#EA4335"/>
+      <path d="M0 2.947A1.895 1.895 0 0 1 1.895 1.053h3.789v5.684H0V2.947z" fill="#188038"/>
+      <path d="M24 6.737v7.579H0V6.737h24z" fill="#FBBC04" opacity="0.9"/>
+      <path d="M0 14.316h24v7.579A1.895 1.895 0 0 1 22.105 23.79H1.895A1.895 1.895 0 0 1 0 21.895v-7.579z" fill="#1967D2"/>
+      <path d="M5.684 1.053h12.632v5.684H5.684z" fill="#4285F4"/>
+      <rect x="7" y="10" width="10" height="2" rx="0.5" fill="white" opacity="0.9"/>
+      <rect x="7" y="14" width="7" height="2" rx="0.5" fill="white" opacity="0.9"/>
+      <rect x="7" y="18" width="5" height="2" rx="0.5" fill="white" opacity="0.7"/>
+      <text x="12" y="20" textAnchor="middle" fill="white" fontSize="8" fontWeight="800" fontFamily="sans-serif">31</text>
+    </g>
+  );
+}
+
+const brandLogos: Record<string, typeof SlackLogo> = {
+  Slack: SlackLogo,
+  "MS Teams": TeamsLogo,
+  Email: GmailLogo,
+  Calendar: CalendarLogo,
+};
+
+const brandAccent: Record<string, string> = {
+  Slack: "rgba(54, 197, 240, 0.12)",
+  "MS Teams": "rgba(91, 95, 235, 0.12)",
+  Email: "rgba(234, 67, 53, 0.10)",
+  Calendar: "rgba(66, 133, 244, 0.10)",
+};
+
+const brandBorder: Record<string, string> = {
+  Slack: "rgba(54, 197, 240, 0.25)",
+  "MS Teams": "rgba(91, 95, 235, 0.25)",
+  Email: "rgba(234, 67, 53, 0.20)",
+  Calendar: "rgba(66, 133, 244, 0.20)",
+};
 
 /* ─── Integrations ─── */
 interface Integration {
   name: string;
-  icon: string;
-  logo: string;
   status: "ok" | "processing" | "error";
   statusText: string;
   y: number;
 }
 
 const initialIntegrations: Integration[] = [
-  { name: "Slack", icon: "💬", logo: slackLogo, status: "ok", statusText: "Connected: 15 min ago (OK)", y: 70 },
-  { name: "MS Teams", icon: "🟦", logo: teamsLogo, status: "ok", statusText: "Connected: 10 min ago (OK)", y: 210 },
-  { name: "Email", icon: "✉️", logo: gmailLogo, status: "processing", statusText: "Syncing... (Processing)", y: 350 },
-  { name: "Calendar", icon: "📅", logo: calendarLogo, status: "error", statusText: "Access error (Disconnected)", y: 490 },
+  { name: "Slack", status: "ok", statusText: "Connected: 15 min ago (OK)", y: 70 },
+  { name: "MS Teams", status: "ok", statusText: "Connected: 10 min ago (OK)", y: 210 },
+  { name: "Email", status: "processing", statusText: "Syncing... (Processing)", y: 350 },
+  { name: "Calendar", status: "error", statusText: "Access error (Disconnected)", y: 490 },
 ];
 
 const statusDotColor = { ok: "hsl(160 60% 45%)", processing: "hsl(178 42% 48%)", error: "hsl(0 68% 50%)" };
@@ -211,10 +281,16 @@ export default function DataFlowSection() {
             const y = integ.y;
             return (
               <g key={`c-${integ.name}`}>
+                {/* Card bg with brand-tinted accent */}
                 <rect x="38" y={y - 55} width="170" height="95" rx="14"
-                  fill="hsl(222 55% 8%)" stroke="hsl(220 30% 20%)" strokeWidth="1.5" />
-                <image href={integ.logo} x="97" y={y - 40} width="52" height="42"
-                  preserveAspectRatio="xMidYMid meet" opacity={integ.status === "error" ? 0.4 : 0.95} />
+                  fill="hsl(222 55% 8%)" stroke={brandBorder[integ.name] || "hsl(220 30% 20%)"} strokeWidth="1.5" />
+                <rect x="40" y={y - 53} width="166" height="91" rx="13"
+                  fill={brandAccent[integ.name] || "transparent"} />
+                {/* Brand logo */}
+                {(() => {
+                  const LogoComp = brandLogos[integ.name];
+                  return LogoComp ? <LogoComp x={111} y={y - 42} size={24} opacity={integ.status === "error" ? 0.4 : 1} /> : null;
+                })()}
                 <text x="123" y={y + 26} textAnchor="middle"
                   fill="hsl(210 40% 95%)" fontSize="14" fontWeight="700" fontFamily="'Plus Jakarta Sans', sans-serif">
                   {integ.name}
