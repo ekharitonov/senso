@@ -7,6 +7,7 @@ import TeamSection from "@/components/dashboard/sections/TeamSection";
 import NetworkSection from "@/components/dashboard/sections/NetworkSection";
 import DiagnosticSection from "@/components/dashboard/sections/DiagnosticSection";
 import DataFlowSection from "@/components/dashboard/sections/DataFlowSection";
+import engageScreenshot from "@/assets/engage-messenger.png";
 
 // ─── Network Graph SVG ───
 interface NodeData {
@@ -374,17 +375,23 @@ export default function DemoPage() {
               {/* Left: Network visualization */}
               <div className={`${cardStyle} ${glowStyle} flex flex-col !p-6`}>
                 <div className="text-[10px] font-bold tracking-[0.2em] mb-3" style={{ color: p.color }}>
-                  ORGANIZATIONAL MAP · {p.key} PHASE
+                  {activePhase === 1 ? "AI COACHING IN ACTION · ENGAGE PHASE" : `ORGANIZATIONAL MAP · ${p.key} PHASE`}
                 </div>
                 <div className="flex-1 flex items-center relative">
-                  <NetworkGraph phase={activePhase} />
-                  {activePhase < 2 && (
-                    <div className="absolute top-0 left-0 right-0 h-1 pointer-events-none"
-                      style={{
-                        background: `linear-gradient(90deg, transparent, ${p.color}40, transparent)`,
-                        animation: "scanLine 3s ease infinite",
-                      }}
-                    />
+                  {activePhase === 1 ? (
+                    <img src={engageScreenshot} alt="AI agent coaching in corporate messenger — detecting toxic patterns and suggesting constructive alternatives" className="w-full h-auto rounded-lg" />
+                  ) : (
+                    <>
+                      <NetworkGraph phase={activePhase} />
+                      {activePhase < 2 && (
+                        <div className="absolute top-0 left-0 right-0 h-1 pointer-events-none"
+                          style={{
+                            background: `linear-gradient(90deg, transparent, ${p.color}40, transparent)`,
+                            animation: "scanLine 3s ease infinite",
+                          }}
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               </div>
