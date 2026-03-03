@@ -4,9 +4,9 @@ import face4 from "@/assets/faces/face-4.jpg";
 import face5 from "@/assets/faces/face-5.jpg";
 
 const msg = (delay: number) => ({
-  initial: { opacity: 0, y: 12 },
+  initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
-  transition: { delay, duration: 0.5, ease: "easeOut" as const },
+  transition: { delay, duration: 0.8, ease: "easeOut" as const },
 });
 
 export default function EngageMessenger() {
@@ -61,8 +61,8 @@ export default function EngageMessenger() {
             {/* Left: messages */}
             <div className="flex-1 px-4 py-3 space-y-3.5 overflow-y-auto">
 
-              {/* 1. AMOS — delay 0.3 */}
-              <motion.div {...msg(0.3)} className="flex gap-2 items-start">
+              {/* 1. AMOS — delay 0.5 */}
+              <motion.div {...msg(0.5)} className="flex gap-2 items-start">
                 <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
                   <span className="text-[9px] font-black text-black">A</span>
                 </div>
@@ -80,8 +80,8 @@ export default function EngageMessenger() {
                 </div>
               </motion.div>
 
-              {/* 2. Lisa T. — delay 1.2 */}
-              <motion.div {...msg(1.2)} className="flex gap-2 items-start">
+              {/* 2. Lisa T. — delay 2.5 */}
+              <motion.div {...msg(2.5)} className="flex gap-2 items-start">
                 <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
                   <div className="flex items-baseline gap-1.5 mb-0.5">
@@ -96,8 +96,8 @@ export default function EngageMessenger() {
                 </div>
               </motion.div>
 
-              {/* 3. Sarah M. — delay 2.0 */}
-              <motion.div {...msg(2.0)} className="flex gap-2 items-start">
+              {/* 3. Sarah M. — delay 5.0 */}
+              <motion.div {...msg(5.0)} className="flex gap-2 items-start">
                 <img src={face2} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
                   <div className="flex items-baseline gap-1.5 mb-0.5">
@@ -111,8 +111,8 @@ export default function EngageMessenger() {
                 </div>
               </motion.div>
 
-              {/* 4. Alex P. toxic — delay 2.8 */}
-              <motion.div {...msg(2.8)} className="flex gap-2 items-start">
+              {/* 4. Alex P. toxic — delay 7.0 */}
+              <motion.div {...msg(7.0)} className="flex gap-2 items-start">
                 <img src={face5} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
                   <div className="flex items-baseline gap-1.5 mb-0.5">
@@ -137,7 +137,7 @@ export default function EngageMessenger() {
             <motion.div
               initial={{ opacity: 0, width: 0, padding: 0 }}
               animate={{ opacity: 1, width: 260, padding: 16 }}
-              transition={{ delay: 3.8, duration: 0.7, type: "spring", stiffness: 100 }}
+              transition={{ delay: 9.5, duration: 1, type: "spring", stiffness: 80 }}
               className="border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] hidden md:flex flex-col gap-3 overflow-hidden shrink-0"
               style={{ boxShadow: "-10px 0 40px rgba(245,158,11,0.04)" }}
             >
@@ -173,11 +173,11 @@ export default function EngageMessenger() {
             </motion.div>
           </div>
 
-          {/* 6. Input bar — Alex P. corrected message — delay 5.0 */}
+          {/* 6. Input bar — Alex P. corrected message — delay 13.0 */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 5.0, duration: 0.6 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 13.0, duration: 0.8, ease: "easeOut" }}
             className="px-3 pb-2.5 pt-1"
           >
             <div className="rounded-lg border border-[rgba(78,205,196,0.3)] bg-[rgba(78,205,196,0.04)] px-3 py-2.5 flex items-center gap-2" style={{ boxShadow: "0 0 12px rgba(78,205,196,0.06)" }}>
