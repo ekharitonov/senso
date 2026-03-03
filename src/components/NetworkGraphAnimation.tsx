@@ -147,33 +147,53 @@ export default function NetworkGraphAnimation() {
         n.vy *= 0.997;
       }
 
-      // Draw edges
-      for (const e of edges) {
+      // Edge color palette: red, yellow, green, teal — each edge gets a seeded color that shifts over time
+      const edgeColors = [
+        { h: 0, s: 75, l: 55 },     // red
+        { h: 45, s: 90, l: 55 },    // yellow/amber
+        { h: 130, s: 60, l: 45 },   // green
+        { h: 178, s: 42, l: 48 },   // teal (brand)
+        { h: 15, s: 80, l: 50 },    // orange
+        { h: 280, s: 50, l: 55 },   // purple accent
+      ];
+
+      // Draw edges with shifting colors
+      for (let ei = 0; ei < edges.length; ei++) {
+        const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
         const dx = a.x - b.x, dy = a.y - b.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const op = Math.max(0, (1 - dist / 180)) * 0.25;
+        // Each edge cycles through colors at its own phase
+        const colorPhase = Math.sin(time * 0.3 + ei * 1.7) * 0.5 + 0.5; // 0–1
+        const colorIdx = Math.floor(colorPhase * edgeColors.length) % edgeColors.length;
+        const c = edgeColors[colorIdx];
+        // Pulsing opacity: some edges flare up, others dim
+        const pulse = Math.sin(time * (0.5 + (ei % 7) * 0.15) + ei * 2.3);
+        const baseOp = Math.max(0, (1 - dist / 180)) * 0.25;
+        const op = baseOp * (0.5 + pulse * 0.5); // flares between ~0 and full
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = `hsla(${tH}, ${tS}%, ${tL}%, ${op})`;
-        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, ${op})`;
+        ctx.lineWidth = 0.7 + pulse * 0.5;
         ctx.stroke();
       }
 
-      // Signal pulses
-      for (let i = 0; i < 5; i++) {
-        const ei = Math.floor((time * 0.25 + i * 5.3) % edges.length);
+      // Signal pulses — colored
+      for (let i = 0; i < 7; i++) {
+        const ei = Math.floor((time * 0.2 + i * 4.1) % edges.length);
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
-        const t = ((time * 0.4 + i * 2.1) % 1);
+        const t = ((time * 0.35 + i * 1.9) % 1);
         const px = a.x + (b.x - a.x) * t;
         const py = a.y + (b.y - a.y) * t;
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 5);
-        g.addColorStop(0, `hsla(${tH}, 60%, 70%, 0.7)`);
-        g.addColorStop(1, `hsla(${tH}, 60%, 70%, 0)`);
+        const pc = edgeColors[i % edgeColors.length];
+        const pulseAlpha = 0.4 + Math.sin(time * 2 + i) * 0.4;
+        const g = ctx.createRadialGradient(px, py, 0, px, py, 6);
+        g.addColorStop(0, `hsla(${pc.h}, ${pc.s}%, ${pc.l + 15}%, ${pulseAlpha})`);
+        g.addColorStop(1, `hsla(${pc.h}, ${pc.s}%, ${pc.l}%, 0)`);
         ctx.beginPath();
-        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
         ctx.fillStyle = g;
         ctx.fill();
       }
