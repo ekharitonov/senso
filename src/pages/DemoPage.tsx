@@ -370,7 +370,7 @@ export default function DemoPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 xl:grid-cols-2 gap-6 min-h-[420px]"
+              className="grid grid-cols-1 gap-6"
             >
               {/* Left: Network visualization */}
               <div className={`${cardStyle} ${glowStyle} flex flex-col !p-6`}>
