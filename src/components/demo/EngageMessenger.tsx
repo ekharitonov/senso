@@ -24,7 +24,7 @@ export default function EngageMessenger() {
         <div className="w-12" />
       </div>
 
-      <div className="flex" style={{ height: 520 }}>
+      <div className="flex" style={{ height: 560 }}>
         {/* Sidebar */}
         <div className="w-[160px] bg-[#1e1040] border-r border-[rgba(255,255,255,0.06)] flex-col hidden sm:flex">
           <div className="px-3 py-2.5 border-b border-[rgba(255,255,255,0.06)] flex items-center gap-2">
@@ -55,7 +55,7 @@ export default function EngageMessenger() {
           {/* Chat messages area */}
           <div className="flex-1 flex overflow-hidden">
             {/* Left: messages */}
-            <div className="flex-1 px-4 py-3 space-y-3.5 overflow-hidden">
+            <div className="flex-1 px-4 py-3 space-y-3.5 overflow-y-auto">
               {/* AMOS bot message first */}
               <div className="flex gap-2 items-start">
                 <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
