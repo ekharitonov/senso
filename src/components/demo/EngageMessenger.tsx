@@ -57,6 +57,23 @@ export default function EngageMessenger() {
             {/* Left: messages */}
             <div className="flex-1 px-4 py-3 space-y-3.5 overflow-hidden">
               {/* Blurred messages */}
+              {/* Lisa T. — real message at top */}
+              <div className="flex gap-2 items-start">
+                <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
+                <div>
+                  <div className="flex items-baseline gap-1.5 mb-0.5">
+                    <span className="text-[11px] font-bold text-white/70">Lisa T.</span>
+                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:08 AM</span>
+                  </div>
+                  <div className="bg-[rgba(255,255,255,0.04)] rounded-lg px-3 py-2 inline-block max-w-[95%]">
+                    <span className="text-[11px] text-[rgba(255,255,255,0.75)] leading-snug">
+                      Heads up — the marketing campaign launch is delayed. The designer didn't finish the mockups on time. We need to push back the timeline by at least a week.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Blurred messages */}
               {[
                 { img: face2, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
                 { img: face1, name: "David L.", time: "9:22 AM", widths: [210, 170, 80] },
@@ -111,19 +128,6 @@ export default function EngageMessenger() {
                 </div>
               </div>
 
-              <div className="flex gap-2 items-start">
-                <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
-                <div>
-                  <div className="flex items-baseline gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold text-white/70">Lisa T.</span>
-                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:51 AM</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 180 }} />
-                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 100 }} />
-                  </div>
-                </div>
-              </div>
 
               {/* ── TOXIC MESSAGE ── */}
               <div className="flex gap-2 items-start">
