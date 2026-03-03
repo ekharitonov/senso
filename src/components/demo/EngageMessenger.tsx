@@ -28,9 +28,9 @@ export default function EngageMessenger() {
         <div className="w-12" />
       </div>
 
-      <div className="flex" style={{ height: 560 }}>
+      <div className="flex" style={{ minHeight: 400, maxHeight: 560 }}>
         {/* Sidebar */}
-        <div className="w-[160px] bg-[#1e1040] border-r border-[rgba(255,255,255,0.06)] flex-col hidden sm:flex">
+        <div className="w-[140px] xl:w-[160px] bg-[#1e1040] border-r border-[rgba(255,255,255,0.06)] flex-col hidden md:flex">
           <div className="px-3 py-2.5 border-b border-[rgba(255,255,255,0.06)] flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#818CF8] to-[#6366F1] flex items-center justify-center text-white text-[10px] font-extrabold">S</div>
             <div className="text-[11px] font-bold text-white/90 flex items-center gap-1">Chats <span className="text-[rgba(255,255,255,0.3)] text-[9px]">▾</span></div>
@@ -138,7 +138,7 @@ export default function EngageMessenger() {
               initial={{ opacity: 0, width: 0, padding: 0 }}
               animate={{ opacity: 1, width: 260, padding: 16 }}
               transition={{ delay: 9.5, duration: 1, type: "spring", stiffness: 80 }}
-              className="border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] hidden md:flex flex-col gap-3 overflow-hidden shrink-0"
+              className="border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] hidden lg:flex flex-col gap-3 overflow-hidden shrink-0"
               style={{ boxShadow: "-10px 0 40px rgba(245,158,11,0.04)" }}
             >
               <div className="flex items-center gap-1.5 mb-1">
