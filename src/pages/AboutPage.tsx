@@ -1,76 +1,34 @@
 import Navbar from "@/components/Navbar";
 import founderPhoto from "@/assets/founder-eugene.png";
+// Brand logos
+import logoGE from "@/assets/logos/ge.png";
+import logo3M from "@/assets/logos/3m.png";
+import logoWalmart from "@/assets/logos/walmart.png";
+import logoStanford from "@/assets/logos/stanford.png";
+import logoINSEAD from "@/assets/logos/insead.png";
+import logoAWS from "@/assets/logos/aws.png";
+import logoIBM from "@/assets/logos/ibm.png";
+import logoDuke from "@/assets/logos/duke.png";
+import logoMIT from "@/assets/logos/mit.png";
+import logoIEEE from "@/assets/logos/ieee.png";
+import logoWhiteHouse from "@/assets/logos/whitehouse.png";
+import logoHBR from "@/assets/logos/hbr.png";
+import logoDeloitte from "@/assets/logos/deloitte.png";
+import logoBCG from "@/assets/logos/bcg.png";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight, Building2, BookOpen, BadgeCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Brand logo components for visual richness
-const GELogo = () => (
-  <svg viewBox="0 0 80 80" className="w-10 h-10">
-    <circle cx="40" cy="40" r="36" stroke="#3B82F6" strokeWidth="3" fill="none" opacity="0.7" />
-    <text x="40" y="50" textAnchor="middle" fontSize="28" fontWeight="bold" fontFamily="serif" fill="#60A5FA">GE</text>
-  </svg>
-);
-const ThreeMlogo = () => (
-  <div className="w-10 h-10 flex items-center justify-center">
-    <span className="text-xl font-black text-red-400" style={{ fontFamily: 'Arial Black, sans-serif' }}>3M</span>
+const BrandIcon = ({ src, alt }: { src: string; alt: string }) => (
+  <div className="w-11 h-11 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/[0.08] flex items-center justify-center p-2 group-hover/item:border-primary-foreground/15 transition-colors">
+    <img src={src} alt={alt} className="w-full h-full object-contain brightness-0 invert opacity-70 group-hover/item:opacity-100 transition-opacity" />
   </div>
 );
-const WalmartLogo = () => (
-  <div className="w-10 h-10 flex items-center justify-center">
-    <svg viewBox="0 0 40 40" className="w-7 h-7">
-      {[0, 60, 120, 180, 240, 300].map((angle) => (
-        <line key={angle} x1="20" y1="20" x2={20 + 14 * Math.cos((angle * Math.PI) / 180)} y2={20 + 14 * Math.sin((angle * Math.PI) / 180)} stroke="#FDB913" strokeWidth="3.5" strokeLinecap="round" />
-      ))}
-    </svg>
-  </div>
-);
-const StanfordLogo = () => (
-  <div className="w-10 h-10 rounded-full bg-[#8C1515]/20 border border-[#8C1515]/30 flex items-center justify-center">
-    <span className="text-sm font-bold text-[#E08080]" style={{ fontFamily: 'serif' }}>S</span>
-  </div>
-);
-const INSEADLogo = () => (
-  <div className="w-10 h-10 rounded-full bg-[#006B3F]/20 border border-[#006B3F]/30 flex items-center justify-center">
-    <span className="text-[9px] font-bold text-emerald-400 tracking-tight">INSEAD</span>
-  </div>
-);
-const AWSLogo = () => (
-  <div className="w-10 h-10 rounded-lg bg-[#FF9900]/10 border border-[#FF9900]/20 flex items-center justify-center">
-    <span className="text-[10px] font-black text-[#FF9900]">AWS</span>
-  </div>
-);
-const IBMLogo = () => (
-  <div className="w-10 h-10 flex items-center justify-center">
-    <svg viewBox="0 0 40 20" className="w-8">
-      {[0, 4, 8, 12, 16].map((y) => (
-        <rect key={y} x="2" y={y} width="36" height="2.5" fill="#4A90D9" rx="0.5" />
-      ))}
-      <text x="20" y="14.5" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#1a1a2e" fontFamily="monospace">IBM</text>
-    </svg>
-  </div>
-);
-const MITLogo = () => (
-  <div className="w-10 h-10 rounded-lg bg-[#A31F34]/15 border border-[#A31F34]/25 flex items-center justify-center">
-    <span className="text-[11px] font-black text-[#E06070] tracking-tight">MIT</span>
-  </div>
-);
-const DukeLogo = () => (
-  <div className="w-10 h-10 rounded-full bg-[#003087]/20 border border-[#003087]/30 flex items-center justify-center">
-    <span className="text-[10px] font-bold text-blue-400">Duke</span>
-  </div>
-);
-const IEEELogo = () => (
-  <div className="w-10 h-10 rounded-lg bg-[#006699]/15 border border-[#006699]/25 flex items-center justify-center">
-    <span className="text-[9px] font-bold text-cyan-400 tracking-tight">IEEE</span>
-  </div>
-);
-const WHLogo = () => (
-  <div className="w-10 h-10 rounded-full bg-primary-foreground/5 border border-primary-foreground/10 flex items-center justify-center">
-    <svg viewBox="0 0 24 24" className="w-5 h-5 text-primary-foreground/50" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+
+const TextIcon = ({ text, color }: { text: string; color: string }) => (
+  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} border border-primary-foreground/[0.08] flex items-center justify-center`}>
+    <span className="text-[9px] font-bold text-primary-foreground/60">{text}</span>
   </div>
 );
 
@@ -81,9 +39,11 @@ const credentialRows = [
     color: "from-blue-500/20 to-blue-500/5",
     borderColor: "border-blue-500/15",
     items: [
-      { logo: GELogo, name: "General Electric" },
-      { logo: ThreeMlogo, name: "3M" },
-      { logo: WalmartLogo, name: "Walmart" },
+      { src: logoGE, name: "GE" },
+      { src: logo3M, name: "3M" },
+      { src: logoWalmart, name: "Walmart" },
+      { src: logoDeloitte, name: "Deloitte" },
+      { src: logoBCG, name: "BCG" },
     ],
   },
   {
@@ -92,11 +52,11 @@ const credentialRows = [
     color: "from-violet-500/20 to-violet-500/5",
     borderColor: "border-violet-500/15",
     items: [
-      { logo: StanfordLogo, name: "Stanford d.school" },
-      { logo: INSEADLogo, name: "INSEAD" },
-      { name: "M.S. CS" },
-      { name: "M.Eng." },
-      { name: "MBA" },
+      { src: logoStanford, name: "Stanford" },
+      { src: logoINSEAD, name: "INSEAD" },
+      { text: "M.S.", name: "M.S. CS" },
+      { text: "M.E.", name: "M.Eng." },
+      { text: "MBA", name: "MBA" },
     ],
   },
   {
@@ -105,11 +65,11 @@ const credentialRows = [
     color: "from-emerald-500/20 to-emerald-500/5",
     borderColor: "border-emerald-500/15",
     items: [
-      { logo: AWSLogo, name: "AWS Architecture" },
-      { logo: IBMLogo, name: "IBM AI" },
-      { logo: DukeLogo, name: "Duke MLOps" },
-      { logo: MITLogo, name: "MIT Fintech" },
-      { logo: StanfordLogo, name: "Stanford AI Health" },
+      { src: logoAWS, name: "AWS" },
+      { src: logoIBM, name: "IBM AI" },
+      { src: logoDuke, name: "Duke" },
+      { src: logoMIT, name: "MIT" },
+      { src: logoStanford, name: "Stanford" },
     ],
   },
   {
@@ -118,11 +78,11 @@ const credentialRows = [
     color: "from-amber-500/20 to-amber-500/5",
     borderColor: "border-amber-500/15",
     items: [
-      { logo: IEEELogo, name: "IEEE Senior Member" },
-      { logo: WHLogo, name: "White House AI Judge" },
-      { name: "NSF I-Corps" },
-      { name: "HBR Speaker" },
-      { name: "Board Member" },
+      { src: logoIEEE, name: "IEEE" },
+      { src: logoWhiteHouse, name: "White House" },
+      { src: logoHBR, name: "HBR" },
+      { text: "NSF", name: "NSF I-Corps" },
+      { text: "BM", name: "Board Member" },
     ],
   },
 ];
@@ -258,12 +218,10 @@ export default function AboutPage() {
                           <div className="flex flex-wrap gap-3">
                             {section.items.map((item) => (
                               <div key={item.name} className="flex flex-col items-center gap-1.5 group/item">
-                                {item.logo ? (
-                                  <item.logo />
+                                {'src' in item && item.src ? (
+                                  <BrandIcon src={item.src} alt={item.name} />
                                 ) : (
-                                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${section.color} ${section.borderColor} border flex items-center justify-center`}>
-                                    <span className="text-[9px] font-bold text-primary-foreground/50 text-center leading-tight">{item.name}</span>
-                                  </div>
+                                  <TextIcon text={'text' in item ? item.text! : item.name} color={section.color} />
                                 )}
                                 <span className="text-[10px] text-primary-foreground/40 font-medium text-center max-w-[72px] leading-tight group-hover/item:text-primary-foreground/60 transition-colors">
                                   {item.name}
