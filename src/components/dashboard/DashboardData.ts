@@ -1,5 +1,23 @@
 // ═══ SENSO Culture Dashboard — Data & Types ═══
 
+import jamesAvatar from "@/assets/avatars/james-k.jpg";
+import sarahAvatar from "@/assets/avatars/sarah-m.jpg";
+import michaelAvatar from "@/assets/avatars/michael-r.jpg";
+import lisaAvatar from "@/assets/avatars/lisa-t.jpg";
+import davidAvatar from "@/assets/avatars/david-l.jpg";
+import elenaAvatar from "@/assets/avatars/elena-v.jpg";
+import chrisAvatar from "@/assets/avatars/chris-p.jpg";
+
+export const avatarMap: Record<string, string> = {
+  "James K.": jamesAvatar,
+  "Sarah M.": sarahAvatar,
+  "Michael R.": michaelAvatar,
+  "Lisa T.": lisaAvatar,
+  "David L.": davidAvatar,
+  "Elena V.": elenaAvatar,
+  "Chris P.": chrisAvatar,
+};
+
 export const pulseData = [
   { month: "Jan", health: 34, connectivity: 7 },
   { month: "Feb", health: 40, connectivity: 8 },

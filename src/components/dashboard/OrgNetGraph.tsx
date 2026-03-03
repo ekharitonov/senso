@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { orgNodes as initialNodes, orgEdges, OrgEdge } from "./DashboardData";
+import { orgNodes as initialNodes, orgEdges, OrgEdge, avatarMap } from "./DashboardData";
 
 interface OrgNetGraphProps {
   onSelectEdge?: (edge: OrgEdge, key: string) => void;
@@ -97,6 +97,12 @@ export default function OrgNetGraph({ onSelectEdge, selectedEdgeKey }: OrgNetGra
           <feGaussianBlur stdDeviation="5" result="b"><animate attributeName="stdDeviation" values="3;7;3" dur="2s" repeatCount="indefinite"/></feGaussianBlur>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
+        {/* Clip paths for avatar circles */}
+        {initialNodes.map(nd => (
+          <clipPath key={`clip-${nd.id}`} id={`clip-${nd.id}`}>
+            <circle cx={0} cy={0} r={nd.r - 1.5} />
+          </clipPath>
+        ))}
       </defs>
 
       {/* Background rings */}
@@ -173,12 +179,18 @@ export default function OrgNetGraph({ onSelectEdge, selectedEdgeKey }: OrgNetGra
               fill="hsl(220, 30%, 12%)"
               stroke={isDragging ? "hsl(178, 42%, 48%)" : isInSelected ? color : isHov ? "hsl(178, 42%, 60%)" : "hsl(220, 20%, 22%)"}
               strokeWidth={isDragging ? 3 : isInSelected ? 2.5 : 1.5}/>
-            {/* Initials */}
-            <text x={nd.x} y={nd.y + 1} textAnchor="middle" dominantBaseline="middle"
-              fill={color} fontSize={nd.r > 24 ? 13 : 11} fontWeight={700}
-              style={{ pointerEvents: "none", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              {nd.name.split(" ").map(w => w[0]).join("")}
-            </text>
+            {/* Avatar photo or initials */}
+            {avatarMap[nd.name] ? (
+              <g transform={`translate(${nd.x}, ${nd.y})`} clipPath={`url(#clip-${nd.id})`} style={{ pointerEvents: "none" }}>
+                <image href={avatarMap[nd.name]} x={-(nd.r - 1.5)} y={-(nd.r - 1.5)} width={(nd.r - 1.5) * 2} height={(nd.r - 1.5) * 2} preserveAspectRatio="xMidYMid slice" />
+              </g>
+            ) : (
+              <text x={nd.x} y={nd.y + 1} textAnchor="middle" dominantBaseline="middle"
+                fill={color} fontSize={nd.r > 24 ? 13 : 11} fontWeight={700}
+                style={{ pointerEvents: "none", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {nd.name.split(" ").map(w => w[0]).join("")}
+              </text>
+            )}
             {/* Name */}
             <text x={nd.x} y={nd.y + nd.r + 16} textAnchor="middle"
               fill={isHov || isInSelected || isDragging ? "hsl(210, 40%, 95%)" : "hsl(210, 15%, 50%)"}
