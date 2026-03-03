@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
-import face1 from "@/assets/faces/face-1.jpg";
 import face2 from "@/assets/faces/face-2.jpg";
-import face3 from "@/assets/faces/face-3.jpg";
 import face4 from "@/assets/faces/face-4.jpg";
 import face5 from "@/assets/faces/face-5.jpg";
+
+const msg = (delay: number) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { delay, duration: 0.5, ease: "easeOut" as const },
+});
 
 export default function EngageMessenger() {
   return (
@@ -40,7 +44,7 @@ export default function EngageMessenger() {
           </div>
         </div>
 
-        {/* Main chat + SENSO panel */}
+        {/* Main chat + AMOS panel */}
         <div className="flex-1 flex flex-col relative">
           {/* Channel header */}
           <div className="px-4 py-2 border-b border-[rgba(255,255,255,0.06)] flex items-center justify-between">
@@ -56,8 +60,9 @@ export default function EngageMessenger() {
           <div className="flex-1 flex overflow-hidden">
             {/* Left: messages */}
             <div className="flex-1 px-4 py-3 space-y-3.5 overflow-y-auto">
-              {/* AMOS bot message first */}
-              <div className="flex gap-2 items-start">
+
+              {/* 1. AMOS — delay 0.3 */}
+              <motion.div {...msg(0.3)} className="flex gap-2 items-start">
                 <div className="w-7 h-7 rounded bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 mt-0.5">
                   <span className="text-[9px] font-black text-black">A</span>
                 </div>
@@ -73,10 +78,10 @@ export default function EngageMessenger() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Lisa T. responds */}
-              <div className="flex gap-2 items-start">
+              {/* 2. Lisa T. — delay 1.2 */}
+              <motion.div {...msg(1.2)} className="flex gap-2 items-start">
                 <img src={face4} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
                   <div className="flex items-baseline gap-1.5 mb-0.5">
@@ -89,30 +94,25 @@ export default function EngageMessenger() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Blurred messages */}
-              {[
-                { img: face2, name: "Sarah M.", time: "9:15 AM", widths: [190, 130] },
-              ].map((msg, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <img src={msg.img} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
-                  <div>
-                    <div className="flex items-baseline gap-1.5 mb-0.5">
-                      <span className="text-[11px] font-bold text-white/70">{msg.name}</span>
-                      <span className="text-[9px] text-[rgba(255,255,255,0.18)]">{msg.time}</span>
-                    </div>
-                    <div className="space-y-1">
-                      {msg.widths.map((w, j) => (
-                        <div key={j} className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: w }} />
-                      ))}
-                    </div>
+              {/* 3. Sarah M. — delay 2.0 */}
+              <motion.div {...msg(2.0)} className="flex gap-2 items-start">
+                <img src={face2} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
+                <div>
+                  <div className="flex items-baseline gap-1.5 mb-0.5">
+                    <span className="text-[11px] font-bold text-white/70">Sarah M.</span>
+                    <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:15 AM</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 190 }} />
+                    <div className="h-2 rounded-sm bg-[rgba(255,255,255,0.06)]" style={{ width: 130 }} />
                   </div>
                 </div>
-              ))}
+              </motion.div>
 
-              {/* ── TOXIC MESSAGE ── */}
-              <div className="flex gap-2 items-start">
+              {/* 4. Alex P. toxic — delay 2.8 */}
+              <motion.div {...msg(2.8)} className="flex gap-2 items-start">
                 <img src={face5} className="w-7 h-7 rounded object-cover shrink-0 mt-0.5" alt="" />
                 <div>
                   <div className="flex items-baseline gap-1.5 mb-0.5">
@@ -130,14 +130,14 @@ export default function EngageMessenger() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            {/* ── Right: SENSO Insight Panel (appears beside the chat) ── */}
+            {/* 5. AMOS Insight panel — delay 3.8 */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5, duration: 0.7, type: "spring", stiffness: 100 }}
+              transition={{ delay: 3.8, duration: 0.7, type: "spring", stiffness: 100 }}
               className="w-[260px] border-l border-[rgba(245,158,11,0.2)] bg-[rgba(20,18,40,0.95)] p-4 hidden md:flex flex-col gap-3 overflow-auto"
               style={{ boxShadow: "-10px 0 40px rgba(245,158,11,0.04)" }}
             >
@@ -173,8 +173,13 @@ export default function EngageMessenger() {
             </motion.div>
           </div>
 
-          {/* Input bar — Alex P. typing corrected message */}
-          <div className="px-3 pb-2.5 pt-1">
+          {/* 6. Input bar — Alex P. corrected message — delay 5.0 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 5.0, duration: 0.6 }}
+            className="px-3 pb-2.5 pt-1"
+          >
             <div className="rounded-lg border border-[rgba(78,205,196,0.3)] bg-[rgba(78,205,196,0.04)] px-3 py-2.5 flex items-center gap-2" style={{ boxShadow: "0 0 12px rgba(78,205,196,0.06)" }}>
               <span className="text-[rgba(255,255,255,0.2)] text-[14px]">+</span>
               <span className="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">
@@ -185,7 +190,7 @@ export default function EngageMessenger() {
                 <span className="ml-1 text-[14px]">➤</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
