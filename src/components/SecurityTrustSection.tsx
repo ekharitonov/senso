@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Shield, Lock, Eye, Server, ChevronDown, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ParticleField from "./ParticleField";
 
 const tabs = [
   { id: "privacy", label: "Data Privacy" },
@@ -10,34 +9,13 @@ const tabs = [
 ] as const;
 
 const faq = [
-  {
-    q: "Where does our data live?",
-    a: "Dedicated tenant isolation. Your organizational data never crosses tenant boundaries. We do not use client data for model training. SOC 2 Type I in roadmap for months 7–12.",
-  },
-  {
-    q: "What data do you ingest?",
-    a: "Only structured dialogue from SENSO agent conversations. We do NOT connect to your email, Slack, calendars, HRIS, or any internal systems. All data enters through explicit employee interaction with agents.",
-  },
-  {
-    q: "What LLMs power this?",
-    a: "Claude Sonnet (Anthropic) as primary inference engine. Model-agnostic architecture — can switch to any provider or self-hosted model. No OpenAI dependency.",
-  },
-  {
-    q: "How does it integrate?",
-    a: "Delivered through Slack, Microsoft Teams, or web interface. No VPN access, no internal system integration required. SSO supported but not mandatory. Time from signing to first diagnostic conversation: under 48 hours.",
-  },
-  {
-    q: "What about hallucinations?",
-    a: "Agents are grounded in the Organizational Knowledge Graph — they reference actual conversation data, not generated patterns. Every claim in the health report is traceable to specific source interactions.",
-  },
-  {
-    q: "Can we delete our data?",
-    a: "Full data portability and right-to-delete. You own your organizational knowledge graph. Export or purge at any time.",
-  },
-  {
-    q: "What if an agent makes a wrong decision?",
-    a: "Agents don't make decisions. They operate within a four-tier escalation system: (1) Autonomous — routine sensing, (2) Flagged — marked for human review, (3) Gated — requires human approval before action, (4) Blocked — agent cannot proceed.",
-  },
+  { q: "Where does our data live?", a: "Dedicated tenant isolation. Your organizational data never crosses tenant boundaries. We do not use client data for model training. SOC 2 Type I in roadmap for months 7–12." },
+  { q: "What data do you ingest?", a: "Only structured dialogue from SENSO agent conversations. We do NOT connect to your email, Slack, calendars, HRIS, or any internal systems. All data enters through explicit employee interaction with agents." },
+  { q: "What LLMs power this?", a: "Claude Sonnet (Anthropic) as primary inference engine. Model-agnostic architecture — can switch to any provider or self-hosted model. No OpenAI dependency." },
+  { q: "How does it integrate?", a: "Delivered through Slack, Microsoft Teams, or web interface. No VPN access, no internal system integration required. SSO supported but not mandatory. Time from signing to first diagnostic conversation: under 48 hours." },
+  { q: "What about hallucinations?", a: "Agents are grounded in the Organizational Knowledge Graph — they reference actual conversation data, not generated patterns. Every claim in the health report is traceable to specific source interactions." },
+  { q: "Can we delete our data?", a: "Full data portability and right-to-delete. You own your organizational knowledge graph. Export or purge at any time." },
+  { q: "What if an agent makes a wrong decision?", a: "Agents don't make decisions. They operate within a four-tier escalation system: (1) Autonomous — routine sensing, (2) Flagged — marked for human review, (3) Gated — requires human approval before action, (4) Blocked — agent cannot proceed." },
 ];
 
 const escalationLevels = [
@@ -57,15 +35,15 @@ const securityBadges = [
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-lg border border-primary-foreground/10 bg-primary-foreground/5 overflow-hidden">
+    <div className="rounded-lg border border-border bg-card overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-primary-foreground/[0.08] transition-colors"
+        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-accent/[0.03] transition-colors"
       >
         <Lock className="w-4 h-4 text-accent shrink-0" />
-        <span className="font-semibold text-sm text-primary-foreground flex-1">{question}</span>
+        <span className="font-semibold text-sm text-foreground flex-1">{question}</span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="w-4 h-4 text-primary-foreground/40" />
+          <ChevronDown className="w-4 h-4 text-muted-foreground" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -77,7 +55,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="px-5 pb-4 text-sm text-primary-foreground/50 leading-relaxed pl-12">{answer}</p>
+            <p className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed pl-12">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -89,10 +67,8 @@ export default function SecurityTrustSection() {
   const [activeTab, setActiveTab] = useState<"privacy" | "security">("privacy");
 
   return (
-    <section className="py-16 md:py-28 bg-gradient-hero relative overflow-hidden">
-      <ParticleField />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal/3 rounded-full blur-[120px]" />
+    <section className="py-16 md:py-28 bg-background relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-teal/3 blur-[120px]" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
@@ -101,20 +77,20 @@ export default function SecurityTrustSection() {
           viewport={{ once: true }}
           className="text-center max-w-2xl mx-auto mb-10"
         >
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-bright mb-4 block">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-4 block">
             Trust & Security
           </span>
-          <h2 className="text-headline md:text-display-sm text-primary-foreground">
+          <h2 className="text-headline md:text-display-sm text-foreground">
             Built for enterprise-grade confidentiality
           </h2>
-          <p className="text-primary-foreground/40 mt-4 text-sm md:text-base max-w-lg mx-auto">
+          <p className="text-muted-foreground mt-4 text-sm md:text-base max-w-lg mx-auto">
             Your organizational data is sensitive. SENSO meets the strictest security and compliance requirements.
           </p>
         </motion.div>
 
         {/* Tabs */}
         <div className="flex justify-center mb-10">
-          <div className="inline-flex rounded-full border border-primary-foreground/10 bg-primary-foreground/5 p-1">
+          <div className="inline-flex rounded-full border border-border bg-card p-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -123,7 +99,7 @@ export default function SecurityTrustSection() {
                   "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
                   activeTab === tab.id
                     ? "bg-accent text-primary shadow-md"
-                    : "text-primary-foreground/50 hover:text-primary-foreground/70"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {tab.label}
@@ -142,7 +118,6 @@ export default function SecurityTrustSection() {
               transition={{ duration: 0.3 }}
               className="max-w-4xl mx-auto"
             >
-              {/* Security capability badges */}
               <div className="flex flex-wrap gap-2 mb-6 justify-center">
                 {["Tenant Isolation", "SOC 2 Roadmap", "Model-Agnostic", "SSO Ready", "48h Deployment", "Full Data Portability"].map(
                   (badge) => (
@@ -159,26 +134,25 @@ export default function SecurityTrustSection() {
                 ))}
               </div>
 
-              {/* Escalation */}
-              <div className="mt-8 p-5 rounded-xl bg-primary-foreground/5 border border-primary-foreground/10">
-                <h4 className="font-heading font-bold text-primary-foreground mb-4 flex items-center gap-2">
+              <div className="mt-8 p-5 rounded-xl bg-card border border-border">
+                <h4 className="font-heading font-bold text-foreground mb-4 flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-accent" />
                   Four-Tier Escalation Protocol
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {escalationLevels.map((esc) => (
-                    <div key={esc.level} className="flex items-start gap-3 p-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10">
+                    <div key={esc.level} className="flex items-start gap-3 p-3 rounded-lg bg-background border border-border">
                       <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-mono font-bold text-sm", esc.color)}>
                         {esc.level}
                       </div>
                       <div>
-                        <p className="font-semibold text-sm text-primary-foreground">{esc.name}</p>
-                        <p className="text-xs text-primary-foreground/40">{esc.desc}</p>
+                        <p className="font-semibold text-sm text-foreground">{esc.name}</p>
+                        <p className="text-xs text-muted-foreground">{esc.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-primary-foreground/30 mt-4 font-mono">
+                <p className="text-xs text-muted-foreground mt-4 font-mono">
                   Production validated: 20 C-level executives • Zero churn
                 </p>
               </div>
@@ -203,22 +177,22 @@ export default function SecurityTrustSection() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1, duration: 0.6, type: "spring" }}
                     whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                    className="bg-primary-foreground/5 backdrop-blur-md rounded-2xl p-6 border border-primary-foreground/10 text-center hover:border-accent/40 hover:bg-primary-foreground/8 transition-colors duration-300"
+                    className="bg-card backdrop-blur-md rounded-2xl p-6 border border-border text-center hover:border-accent/40 transition-colors duration-300"
                   >
                     <motion.div
-                      className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/25 to-teal/5 flex items-center justify-center mx-auto mb-4 relative"
+                      className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center mx-auto mb-4 relative"
                       whileHover={{ rotate: 10 }}
                       transition={{ type: "spring", stiffness: 200 }}
                     >
                       <motion.div
-                        className="absolute inset-0 rounded-2xl border border-teal/30"
+                        className="absolute inset-0 rounded-2xl border border-accent/30"
                         animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }}
                         transition={{ duration: 3, repeat: Infinity, delay: i * 0.7 }}
                       />
-                      <badge.icon className="w-6 h-6 text-teal-bright" />
+                      <badge.icon className="w-6 h-6 text-accent" />
                     </motion.div>
-                    <h3 className="font-heading font-bold text-sm text-primary-foreground mb-2">{badge.title}</h3>
-                    <p className="text-xs text-primary-foreground/40 leading-relaxed">{badge.desc}</p>
+                    <h3 className="font-heading font-bold text-sm text-foreground mb-2">{badge.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{badge.desc}</p>
                   </motion.div>
                 ))}
               </div>
