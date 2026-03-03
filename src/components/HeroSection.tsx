@@ -66,7 +66,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-base md:text-xl text-primary-foreground/50 max-w-lg mb-8 md:mb-10 leading-relaxed"
+              className="text-base md:text-xl text-primary-foreground/70 max-w-lg mb-8 md:mb-10 leading-relaxed"
             >
               Persistent AI agents that sense dysfunction, engage stakeholders,
               navigate politics, solve root causes, and organize lasting change —
@@ -79,10 +79,10 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.35 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Link to="/contact">
+              <Link to="/demo">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                    Schedule a Briefing
+                    See How It Works
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </motion.div>
@@ -97,27 +97,7 @@ export default function HeroSection() {
               </Link>
             </motion.div>
 
-            {/* Trust indicator */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="mt-12 flex items-center gap-3"
-            >
-              <div className="flex -space-x-2">
-                {["SC", "MT", "DK", "JL"].map((initials, i) => (
-                  <div
-                    key={initials}
-                    className="w-8 h-8 rounded-full bg-gradient-to-br from-teal/40 to-teal/10 border-2 border-navy-deep flex items-center justify-center"
-                  >
-                    <span className="text-[10px] font-bold text-teal-bright">{initials}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-primary-foreground/30">
-                Trusted by C-level executives at leading organizations
-              </p>
-            </motion.div>
+            {/* Trust indicator removed — no verified data yet */}
           </div>
 
           {/* Right — live network animation */}
