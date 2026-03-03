@@ -10,23 +10,12 @@ const navItems = [
     label: "Product",
     children: [
       { label: "How It Works", href: "/how-it-works", desc: "Multi-agent architecture" },
-      { label: "Use Cases", href: "/use-cases", desc: "Six validated scenarios" },
+      { label: "Use Cases", href: "/use-cases", desc: "Real production scenarios" },
       { label: "Interactive Demo", href: "/demo", desc: "Try SENSO live" },
     ],
   },
-  {
-    label: "Solutions",
-    children: [
-      { label: "ROI Calculator", href: "/roi-calculator", desc: "Calculate your savings" },
-      { label: "Pricing", href: "/pricing", desc: "Plans and packages" },
-    ],
-  },
-  {
-    label: "Resources",
-    children: [
-      { label: "About", href: "/about", desc: "Team & story" },
-    ],
-  },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
   { label: "For Investors", href: "/investors" },
 ];
 
