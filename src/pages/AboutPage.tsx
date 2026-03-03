@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import founderPhoto from "@/assets/founder-eugene.png";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight } from "lucide-react";
@@ -79,8 +80,8 @@ export default function AboutPage() {
                       transition={{ duration: 0.5, delay: 0.2 }}
                       className="relative shrink-0"
                     >
-                      <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 flex items-center justify-center">
-                        <span className="text-4xl md:text-5xl font-heading font-bold text-accent">EK</span>
+                      <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border border-accent/20">
+                        <img src={founderPhoto} alt="Eugene Kharitonov — Founder & CEO of SENSO" className="w-full h-full object-cover" />
                       </div>
                       <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-accent flex items-center justify-center">
                         <Shield className="w-4 h-4 text-accent-foreground" />
