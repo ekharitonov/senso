@@ -24,7 +24,7 @@ export default function EngageMessenger() {
         <div className="w-12" />
       </div>
 
-      <div className="flex" style={{ height: 420 }}>
+      <div className="flex" style={{ height: 520 }}>
         {/* Sidebar */}
         <div className="w-[160px] bg-[#1e1040] border-r border-[rgba(255,255,255,0.06)] flex-col hidden sm:flex">
           <div className="px-3 py-2.5 border-b border-[rgba(255,255,255,0.06)] flex items-center gap-2">
