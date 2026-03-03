@@ -225,7 +225,7 @@ export default function AboutPage() {
                       "SENSO didn't start as a startup. It started as a question."
                     </p>
                     <p className="text-primary-foreground/60 leading-relaxed">
-                      In 2024, Eugene Kharitonov created a private community for executives and entrepreneurs — <span className="text-accent font-semibold">Homo Amans Space</span>. "Homo Amans" is Latin for "the loving human." Not Homo Economicus (the rational human), not Homo Faber (the making human) — but a human for whom relationships, trust, and authenticity are the foundation, not a side effect.
+                      In 2025, Eugene Kharitonov created a private community for executives and entrepreneurs — <span className="text-accent font-semibold">Homo Amans Space</span>. "Homo Amans" is Latin for "the loving human." Not Homo Economicus (the rational human), not Homo Faber (the making human) — but a human for whom relationships, trust, and authenticity are the foundation, not a side effect.
                     </p>
                   </div>
                 </motion.div>
