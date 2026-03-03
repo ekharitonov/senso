@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
+import OverviewSection from "@/components/dashboard/sections/OverviewSection";
+import TeamSection from "@/components/dashboard/sections/TeamSection";
+import NetworkSection from "@/components/dashboard/sections/NetworkSection";
+import DiagnosticSection from "@/components/dashboard/sections/DiagnosticSection";
+import DataFlowSection from "@/components/dashboard/sections/DataFlowSection";
 
 // ─── Network Graph SVG ───
 interface NodeData {
@@ -456,6 +461,34 @@ export default function DemoPage() {
                     </div>
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dashboard section for active phase */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`dashboard-${activePhase}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-8"
+            >
+              <div className={`${cardStyle} ${glowStyle} !p-0 overflow-hidden`}>
+                <div className="flex items-center gap-2 px-6 py-3 border-b border-[rgba(255,255,255,0.06)]">
+                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: p.color }} />
+                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: p.color }}>
+                    Live Dashboard · {p.key} Phase
+                  </span>
+                </div>
+                <div className="p-4 sm:p-6">
+                  {activePhase === 0 && <OverviewSection />}
+                  {activePhase === 1 && <TeamSection />}
+                  {activePhase === 2 && <NetworkSection />}
+                  {activePhase === 3 && <DiagnosticSection />}
+                  {activePhase === 4 && <DataFlowSection />}
+                </div>
               </div>
             </motion.div>
           </AnimatePresence>
