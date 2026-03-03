@@ -4,12 +4,14 @@ import OverviewSection from "@/components/dashboard/sections/OverviewSection";
 import TeamSection from "@/components/dashboard/sections/TeamSection";
 import NetworkSection from "@/components/dashboard/sections/NetworkSection";
 import DiagnosticSection from "@/components/dashboard/sections/DiagnosticSection";
+import DataFlowSection from "@/components/dashboard/sections/DataFlowSection";
 
 const nav = [
   { id: "overview", label: "Overview" },
   { id: "team", label: "Team" },
   { id: "network", label: "Knowledge Graph" },
   { id: "diagnostic", label: "Behavioral Analysis" },
+  { id: "dataflow", label: "Data Flow" },
 ];
 
 export default function CultureDashboard() {
@@ -27,6 +29,7 @@ export default function CultureDashboard() {
       case "team": return <TeamSection />;
       case "network": return <NetworkSection />;
       case "diagnostic": return <DiagnosticSection />;
+      case "dataflow": return <DataFlowSection />;
       default: return <OverviewSection />;
     }
   };
