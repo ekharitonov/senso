@@ -147,18 +147,23 @@ export default function EngageMessenger() {
                 <span className="text-[11px] font-extrabold text-white">AMOS Insight</span>
               </div>
 
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-[10px] text-[rgba(255,255,255,0.35)]">Private to</span>
+                <span className="text-[10px] font-bold text-white/80 bg-[rgba(255,255,255,0.08)] rounded px-1.5 py-0.5">Alex P.</span>
+              </div>
+
               <div className="text-[12px] font-bold text-white/90 leading-snug">
                 Communication Pattern
               </div>
 
               <p className="text-[10px] text-[rgba(255,255,255,0.55)] leading-relaxed">
                 <span className="text-[#F59E0B] font-bold">⚠ Pattern detected:</span>{" "}
-                Toxic generalization. Contradicts team value "Collaboration" and lowers Foundation Score on "Reliability."
+                Toxic generalization. This contradicts the team value "Collaboration" and lowers your Foundation Score on "Reliability."
               </p>
 
               <p className="text-[10px] text-[rgba(255,255,255,0.55)] leading-relaxed">
                 <span className="text-white font-bold">Coach suggestion:</span>{" "}
-                Focus on facts and solutions.
+                Focus on facts and solutions instead of blame.
               </p>
 
               <div className="rounded-lg px-3 py-2.5 mt-auto" style={{ background: "rgba(78,205,196,0.06)", border: "1px solid rgba(78,205,196,0.2)" }}>
