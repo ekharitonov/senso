@@ -2,14 +2,69 @@ import Navbar from "@/components/Navbar";
 import founderPhoto from "@/assets/founder-eugene.png";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight } from "lucide-react";
+import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight, Building2, BookOpen, BadgeCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const credentials = [
-  { icon: Briefcase, label: "Enterprise", text: "15+ years at GE, 3M, Walmart" },
-  { icon: GraduationCap, label: "Education", text: "M.S. CS · M.Eng. · MBA · INSEAD · Stanford d.school" },
-  { icon: Shield, label: "Certifications", text: "AWS Architecture · IBM AI · Duke MLOps · Stanford AI Healthcare · MIT Fintech" },
-  { icon: Award, label: "Recognition", text: "IEEE Senior Member · White House AI Judge · NSF I-Corps · HBR Speaker · Board Member" },
+const credentialSections = [
+  {
+    icon: Building2,
+    label: "Enterprise Experience",
+    color: "from-blue-500/20 to-blue-600/5",
+    borderColor: "border-blue-500/20",
+    iconColor: "text-blue-400",
+    tagBg: "bg-blue-500/10 text-blue-300 border-blue-500/15",
+    items: [
+      { text: "GE", bold: true },
+      { text: "3M", bold: true },
+      { text: "Walmart", bold: true },
+    ],
+    subtitle: "15+ years scaling enterprise products",
+  },
+  {
+    icon: GraduationCap,
+    label: "Education",
+    color: "from-violet-500/20 to-violet-600/5",
+    borderColor: "border-violet-500/20",
+    iconColor: "text-violet-400",
+    tagBg: "bg-violet-500/10 text-violet-300 border-violet-500/15",
+    items: [
+      { text: "M.S. Computer Science" },
+      { text: "M.Eng." },
+      { text: "MBA" },
+      { text: "INSEAD" },
+      { text: "Stanford d.school" },
+    ],
+  },
+  {
+    icon: BadgeCheck,
+    label: "Certifications",
+    color: "from-emerald-500/20 to-emerald-600/5",
+    borderColor: "border-emerald-500/20",
+    iconColor: "text-emerald-400",
+    tagBg: "bg-emerald-500/10 text-emerald-300 border-emerald-500/15",
+    items: [
+      { text: "AWS Architecture" },
+      { text: "IBM AI" },
+      { text: "Duke MLOps" },
+      { text: "Stanford AI Healthcare" },
+      { text: "MIT Fintech" },
+    ],
+  },
+  {
+    icon: Star,
+    label: "Recognition",
+    color: "from-amber-500/20 to-amber-600/5",
+    borderColor: "border-amber-500/20",
+    iconColor: "text-amber-400",
+    tagBg: "bg-amber-500/10 text-amber-300 border-amber-500/15",
+    items: [
+      { text: "IEEE Senior Member", bold: true },
+      { text: "White House AI Judge", bold: true },
+      { text: "NSF I-Corps" },
+      { text: "HBR Speaker" },
+      { text: "Board Member" },
+    ],
+  },
 ];
 
 const stats = [
@@ -140,23 +195,45 @@ export default function AboutPage() {
                     </div>
                   </div>
 
-                  {/* Credentials Grid */}
+                  {/* Credentials Visual Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                    {credentials.map((cred, i) => (
+                    {credentialSections.map((section, i) => (
                       <motion.div
-                        key={cred.label}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        key={section.label}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: 0.1 * i }}
-                        className="flex items-start gap-4 p-4 rounded-xl bg-primary-foreground/[0.03] border border-primary-foreground/[0.06] hover:border-accent/20 transition-colors duration-300"
+                        transition={{ duration: 0.5, delay: 0.1 * i }}
+                        className={`relative rounded-xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300`}
                       >
-                        <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
-                          <cred.icon className="w-5 h-5 text-accent" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-wider text-accent/70 mb-1">{cred.label}</p>
-                          <p className="text-sm text-primary-foreground/80 leading-relaxed">{cred.text}</p>
+                        {/* Gradient border */}
+                        <div className={`absolute -inset-[1px] rounded-xl bg-gradient-to-br ${section.color} opacity-60 group-hover:opacity-100 transition-opacity`} />
+                        
+                        <div className="relative bg-primary rounded-xl p-5">
+                          {/* Header */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${section.color} ${section.borderColor} border flex items-center justify-center`}>
+                              <section.icon className={`w-4 h-4 ${section.iconColor}`} />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-primary-foreground/90">{section.label}</p>
+                              {section.subtitle && (
+                                <p className="text-[11px] text-primary-foreground/40">{section.subtitle}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {/* Tags */}
+                          <div className="flex flex-wrap gap-2">
+                            {section.items.map((item) => (
+                              <span
+                                key={item.text}
+                                className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs border ${section.tagBg} ${item.bold ? 'font-bold' : 'font-medium'}`}
+                              >
+                                {item.text}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </motion.div>
                     ))}
