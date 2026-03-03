@@ -174,13 +174,16 @@ export default function EngageMessenger() {
             </motion.div>
           </div>
 
-          {/* Input bar */}
+          {/* Input bar — Alex P. typing corrected message */}
           <div className="px-3 pb-2.5 pt-1">
-            <div className="rounded-lg border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-3 py-2 flex items-center gap-2">
+            <div className="rounded-lg border border-[rgba(78,205,196,0.3)] bg-[rgba(78,205,196,0.04)] px-3 py-2.5 flex items-center gap-2" style={{ boxShadow: "0 0 12px rgba(78,205,196,0.06)" }}>
               <span className="text-[rgba(255,255,255,0.2)] text-[14px]">+</span>
-              <span className="flex-1 text-[11px] text-[rgba(255,255,255,0.2)]">Message #project-alpha</span>
-              <div className="flex items-center gap-1.5 text-[rgba(255,255,255,0.2)] text-[12px]">
+              <span className="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">
+                Sorry about that. The marketing team's deadlines shifted — let's discuss causes and build a new sync plan together.
+              </span>
+              <div className="flex items-center gap-1.5 text-[rgba(255,255,255,0.25)] text-[12px]">
                 📎 😊 <span className="text-[11px] font-bold">Aa</span>
+                <span className="ml-1 text-[14px]">➤</span>
               </div>
             </div>
           </div>
