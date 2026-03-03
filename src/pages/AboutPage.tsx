@@ -5,64 +5,124 @@ import { motion } from "framer-motion";
 import { Linkedin, Github, Award, GraduationCap, Briefcase, Shield, ExternalLink, Heart, Sparkles, Users, MessageCircle, ArrowRight, Building2, BookOpen, BadgeCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const credentialSections = [
+// Brand logo components for visual richness
+const GELogo = () => (
+  <svg viewBox="0 0 80 80" className="w-10 h-10">
+    <circle cx="40" cy="40" r="36" stroke="#3B82F6" strokeWidth="3" fill="none" opacity="0.7" />
+    <text x="40" y="50" textAnchor="middle" fontSize="28" fontWeight="bold" fontFamily="serif" fill="#60A5FA">GE</text>
+  </svg>
+);
+const ThreeMlogo = () => (
+  <div className="w-10 h-10 flex items-center justify-center">
+    <span className="text-xl font-black text-red-400" style={{ fontFamily: 'Arial Black, sans-serif' }}>3M</span>
+  </div>
+);
+const WalmartLogo = () => (
+  <div className="w-10 h-10 flex items-center justify-center">
+    <svg viewBox="0 0 40 40" className="w-7 h-7">
+      {[0, 60, 120, 180, 240, 300].map((angle) => (
+        <line key={angle} x1="20" y1="20" x2={20 + 14 * Math.cos((angle * Math.PI) / 180)} y2={20 + 14 * Math.sin((angle * Math.PI) / 180)} stroke="#FDB913" strokeWidth="3.5" strokeLinecap="round" />
+      ))}
+    </svg>
+  </div>
+);
+const StanfordLogo = () => (
+  <div className="w-10 h-10 rounded-full bg-[#8C1515]/20 border border-[#8C1515]/30 flex items-center justify-center">
+    <span className="text-sm font-bold text-[#E08080]" style={{ fontFamily: 'serif' }}>S</span>
+  </div>
+);
+const INSEADLogo = () => (
+  <div className="w-10 h-10 rounded-full bg-[#006B3F]/20 border border-[#006B3F]/30 flex items-center justify-center">
+    <span className="text-[9px] font-bold text-emerald-400 tracking-tight">INSEAD</span>
+  </div>
+);
+const AWSLogo = () => (
+  <div className="w-10 h-10 rounded-lg bg-[#FF9900]/10 border border-[#FF9900]/20 flex items-center justify-center">
+    <span className="text-[10px] font-black text-[#FF9900]">AWS</span>
+  </div>
+);
+const IBMLogo = () => (
+  <div className="w-10 h-10 flex items-center justify-center">
+    <svg viewBox="0 0 40 20" className="w-8">
+      {[0, 4, 8, 12, 16].map((y) => (
+        <rect key={y} x="2" y={y} width="36" height="2.5" fill="#4A90D9" rx="0.5" />
+      ))}
+      <text x="20" y="14.5" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#1a1a2e" fontFamily="monospace">IBM</text>
+    </svg>
+  </div>
+);
+const MITLogo = () => (
+  <div className="w-10 h-10 rounded-lg bg-[#A31F34]/15 border border-[#A31F34]/25 flex items-center justify-center">
+    <span className="text-[11px] font-black text-[#E06070] tracking-tight">MIT</span>
+  </div>
+);
+const DukeLogo = () => (
+  <div className="w-10 h-10 rounded-full bg-[#003087]/20 border border-[#003087]/30 flex items-center justify-center">
+    <span className="text-[10px] font-bold text-blue-400">Duke</span>
+  </div>
+);
+const IEEELogo = () => (
+  <div className="w-10 h-10 rounded-lg bg-[#006699]/15 border border-[#006699]/25 flex items-center justify-center">
+    <span className="text-[9px] font-bold text-cyan-400 tracking-tight">IEEE</span>
+  </div>
+);
+const WHLogo = () => (
+  <div className="w-10 h-10 rounded-full bg-primary-foreground/5 border border-primary-foreground/10 flex items-center justify-center">
+    <svg viewBox="0 0 24 24" className="w-5 h-5 text-primary-foreground/50" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </div>
+);
+
+const credentialRows = [
   {
-    icon: Building2,
-    label: "Enterprise Experience",
-    color: "from-blue-500/20 to-blue-600/5",
-    borderColor: "border-blue-500/20",
-    iconColor: "text-blue-400",
-    tagBg: "bg-blue-500/10 text-blue-300 border-blue-500/15",
+    label: "Enterprise",
+    subtitle: "15+ years scaling products",
+    color: "from-blue-500/20 to-blue-500/5",
+    borderColor: "border-blue-500/15",
     items: [
-      { text: "GE", bold: true },
-      { text: "3M", bold: true },
-      { text: "Walmart", bold: true },
+      { logo: GELogo, name: "General Electric" },
+      { logo: ThreeMlogo, name: "3M" },
+      { logo: WalmartLogo, name: "Walmart" },
     ],
-    subtitle: "15+ years scaling enterprise products",
   },
   {
-    icon: GraduationCap,
     label: "Education",
-    color: "from-violet-500/20 to-violet-600/5",
-    borderColor: "border-violet-500/20",
-    iconColor: "text-violet-400",
-    tagBg: "bg-violet-500/10 text-violet-300 border-violet-500/15",
+    subtitle: "5 graduate programs",
+    color: "from-violet-500/20 to-violet-500/5",
+    borderColor: "border-violet-500/15",
     items: [
-      { text: "M.S. Computer Science" },
-      { text: "M.Eng." },
-      { text: "MBA" },
-      { text: "INSEAD" },
-      { text: "Stanford d.school" },
+      { logo: StanfordLogo, name: "Stanford d.school" },
+      { logo: INSEADLogo, name: "INSEAD" },
+      { name: "M.S. CS" },
+      { name: "M.Eng." },
+      { name: "MBA" },
     ],
   },
   {
-    icon: BadgeCheck,
     label: "Certifications",
-    color: "from-emerald-500/20 to-emerald-600/5",
-    borderColor: "border-emerald-500/20",
-    iconColor: "text-emerald-400",
-    tagBg: "bg-emerald-500/10 text-emerald-300 border-emerald-500/15",
+    subtitle: "5 professional certifications",
+    color: "from-emerald-500/20 to-emerald-500/5",
+    borderColor: "border-emerald-500/15",
     items: [
-      { text: "AWS Architecture" },
-      { text: "IBM AI" },
-      { text: "Duke MLOps" },
-      { text: "Stanford AI Healthcare" },
-      { text: "MIT Fintech" },
+      { logo: AWSLogo, name: "AWS Architecture" },
+      { logo: IBMLogo, name: "IBM AI" },
+      { logo: DukeLogo, name: "Duke MLOps" },
+      { logo: MITLogo, name: "MIT Fintech" },
+      { logo: StanfordLogo, name: "Stanford AI Health" },
     ],
   },
   {
-    icon: Star,
     label: "Recognition",
-    color: "from-amber-500/20 to-amber-600/5",
-    borderColor: "border-amber-500/20",
-    iconColor: "text-amber-400",
-    tagBg: "bg-amber-500/10 text-amber-300 border-amber-500/15",
+    subtitle: "Industry leadership",
+    color: "from-amber-500/20 to-amber-500/5",
+    borderColor: "border-amber-500/15",
     items: [
-      { text: "IEEE Senior Member", bold: true },
-      { text: "White House AI Judge", bold: true },
-      { text: "NSF I-Corps" },
-      { text: "HBR Speaker" },
-      { text: "Board Member" },
+      { logo: IEEELogo, name: "IEEE Senior Member" },
+      { logo: WHLogo, name: "White House AI Judge" },
+      { name: "NSF I-Corps" },
+      { name: "HBR Speaker" },
+      { name: "Board Member" },
     ],
   },
 ];
@@ -176,41 +236,39 @@ export default function AboutPage() {
 
                   {/* Credentials Visual Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                    {credentialSections.map((section, i) => (
+                    {credentialRows.map((section, i) => (
                       <motion.div
                         key={section.label}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 * i }}
-                        className={`relative rounded-xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300`}
+                        className="relative rounded-xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300"
                       >
-                        {/* Gradient border */}
                         <div className={`absolute -inset-[1px] rounded-xl bg-gradient-to-br ${section.color} opacity-60 group-hover:opacity-100 transition-opacity`} />
                         
                         <div className="relative bg-primary rounded-xl p-5">
-                          {/* Header */}
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${section.color} ${section.borderColor} border flex items-center justify-center`}>
-                              <section.icon className={`w-4 h-4 ${section.iconColor}`} />
-                            </div>
+                          <div className="flex items-center justify-between mb-4">
                             <div>
                               <p className="text-sm font-bold text-primary-foreground/90">{section.label}</p>
-                              {section.subtitle && (
-                                <p className="text-[11px] text-primary-foreground/40">{section.subtitle}</p>
-                              )}
+                              <p className="text-[11px] text-primary-foreground/40">{section.subtitle}</p>
                             </div>
                           </div>
                           
-                          {/* Tags */}
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-3">
                             {section.items.map((item) => (
-                              <span
-                                key={item.text}
-                                className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs border ${section.tagBg} ${item.bold ? 'font-bold' : 'font-medium'}`}
-                              >
-                                {item.text}
-                              </span>
+                              <div key={item.name} className="flex flex-col items-center gap-1.5 group/item">
+                                {item.logo ? (
+                                  <item.logo />
+                                ) : (
+                                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${section.color} ${section.borderColor} border flex items-center justify-center`}>
+                                    <span className="text-[9px] font-bold text-primary-foreground/50 text-center leading-tight">{item.name}</span>
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-primary-foreground/40 font-medium text-center max-w-[72px] leading-tight group-hover/item:text-primary-foreground/60 transition-colors">
+                                  {item.name}
+                                </span>
+                              </div>
                             ))}
                           </div>
                         </div>
