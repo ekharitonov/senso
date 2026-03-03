@@ -79,10 +79,10 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.35 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Link to="/demo">
+              <Link to="/contact">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                    See How It Works
+                    Schedule a Briefing
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </motion.div>

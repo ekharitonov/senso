@@ -13,6 +13,7 @@ import DemoPage from "./pages/DemoPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import PricingPage from "./pages/PricingPage";
 import CultureDashboard from "./pages/CultureDashboard";
+import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,7 +22,7 @@ const placeholderRoutes = [
   "/case-studies",
   "/blog",
   "/open-source",
-  "/contact",
+  
 ];
 
 const App = () => (
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/demo" element={<DemoPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/dashboard" element={<CultureDashboard />} />
+          <Route path="/contact" element={<ContactPage />} />
           {placeholderRoutes.map((path) => (
             <Route key={path} path={path} element={<PlaceholderPage />} />
           ))}
