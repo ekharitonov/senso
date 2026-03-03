@@ -221,49 +221,42 @@ export default function NetworkGraphAnimation() {
       }
 
       // Draw nodes
-      for (const n of allNodes) {
-        // Compute dynamic alpha based on fadeState
-        let baseAlpha: number;
+      for (let ni = 0; ni < allNodes.length; ni++) {
+        const n = allNodes[ni];
+
+        // ALL nodes breathe dynamically — no static faces
         const sinVal = Math.sin(time * n.pulseSpeed + n.pulseOffset);
-        switch (n.fadeState) {
-          case "bright":
-            baseAlpha = 0.85 + sinVal * 0.15; // 0.7–1.0, barely flickers
-            break;
-          case "growing":
-            baseAlpha = 0.4 + sinVal * 0.35; // 0.05–0.75, breathes in
-            break;
-          case "fading":
-            baseAlpha = 0.3 + Math.sin(time * 0.3 + n.fadePhase) * 0.25; // slow fade in/out
-            break;
-          case "dim":
-            baseAlpha = 0.15 + sinVal * 0.1; // ghost-like
-            break;
-        }
-        const alpha = baseAlpha * n.brightness;
+        const slowBreath = Math.sin(time * 0.15 + n.fadePhase); // very slow cycle 0→1→0
+        // Combine fast pulse with slow deep breathing
+        const baseAlpha = 0.1 + (sinVal * 0.5 + 0.5) * 0.5 + (slowBreath * 0.5 + 0.5) * 0.4;
+        const alpha = Math.min(1, baseAlpha * n.brightness);
 
-        if (n.imgIndex >= 0 && loadedRef.current >= faceSrcs.length) {
+        // Face swapping: every ~8-15 seconds each node swaps face
+        const swapCycle = Math.floor((time + ni * 3.7) / (8 + (ni % 7) * 1.2));
+        const currentImgIndex = (n.imgIndex + swapCycle) % faceSrcs.length;
+
+        if (loadedRef.current >= faceSrcs.length) {
           const r = n.radius;
-          const img = imagesRef.current[n.imgIndex];
+          const img = imagesRef.current[currentImgIndex];
 
-          // Glow — stronger for bright nodes
-          const glowR = n.fadeState === "bright" ? r + 16 : r + 8;
-          const glowAlpha = n.fadeState === "bright" ? alpha * 0.6 : alpha * 0.3;
+          // Glow — pulses with the node
+          const glowR = r + 8 + alpha * 10;
           const gg = ctx.createRadialGradient(n.x, n.y, r * 0.8, n.x, n.y, glowR);
-          gg.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${glowAlpha})`);
+          gg.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${alpha * 0.5})`);
           gg.addColorStop(1, `hsla(${tH}, ${tS}%, ${tL}%, 0)`);
           ctx.beginPath();
           ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
           ctx.fillStyle = gg;
           ctx.fill();
 
-          // Border ring
+          // Border ring — brightness matches alpha
           ctx.beginPath();
           ctx.arc(n.x, n.y, r + 1.5, 0, Math.PI * 2);
-          ctx.strokeStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha * 0.8})`;
-          ctx.lineWidth = n.fadeState === "bright" ? 2.5 : 1.5;
+          ctx.strokeStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha * 0.9})`;
+          ctx.lineWidth = 1.5 + alpha * 1.5;
           ctx.stroke();
 
-          // Face
+          // Face with dynamic alpha
           ctx.save();
           ctx.globalAlpha = alpha;
           ctx.beginPath();
@@ -272,20 +265,6 @@ export default function NetworkGraphAnimation() {
           ctx.drawImage(img, n.x - r, n.y - r, r * 2, r * 2);
           ctx.restore();
           ctx.globalAlpha = 1;
-        } else if (n.imgIndex < 0) {
-          // Abstract dot
-          const gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius * 3);
-          gr.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${alpha * 0.5})`);
-          gr.addColorStop(1, `hsla(${tH}, ${tS}%, ${tL}%, 0)`);
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, n.radius * 3, 0, Math.PI * 2);
-          ctx.fillStyle = gr;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha})`;
-          ctx.fill();
         }
       }
 
