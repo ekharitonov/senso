@@ -12,6 +12,7 @@ const navItems = [
       { label: "How It Works", href: "/how-it-works", desc: "Multi-agent architecture" },
       { label: "Use Cases", href: "/use-cases", desc: "Six validated scenarios" },
       { label: "Interactive Demo", href: "/demo", desc: "Try SENSO live" },
+      { label: "Live Dashboard", href: "/dashboard", desc: "Culture analytics demo" },
     ],
   },
   {
