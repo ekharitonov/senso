@@ -1,16 +1,12 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofBar from "@/components/SocialProofBar";
-import TrustedByBar from "@/components/TrustedByBar";
 import ProblemSection from "@/components/ProblemSection";
+import UseCasesPreview from "@/components/UseCasesPreview";
+import WedgeSection from "@/components/WedgeSection";
 import SensoFlowSection from "@/components/SensoFlowSection";
 import ArchitectureSection from "@/components/ArchitectureSection";
-import ITSecuritySection from "@/components/ITSecuritySection";
-import AIProSection from "@/components/AIProSection";
-import UseCasesPreview from "@/components/UseCasesPreview";
-import SecuritySection from "@/components/SecuritySection";
-import WedgeSection from "@/components/WedgeSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
+import SecurityTrustSection from "@/components/SecurityTrustSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -19,16 +15,12 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SocialProofBar />
-      {/* <TrustedByBar /> */}
       <ProblemSection />
       <UseCasesPreview />
+      <WedgeSection />
       <SensoFlowSection />
       <ArchitectureSection />
-      <ITSecuritySection />
-      <AIProSection />
-      <SecuritySection />
-      <WedgeSection />
-      {/* <TestimonialsSection /> */}
+      <SecurityTrustSection />
       <Footer />
     </div>
   );
