@@ -109,22 +109,22 @@ export default function NetworkGraphAnimation() {
       fadePhase: Math.random() * Math.PI * 2,
     }));
 
-    // 22 small abstract dots for density
+    // 22 additional small face nodes for density — all with photos
     for (let i = 0; i < 22; i++) {
       const angle = (i / 22) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
       const dist = 35 + Math.random() * 260;
       allNodes.push({
         x: cx + Math.cos(angle) * dist,
         y: cy + Math.sin(angle) * dist,
-        radius: 1.5 + Math.random() * 3.5,
+        radius: 8 + Math.random() * 6,
         vx: (Math.random() - 0.5) * 0.2,
         vy: (Math.random() - 0.5) * 0.2,
         brightness: 0.2 + Math.random() * 0.5,
         pulseSpeed: 0.5 + Math.random() * 1.5,
         pulseOffset: Math.random() * Math.PI * 2,
-        imgIndex: -1,
-        fadeState: "dim",
-        fadePhase: 0,
+        imgIndex: i % faceSrcs.length,
+        fadeState: i % 3 === 0 ? "fading" : i % 3 === 1 ? "dim" : "growing",
+        fadePhase: Math.random() * Math.PI * 2,
       });
     }
 
