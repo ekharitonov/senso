@@ -10,7 +10,7 @@ import face8 from "@/assets/faces/face-8.jpg";
 
 const faceSrcs = [face1, face2, face3, face4, face5, face6, face7, face8];
 
-interface FaceNode {
+interface NetNode {
   x: number;
   y: number;
   radius: number;
@@ -19,12 +19,9 @@ interface FaceNode {
   brightness: number;
   pulseSpeed: number;
   pulseOffset: number;
-  imgIndex: number;
-}
-
-interface Edge {
-  from: number;
-  to: number;
+  imgIndex: number; // -1 = abstract dot
+  fadeState: "bright" | "dim" | "fading" | "growing";
+  fadePhase: number;
 }
 
 export default function NetworkGraphAnimation() {
@@ -58,182 +55,194 @@ export default function NetworkGraphAnimation() {
       return img;
     });
 
-    // Create face nodes — 8 primary large nodes with faces
-    const faceNodes: FaceNode[] = [];
-    const primaryCount = 8;
-
-    // Place primary nodes in a nice organic ring
-    const positions = [
-      { angle: -0.4, dist: 120 },
-      { angle: 0.3, dist: 155 },
-      { angle: 1.0, dist: 110 },
-      { angle: 1.7, dist: 160 },
-      { angle: 2.4, dist: 125 },
-      { angle: 3.2, dist: 150 },
-      { angle: 4.0, dist: 115 },
-      { angle: 5.0, dist: 145 },
+    // --- Create nodes ---
+    // 16 face nodes at varying sizes, depths, and pulse states
+    const facePositions = [
+      // Inner ring — large, bright
+      { angle: -0.3, dist: 70, r: 28, fade: "bright" as const, ps: 0.6 },
+      { angle: 0.8, dist: 85, r: 26, fade: "bright" as const, ps: 0.5 },
+      { angle: 2.0, dist: 75, r: 30, fade: "bright" as const, ps: 0.7 },
+      { angle: 3.5, dist: 80, r: 27, fade: "bright" as const, ps: 0.55 },
+      // Mid ring — medium, some fading
+      { angle: 0.2, dist: 135, r: 22, fade: "growing" as const, ps: 0.9 },
+      { angle: 1.3, dist: 145, r: 20, fade: "dim" as const, ps: 1.2 },
+      { angle: 2.5, dist: 130, r: 23, fade: "bright" as const, ps: 0.8 },
+      { angle: 3.8, dist: 140, r: 19, fade: "fading" as const, ps: 1.0 },
+      { angle: 4.8, dist: 125, r: 21, fade: "growing" as const, ps: 0.7 },
+      { angle: 5.6, dist: 150, r: 18, fade: "dim" as const, ps: 1.3 },
+      // Outer ring — small, dim/fading
+      { angle: 0.6, dist: 195, r: 15, fade: "fading" as const, ps: 1.4 },
+      { angle: 1.7, dist: 200, r: 14, fade: "dim" as const, ps: 1.6 },
+      { angle: 2.9, dist: 190, r: 16, fade: "fading" as const, ps: 1.1 },
+      { angle: 4.2, dist: 205, r: 13, fade: "dim" as const, ps: 1.5 },
+      { angle: 5.1, dist: 185, r: 15, fade: "growing" as const, ps: 0.9 },
+      { angle: 5.9, dist: 195, r: 14, fade: "fading" as const, ps: 1.2 },
     ];
 
-    for (let i = 0; i < primaryCount; i++) {
-      const { angle, dist } = positions[i];
-      faceNodes.push({
-        x: cx + Math.cos(angle) * dist,
-        y: cy + Math.sin(angle) * dist,
-        radius: 22 + Math.random() * 8, // face circle radius
-        vx: (Math.random() - 0.5) * 0.12,
-        vy: (Math.random() - 0.5) * 0.12,
-        brightness: 0.7 + Math.random() * 0.3,
-        pulseSpeed: 0.4 + Math.random() * 0.8,
-        pulseOffset: Math.random() * Math.PI * 2,
-        imgIndex: i,
-      });
-    }
+    const allNodes: NetNode[] = facePositions.map((p, i) => ({
+      x: cx + Math.cos(p.angle) * p.dist,
+      y: cy + Math.sin(p.angle) * p.dist,
+      radius: p.r,
+      vx: (Math.random() - 0.5) * 0.1,
+      vy: (Math.random() - 0.5) * 0.1,
+      brightness: p.fade === "bright" ? 0.95 : p.fade === "growing" ? 0.7 : p.fade === "dim" ? 0.35 : 0.5,
+      pulseSpeed: p.ps,
+      pulseOffset: Math.random() * Math.PI * 2,
+      imgIndex: i % faceSrcs.length,
+      fadeState: p.fade,
+      fadePhase: Math.random() * Math.PI * 2,
+    }));
 
-    // Add 14 small abstract nodes for network density
-    const smallNodes: FaceNode[] = [];
-    for (let i = 0; i < 14; i++) {
-      const angle = (i / 14) * Math.PI * 2 + (Math.random() - 0.5) * 0.6;
-      const dist = 40 + Math.random() * 180;
-      smallNodes.push({
+    // 18 small abstract dots
+    for (let i = 0; i < 18; i++) {
+      const angle = (i / 18) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+      const dist = 30 + Math.random() * 210;
+      allNodes.push({
         x: cx + Math.cos(angle) * dist,
         y: cy + Math.sin(angle) * dist,
-        radius: 2 + Math.random() * 3,
+        radius: 1.5 + Math.random() * 3,
         vx: (Math.random() - 0.5) * 0.2,
         vy: (Math.random() - 0.5) * 0.2,
-        brightness: 0.3 + Math.random() * 0.4,
+        brightness: 0.2 + Math.random() * 0.5,
         pulseSpeed: 0.5 + Math.random() * 1.5,
         pulseOffset: Math.random() * Math.PI * 2,
-        imgIndex: -1, // no image
+        imgIndex: -1,
+        fadeState: "dim",
+        fadePhase: 0,
       });
     }
 
-    const allNodes = [...faceNodes, ...smallNodes];
-
-    // Create edges based on proximity
-    const edges: Edge[] = [];
+    // Build edges
+    const edges: { from: number; to: number }[] = [];
     for (let i = 0; i < allNodes.length; i++) {
       for (let j = i + 1; j < allNodes.length; j++) {
         const dx = allNodes[i].x - allNodes[j].x;
         const dy = allNodes[i].y - allNodes[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
+        const threshold = (allNodes[i].imgIndex >= 0 && allNodes[j].imgIndex >= 0) ? 170 : 130;
+        if (dist < threshold) {
           edges.push({ from: i, to: j });
         }
       }
     }
 
-    const tealH = 178, tealS = 42, tealL = 48;
+    const tH = 178, tS = 42, tL = 48;
     let time = 0;
 
     function draw() {
-      if (!ctx || !canvas) return;
+      if (!ctx) return;
       ctx.clearRect(0, 0, size, size);
       time += 0.016;
 
       // Update positions
-      for (const node of allNodes) {
-        node.x += node.vx;
-        node.y += node.vy;
-        const dx = node.x - cx;
-        const dy = node.y - cy;
+      for (const n of allNodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+        const dx = n.x - cx, dy = n.y - cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 210) {
-          node.vx -= dx * 0.0004;
-          node.vy -= dy * 0.0004;
-        }
-        node.vx += (Math.random() - 0.5) * 0.008;
-        node.vy += (Math.random() - 0.5) * 0.008;
-        node.vx *= 0.997;
-        node.vy *= 0.997;
+        if (dist > 220) { n.vx -= dx * 0.0004; n.vy -= dy * 0.0004; }
+        n.vx += (Math.random() - 0.5) * 0.006;
+        n.vy += (Math.random() - 0.5) * 0.006;
+        n.vx *= 0.997;
+        n.vy *= 0.997;
       }
 
       // Draw edges
-      for (const edge of edges) {
-        const a = allNodes[edge.from];
-        const b = allNodes[edge.to];
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
+      for (const e of edges) {
+        const a = allNodes[e.from], b = allNodes[e.to];
+        const dx = a.x - b.x, dy = a.y - b.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const opacity = Math.max(0, (1 - dist / 170)) * 0.3;
-
+        const op = Math.max(0, (1 - dist / 180)) * 0.25;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = `hsla(${tealH}, ${tealS}%, ${tealL}%, ${opacity})`;
-        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = `hsla(${tH}, ${tS}%, ${tL}%, ${op})`;
+        ctx.lineWidth = 0.7;
         ctx.stroke();
       }
 
-      // Draw signal pulses on some edges
-      const pulseEdgeCount = 3;
-      for (let i = 0; i < pulseEdgeCount; i++) {
-        const edgeIdx = Math.floor((time * 0.3 + i * 7.7) % edges.length);
-        const edge = edges[edgeIdx];
-        const a = allNodes[edge.from];
-        const b = allNodes[edge.to];
-        const t = ((time * 0.5 + i * 3.3) % 1);
+      // Signal pulses
+      for (let i = 0; i < 5; i++) {
+        const ei = Math.floor((time * 0.25 + i * 5.3) % edges.length);
+        const e = edges[ei];
+        const a = allNodes[e.from], b = allNodes[e.to];
+        const t = ((time * 0.4 + i * 2.1) % 1);
         const px = a.x + (b.x - a.x) * t;
         const py = a.y + (b.y - a.y) * t;
-
-        const grad = ctx.createRadialGradient(px, py, 0, px, py, 6);
-        grad.addColorStop(0, `hsla(${tealH}, 60%, 70%, 0.8)`);
-        grad.addColorStop(1, `hsla(${tealH}, 60%, 70%, 0)`);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, 5);
+        g.addColorStop(0, `hsla(${tH}, 60%, 70%, 0.7)`);
+        g.addColorStop(1, `hsla(${tH}, 60%, 70%, 0)`);
         ctx.beginPath();
-        ctx.arc(px, py, 6, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fillStyle = g;
         ctx.fill();
       }
 
       // Draw nodes
-      for (const node of allNodes) {
-        const pulse = Math.sin(time * node.pulseSpeed + node.pulseOffset) * 0.2 + 0.8;
-        const alpha = node.brightness * pulse;
+      for (const n of allNodes) {
+        // Compute dynamic alpha based on fadeState
+        let baseAlpha: number;
+        const sinVal = Math.sin(time * n.pulseSpeed + n.pulseOffset);
+        switch (n.fadeState) {
+          case "bright":
+            baseAlpha = 0.85 + sinVal * 0.15; // 0.7–1.0, barely flickers
+            break;
+          case "growing":
+            baseAlpha = 0.4 + sinVal * 0.35; // 0.05–0.75, breathes in
+            break;
+          case "fading":
+            baseAlpha = 0.3 + Math.sin(time * 0.3 + n.fadePhase) * 0.25; // slow fade in/out
+            break;
+          case "dim":
+            baseAlpha = 0.15 + sinVal * 0.1; // ghost-like
+            break;
+        }
+        const alpha = baseAlpha * n.brightness;
 
-        if (node.imgIndex >= 0 && loadedRef.current >= faceSrcs.length) {
-          // Face node — draw circular clipped image
-          const r = node.radius;
-          const img = imagesRef.current[node.imgIndex];
+        if (n.imgIndex >= 0 && loadedRef.current >= faceSrcs.length) {
+          const r = n.radius;
+          const img = imagesRef.current[n.imgIndex];
 
-          // Outer glow ring
-          const glowGrad = ctx.createRadialGradient(node.x, node.y, r, node.x, node.y, r + 12);
-          glowGrad.addColorStop(0, `hsla(${tealH}, ${tealS}%, ${tealL + 15}%, ${alpha * 0.5})`);
-          glowGrad.addColorStop(1, `hsla(${tealH}, ${tealS}%, ${tealL}%, 0)`);
+          // Glow — stronger for bright nodes
+          const glowR = n.fadeState === "bright" ? r + 16 : r + 8;
+          const glowAlpha = n.fadeState === "bright" ? alpha * 0.6 : alpha * 0.3;
+          const gg = ctx.createRadialGradient(n.x, n.y, r * 0.8, n.x, n.y, glowR);
+          gg.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${glowAlpha})`);
+          gg.addColorStop(1, `hsla(${tH}, ${tS}%, ${tL}%, 0)`);
           ctx.beginPath();
-          ctx.arc(node.x, node.y, r + 12, 0, Math.PI * 2);
-          ctx.fillStyle = glowGrad;
+          ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
+          ctx.fillStyle = gg;
           ctx.fill();
 
-          // Teal ring border
+          // Border ring
           ctx.beginPath();
-          ctx.arc(node.x, node.y, r + 2, 0, Math.PI * 2);
-          ctx.strokeStyle = `hsla(${tealH}, ${tealS + 10}%, ${tealL + 20}%, ${alpha * 0.7})`;
-          ctx.lineWidth = 2;
+          ctx.arc(n.x, n.y, r + 1.5, 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha * 0.8})`;
+          ctx.lineWidth = n.fadeState === "bright" ? 2.5 : 1.5;
           ctx.stroke();
 
-          // Clip circle and draw face
+          // Face
           ctx.save();
+          ctx.globalAlpha = alpha;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
           ctx.clip();
-
-          // Draw image centered and covering the circle
-          const imgSize = r * 2;
-          ctx.drawImage(img, node.x - r, node.y - r, imgSize, imgSize);
-
+          ctx.drawImage(img, n.x - r, n.y - r, r * 2, r * 2);
           ctx.restore();
-        } else if (node.imgIndex < 0) {
-          // Small abstract node
-          const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3);
-          gradient.addColorStop(0, `hsla(${tealH}, ${tealS}%, ${tealL + 15}%, ${alpha * 0.4})`);
-          gradient.addColorStop(1, `hsla(${tealH}, ${tealS}%, ${tealL}%, 0)`);
+          ctx.globalAlpha = 1;
+        } else if (n.imgIndex < 0) {
+          // Abstract dot
+          const gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius * 3);
+          gr.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${alpha * 0.5})`);
+          gr.addColorStop(1, `hsla(${tH}, ${tS}%, ${tL}%, 0)`);
           ctx.beginPath();
-          ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
-          ctx.fillStyle = gradient;
+          ctx.arc(n.x, n.y, n.radius * 3, 0, Math.PI * 2);
+          ctx.fillStyle = gr;
           ctx.fill();
 
           ctx.beginPath();
-          ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(${tealH}, ${tealS + 10}%, ${tealL + 20}%, ${alpha})`;
+          ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha})`;
           ctx.fill();
         }
       }
