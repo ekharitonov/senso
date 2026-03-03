@@ -88,9 +88,10 @@ export default function EngageMessenger() {
                     <span className="text-[9px] text-[rgba(245,158,11,0.4)]">APP</span>
                     <span className="text-[9px] text-[rgba(255,255,255,0.18)]">9:35 AM</span>
                   </div>
-                  <div className="space-y-1">
-                    <div className="h-2 rounded-sm bg-[rgba(245,158,11,0.08)]" style={{ width: 200 }} />
-                    <div className="h-2 rounded-sm bg-[rgba(245,158,11,0.08)]" style={{ width: 150 }} />
+                  <div className="bg-[rgba(245,158,11,0.06)] border border-[rgba(245,158,11,0.15)] rounded-lg px-3 py-2 inline-block max-w-[95%]">
+                    <span className="text-[11px] text-[rgba(255,255,255,0.75)] leading-snug">
+                      Hey team 👋 How's everyone feeling about the project-alpha timeline? Any blockers I can help clear? Would love to hear where things stand so we can support each other.
+                    </span>
                   </div>
                 </div>
               </div>
