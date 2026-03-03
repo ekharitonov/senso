@@ -159,8 +159,20 @@ export default function AboutPage() {
                     <p className="text-accent text-base md:text-lg font-semibold mb-3">
                       Founder & Technical Architect
                     </p>
+                    <p className="text-primary-foreground/60 text-sm md:text-base leading-relaxed mb-3">
+                      15+ years scaling enterprise products at GE, 3M, and running his own consulting practice with Fortune 500 companies — teaming on projects with Deloitte, BCG, and McKinsey, and understanding hands-on the challenges that kill culture, trust, and performance from the inside.
+                    </p>
+                    <p className="text-primary-foreground/60 text-sm md:text-base leading-relaxed mb-3">
+                      Judge & Mentor at the White House AI Presidential Challenge. IEEE Senior Member. NSF I-Corps graduate.
+                    </p>
+                    <p className="text-primary-foreground/60 text-sm md:text-base leading-relaxed mb-3">
+                      Certified across the full stack that SENSO demands: AI/ML and Enterprise AI Workflows (IBM), Cloud Architecture (AWS Academy), ML Operations (Duke University), AI in Healthcare (Stanford University), Cybersecurity in Fintech (MIT), Big Data and Hadoop (IBM), Digital Transformation (BCG & University of Virginia), Customer-Centric IT Strategy (University of Virginia Darden School of Business), AI Strategy and Governance (University of Pennsylvania), Cybersecurity Specialization ((ISC)²). MBA, M.Eng. and M.S. in Computer Science.
+                    </p>
+                    <p className="text-primary-foreground/60 text-sm md:text-base leading-relaxed mb-3">
+                      This rare combination — deep enterprise experience, hands-on engineering, AI/ML certifications, cybersecurity awareness, and business administration — gives Eugene a unique expertise at the intersection of IT, business strategy, and engineering thinking. He doesn't theorize about organizational dysfunction. He saw it, lived it, and built the system to fix it.
+                    </p>
                     <p className="text-primary-foreground/60 text-sm md:text-base leading-relaxed">
-                      15+ years scaling enterprise products at GE, 3M, and running his own consulting practice with Fortune 500 companies — teaming on projects with Deloitte, BCG, and McKinsey, and understanding hands-on the challenges that kill culture, trust, and performance from the inside. Built SENSO's entire production system solo — from architecture to deployment to 20 executive pilots.
+                      Built SENSO's entire production system solo — from architecture to deployment to executive pilots. Two AI agents in production. 20 C-level executives served. 8,500+ autonomous interactions. 0% churn.
                     </p>
 
                     <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-4">
