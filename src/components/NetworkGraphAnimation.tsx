@@ -15,8 +15,38 @@ import face13 from "@/assets/faces/face-13.jpg";
 import face14 from "@/assets/faces/face-14.jpg";
 import face15 from "@/assets/faces/face-15.jpg";
 import face16 from "@/assets/faces/face-16.jpg";
+import face17 from "@/assets/faces/face-17.jpg";
+import face18 from "@/assets/faces/face-18.jpg";
+import face19 from "@/assets/faces/face-19.jpg";
+import face20 from "@/assets/faces/face-20.jpg";
+import face21 from "@/assets/faces/face-21.jpg";
+import face22 from "@/assets/faces/face-22.jpg";
+import face23 from "@/assets/faces/face-23.jpg";
+import face24 from "@/assets/faces/face-24.jpg";
+import face25 from "@/assets/faces/face-25.jpg";
+import face26 from "@/assets/faces/face-26.jpg";
+import face27 from "@/assets/faces/face-27.jpg";
+import face28 from "@/assets/faces/face-28.jpg";
+import face29 from "@/assets/faces/face-29.jpg";
+import face30 from "@/assets/faces/face-30.jpg";
+import face31 from "@/assets/faces/face-31.jpg";
+import face32 from "@/assets/faces/face-32.jpg";
+import face33 from "@/assets/faces/face-33.jpg";
+import face34 from "@/assets/faces/face-34.jpg";
+import face35 from "@/assets/faces/face-35.jpg";
+import face36 from "@/assets/faces/face-36.jpg";
+import face37 from "@/assets/faces/face-37.jpg";
+import face38 from "@/assets/faces/face-38.jpg";
+import face39 from "@/assets/faces/face-39.jpg";
+import face40 from "@/assets/faces/face-40.jpg";
+import face41 from "@/assets/faces/face-41.jpg";
+import face42 from "@/assets/faces/face-42.jpg";
+import face43 from "@/assets/faces/face-43.jpg";
+import face44 from "@/assets/faces/face-44.jpg";
+import face45 from "@/assets/faces/face-45.jpg";
+import face46 from "@/assets/faces/face-46.jpg";
 
-const faceSrcs = [face1, face2, face3, face4, face5, face6, face7, face8, face9, face10, face11, face12, face13, face14, face15, face16];
+const faceSrcs = [face1, face2, face3, face4, face5, face6, face7, face8, face9, face10, face11, face12, face13, face14, face15, face16, face17, face18, face19, face20, face21, face22, face23, face24, face25, face26, face27, face28, face29, face30, face31, face32, face33, face34, face35, face36, face37, face38, face39, face40, face41, face42, face43, face44, face45, face46];
 
 interface NetNode {
   x: number;
@@ -122,7 +152,7 @@ export default function NetworkGraphAnimation() {
         brightness: 0.2 + Math.random() * 0.5,
         pulseSpeed: 0.5 + Math.random() * 1.5,
         pulseOffset: Math.random() * Math.PI * 2,
-        imgIndex: i % faceSrcs.length,
+        imgIndex: facePositions.length + i,
         fadeState: i % 3 === 0 ? "fading" : i % 3 === 1 ? "dim" : "growing",
         fadePhase: Math.random() * Math.PI * 2,
       });
@@ -231,11 +261,10 @@ export default function NetworkGraphAnimation() {
         const baseAlpha = 0.1 + (sinVal * 0.5 + 0.5) * 0.5 + (slowBreath * 0.5 + 0.5) * 0.4;
         const alpha = Math.min(1, baseAlpha * n.brightness);
 
-        // Face swapping: every ~8-15 seconds each node swaps face
-        const swapCycle = Math.floor((time + ni * 3.7) / (8 + (ni % 7) * 1.2));
-        const currentImgIndex = (n.imgIndex + swapCycle) % faceSrcs.length;
+        // Each node has a unique face — no swapping needed
+        const currentImgIndex = n.imgIndex % faceSrcs.length;
 
-        if (loadedRef.current >= faceSrcs.length) {
+        if (currentImgIndex < faceSrcs.length && loadedRef.current >= faceSrcs.length) {
           const r = n.radius;
           const img = imagesRef.current[currentImgIndex];
 
