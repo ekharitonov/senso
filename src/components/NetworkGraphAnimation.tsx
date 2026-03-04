@@ -51,15 +51,46 @@ const faceSrcs = [face1, face2, face3, face4, face5, face6, face7, face8, face9,
 interface NetNode {
   x: number;
   y: number;
+  baseRadius: number;
   radius: number;
   vx: number;
   vy: number;
   brightness: number;
   pulseSpeed: number;
   pulseOffset: number;
-  imgIndex: number; // -1 = abstract dot
-  fadeState: "bright" | "dim" | "fading" | "growing";
-  fadePhase: number;
+  imgIndex: number;
+  // Lifecycle: spawning → alive → dying → dead
+  lifecycle: "spawning" | "alive" | "dying";
+  lifecycleTimer: number;
+  lifeDuration: number;
+  // Growth/shrink animation
+  scalePhase: number;
+  scaleSpeed: number;
+}
+
+function randomAngle() { return Math.random() * Math.PI * 2; }
+
+function createNode(cx: number, cy: number, imgIndex: number, forceAlive = false): NetNode {
+  const angle = randomAngle();
+  const dist = 30 + Math.random() * 260;
+  const baseRadius = 8 + Math.random() * 22;
+  return {
+    x: cx + Math.cos(angle) * dist,
+    y: cy + Math.sin(angle) * dist,
+    baseRadius,
+    radius: baseRadius,
+    vx: (Math.random() - 0.5) * 0.6,
+    vy: (Math.random() - 0.5) * 0.6,
+    brightness: 0.3 + Math.random() * 0.7,
+    pulseSpeed: 0.4 + Math.random() * 1.2,
+    pulseOffset: Math.random() * Math.PI * 2,
+    imgIndex,
+    lifecycle: forceAlive ? "alive" : "spawning",
+    lifecycleTimer: 0,
+    lifeDuration: 8 + Math.random() * 20, // 8-28 seconds alive
+    scalePhase: Math.random() * Math.PI * 2,
+    scaleSpeed: 0.3 + Math.random() * 0.8,
+  };
 }
 
 export default function NetworkGraphAnimation() {
@@ -93,143 +124,183 @@ export default function NetworkGraphAnimation() {
       return img;
     });
 
-    // --- Create nodes ---
-    // 16 face nodes at varying sizes, depths, and pulse states
-    const facePositions = [
-      // Inner ring — large, bright (4 nodes)
-      { angle: -0.4, dist: 110, r: 28, fade: "bright" as const, ps: 0.6 },
-      { angle: 0.9, dist: 120, r: 26, fade: "bright" as const, ps: 0.5 },
-      { angle: 2.1, dist: 115, r: 28, fade: "bright" as const, ps: 0.7 },
-      { angle: 3.6, dist: 118, r: 27, fade: "bright" as const, ps: 0.55 },
-      // Mid ring — 8 nodes spread evenly
-      { angle: 0.0, dist: 195, r: 22, fade: "growing" as const, ps: 0.9 },
-      { angle: 0.8, dist: 205, r: 20, fade: "bright" as const, ps: 0.8 },
-      { angle: 1.6, dist: 190, r: 23, fade: "dim" as const, ps: 1.2 },
-      { angle: 2.4, dist: 200, r: 21, fade: "bright" as const, ps: 0.8 },
-      { angle: 3.2, dist: 195, r: 20, fade: "fading" as const, ps: 1.0 },
-      { angle: 4.0, dist: 205, r: 22, fade: "growing" as const, ps: 0.7 },
-      { angle: 4.8, dist: 190, r: 21, fade: "dim" as const, ps: 1.3 },
-      { angle: 5.6, dist: 200, r: 19, fade: "fading" as const, ps: 1.1 },
-      // Outer ring — 12 nodes
-      { angle: 0.3, dist: 270, r: 16, fade: "fading" as const, ps: 1.4 },
-      { angle: 0.85, dist: 280, r: 15, fade: "dim" as const, ps: 1.6 },
-      { angle: 1.4, dist: 265, r: 16, fade: "growing" as const, ps: 1.1 },
-      { angle: 2.0, dist: 275, r: 14, fade: "dim" as const, ps: 1.5 },
-      { angle: 2.6, dist: 260, r: 15, fade: "fading" as const, ps: 0.9 },
-      { angle: 3.2, dist: 280, r: 14, fade: "dim" as const, ps: 1.2 },
-      { angle: 3.8, dist: 270, r: 15, fade: "growing" as const, ps: 1.3 },
-      { angle: 4.4, dist: 285, r: 13, fade: "fading" as const, ps: 1.4 },
-      { angle: 5.0, dist: 265, r: 15, fade: "dim" as const, ps: 1.0 },
-      { angle: 5.5, dist: 278, r: 14, fade: "fading" as const, ps: 1.5 },
-      { angle: 5.95, dist: 260, r: 15, fade: "growing" as const, ps: 1.1 },
-      { angle: 1.0, dist: 275, r: 13, fade: "dim" as const, ps: 1.6 },
-    ];
+    // Track used face indices to prevent duplicates
+    const usedFaces = new Set<number>();
 
-    const allNodes: NetNode[] = facePositions.map((p, i) => ({
-      x: cx + Math.cos(p.angle) * p.dist,
-      y: cy + Math.sin(p.angle) * p.dist,
-      radius: p.r,
-      vx: (Math.random() - 0.5) * 0.1,
-      vy: (Math.random() - 0.5) * 0.1,
-      brightness: p.fade === "bright" ? 0.95 : p.fade === "growing" ? 0.7 : p.fade === "dim" ? 0.35 : 0.5,
-      pulseSpeed: p.ps,
-      pulseOffset: Math.random() * Math.PI * 2,
-      imgIndex: i % faceSrcs.length,
-      fadeState: p.fade,
-      fadePhase: Math.random() * Math.PI * 2,
-    }));
-
-    // 22 additional small face nodes for density — all with photos
-    for (let i = 0; i < 22; i++) {
-      const angle = (i / 22) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-      const dist = 35 + Math.random() * 260;
-      allNodes.push({
-        x: cx + Math.cos(angle) * dist,
-        y: cy + Math.sin(angle) * dist,
-        radius: 8 + Math.random() * 6,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        brightness: 0.2 + Math.random() * 0.5,
-        pulseSpeed: 0.5 + Math.random() * 1.5,
-        pulseOffset: Math.random() * Math.PI * 2,
-        imgIndex: facePositions.length + i,
-        fadeState: i % 3 === 0 ? "fading" : i % 3 === 1 ? "dim" : "growing",
-        fadePhase: Math.random() * Math.PI * 2,
-      });
+    function getUniqueFaceIndex(): number {
+      if (usedFaces.size >= faceSrcs.length) {
+        // All faces used, clear and start over
+        usedFaces.clear();
+      }
+      let idx: number;
+      do {
+        idx = Math.floor(Math.random() * faceSrcs.length);
+      } while (usedFaces.has(idx));
+      usedFaces.add(idx);
+      return idx;
     }
 
-    // Build edges
-    const edges: { from: number; to: number }[] = [];
-    for (let i = 0; i < allNodes.length; i++) {
-      for (let j = i + 1; j < allNodes.length; j++) {
-        const dx = allNodes[i].x - allNodes[j].x;
-        const dy = allNodes[i].y - allNodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const threshold = (allNodes[i].imgIndex >= 0 && allNodes[j].imgIndex >= 0) ? 200 : 155;
-        if (dist < threshold) {
-          edges.push({ from: i, to: j });
-        }
-      }
+    // Create initial nodes — mix of sizes
+    const TARGET_NODE_COUNT = 34;
+    const allNodes: NetNode[] = [];
+
+    // Create initial set — all start alive
+    for (let i = 0; i < TARGET_NODE_COUNT; i++) {
+      const idx = getUniqueFaceIndex();
+      allNodes.push(createNode(cx, cy, idx, true));
+    }
+
+    // Give initial nodes varied sizes
+    // 4 large inner nodes
+    for (let i = 0; i < 4; i++) {
+      allNodes[i].baseRadius = 24 + Math.random() * 6;
+      allNodes[i].radius = allNodes[i].baseRadius;
+      allNodes[i].brightness = 0.85 + Math.random() * 0.15;
+      const angle = (i / 4) * Math.PI * 2 + Math.random() * 0.5;
+      const dist = 90 + Math.random() * 40;
+      allNodes[i].x = cx + Math.cos(angle) * dist;
+      allNodes[i].y = cy + Math.sin(angle) * dist;
+    }
+    // 8 medium nodes
+    for (let i = 4; i < 12; i++) {
+      allNodes[i].baseRadius = 17 + Math.random() * 7;
+      allNodes[i].radius = allNodes[i].baseRadius;
+      const angle = ((i - 4) / 8) * Math.PI * 2 + Math.random() * 0.4;
+      const dist = 150 + Math.random() * 60;
+      allNodes[i].x = cx + Math.cos(angle) * dist;
+      allNodes[i].y = cy + Math.sin(angle) * dist;
     }
 
     const tH = 178, tS = 42, tL = 48;
     let time = 0;
+    let nextSpawnCheck = 2; // seconds until next spawn check
 
     function draw() {
       if (!ctx) return;
       ctx.clearRect(0, 0, size, size);
-      time += 0.016;
+      const dt = 0.016;
+      time += dt;
 
-      // Update positions
+      // === LIFECYCLE MANAGEMENT ===
+      // Update lifecycle timers
       for (const n of allNodes) {
-        n.x += n.vx;
-        n.y += n.vy;
-        const dx = n.x - cx, dy = n.y - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 270) { n.vx -= dx * 0.0004; n.vy -= dy * 0.0004; }
-        n.vx += (Math.random() - 0.5) * 0.006;
-        n.vy += (Math.random() - 0.5) * 0.006;
-        n.vx *= 0.997;
-        n.vy *= 0.997;
+        n.lifecycleTimer += dt;
+        if (n.lifecycle === "alive" && n.lifecycleTimer > n.lifeDuration) {
+          n.lifecycle = "dying";
+          n.lifecycleTimer = 0;
+        }
       }
 
-      // Edge color palette — focused on red/yellow/green traffic light
+      // Remove dead nodes
+      for (let i = allNodes.length - 1; i >= 0; i--) {
+        if (allNodes[i].lifecycle === "dying" && allNodes[i].lifecycleTimer > 1.5) {
+          usedFaces.delete(allNodes[i].imgIndex);
+          allNodes.splice(i, 1);
+        }
+      }
+
+      // Spawn new nodes to maintain count
+      nextSpawnCheck -= dt;
+      if (nextSpawnCheck <= 0) {
+        nextSpawnCheck = 1 + Math.random() * 2;
+        const aliveCount = allNodes.filter(n => n.lifecycle !== "dying").length;
+        if (aliveCount < TARGET_NODE_COUNT) {
+          const toSpawn = Math.min(3, TARGET_NODE_COUNT - aliveCount);
+          for (let i = 0; i < toSpawn; i++) {
+            const idx = getUniqueFaceIndex();
+            allNodes.push(createNode(cx, cy, idx));
+          }
+        }
+      }
+
+      // === UPDATE POSITIONS — more dynamic movement ===
+      for (const n of allNodes) {
+        // Drift with gentle wandering
+        n.x += n.vx;
+        n.y += n.vy;
+
+        // Attraction to center (elastic)
+        const dx = n.x - cx, dy = n.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 240) {
+          n.vx -= dx * 0.001;
+          n.vy -= dy * 0.001;
+        }
+
+        // Random wandering impulse — makes movement organic
+        n.vx += (Math.random() - 0.5) * 0.025;
+        n.vy += (Math.random() - 0.5) * 0.025;
+
+        // Damping
+        n.vx *= 0.993;
+        n.vy *= 0.993;
+
+        // Clamp speed
+        const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+        if (speed > 1.2) {
+          n.vx = (n.vx / speed) * 1.2;
+          n.vy = (n.vy / speed) * 1.2;
+        }
+
+        // Animate radius — breathing/growing/shrinking
+        const scaleBreathe = Math.sin(time * n.scaleSpeed + n.scalePhase) * 0.15;
+        n.radius = n.baseRadius * (1 + scaleBreathe);
+      }
+
+      // === DYNAMIC EDGES — recalculated each frame ===
+      const edges: { from: number; to: number; dist: number }[] = [];
+      for (let i = 0; i < allNodes.length; i++) {
+        for (let j = i + 1; j < allNodes.length; j++) {
+          const dx = allNodes[i].x - allNodes[j].x;
+          const dy = allNodes[i].y - allNodes[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 180) {
+            edges.push({ from: i, to: j, dist: d });
+          }
+        }
+      }
+
+      // Edge colors
       const edgeColors = [
-        { h: 0, s: 80, l: 55 },     // red
-        { h: 40, s: 95, l: 55 },    // yellow/amber
-        { h: 130, s: 65, l: 48 },   // green
-        { h: 178, s: 42, l: 48 },   // teal (brand)
+        { h: 0, s: 80, l: 55 },
+        { h: 40, s: 95, l: 55 },
+        { h: 130, s: 65, l: 48 },
+        { h: 178, s: 42, l: 48 },
       ];
 
-      // Draw edges — thicker, brighter, with color variation
+      // Draw edges
       for (let ei = 0; ei < edges.length; ei++) {
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const alphaA = getNodeAlpha(a, time);
+        const alphaB = getNodeAlpha(b, time);
+        const edgeAlpha = Math.min(alphaA, alphaB);
+        
         const colorPhase = Math.sin(time * 0.25 + ei * 1.7) * 0.5 + 0.5;
         const colorIdx = Math.floor(colorPhase * edgeColors.length) % edgeColors.length;
         const c = edgeColors[colorIdx];
         const pulse = Math.sin(time * (0.4 + (ei % 5) * 0.2) + ei * 2.3);
-        const baseOp = Math.max(0, (1 - dist / 210)) * 0.45;
-        const op = baseOp * (0.4 + pulse * 0.6);
-        // Line width varies: some thick, some thin
+        const baseOp = Math.max(0, (1 - e.dist / 190)) * 0.45;
+        const op = baseOp * (0.4 + pulse * 0.6) * edgeAlpha;
         const lw = 1.0 + pulse * 1.2 + (ei % 3 === 0 ? 0.5 : 0);
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, ${op})`;
-        ctx.lineWidth = lw;
-        ctx.stroke();
+        
+        if (op > 0.02) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, ${op})`;
+          ctx.lineWidth = lw;
+          ctx.stroke();
+        }
       }
 
-      // Signal dots — 40 flying dots in red, yellow, green
+      // Signal dots
       const dotColors = [
-        { h: 0, s: 85, l: 58 },   // red
-        { h: 45, s: 95, l: 58 },  // yellow
-        { h: 130, s: 70, l: 50 }, // green
+        { h: 0, s: 85, l: 58 },
+        { h: 45, s: 95, l: 58 },
+        { h: 130, s: 70, l: 50 },
       ];
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 40 && edges.length > 0; i++) {
         const ei = Math.floor((time * (0.1 + (i % 5) * 0.05) + i * 2.9) % edges.length);
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
@@ -251,24 +322,16 @@ export default function NetworkGraphAnimation() {
       }
 
       // Draw nodes
-      for (let ni = 0; ni < allNodes.length; ni++) {
-        const n = allNodes[ni];
+      for (const n of allNodes) {
+        const alpha = getNodeAlpha(n, time);
+        if (alpha < 0.01) continue;
 
-        // ALL nodes breathe dynamically — no static faces
-        const sinVal = Math.sin(time * n.pulseSpeed + n.pulseOffset);
-        const slowBreath = Math.sin(time * 0.15 + n.fadePhase); // very slow cycle 0→1→0
-        // Combine fast pulse with slow deep breathing
-        const baseAlpha = 0.1 + (sinVal * 0.5 + 0.5) * 0.5 + (slowBreath * 0.5 + 0.5) * 0.4;
-        const alpha = Math.min(1, baseAlpha * n.brightness);
-
-        // Each node has a unique face — no swapping needed
         const currentImgIndex = n.imgIndex % faceSrcs.length;
-
-        if (currentImgIndex < faceSrcs.length && loadedRef.current >= faceSrcs.length) {
+        if (loadedRef.current >= faceSrcs.length) {
           const r = n.radius;
           const img = imagesRef.current[currentImgIndex];
 
-          // Glow — pulses with the node
+          // Glow
           const glowR = r + 8 + alpha * 10;
           const gg = ctx.createRadialGradient(n.x, n.y, r * 0.8, n.x, n.y, glowR);
           gg.addColorStop(0, `hsla(${tH}, ${tS}%, ${tL + 15}%, ${alpha * 0.5})`);
@@ -278,14 +341,14 @@ export default function NetworkGraphAnimation() {
           ctx.fillStyle = gg;
           ctx.fill();
 
-          // Border ring — brightness matches alpha
+          // Border ring
           ctx.beginPath();
           ctx.arc(n.x, n.y, r + 1.5, 0, Math.PI * 2);
           ctx.strokeStyle = `hsla(${tH}, ${tS + 10}%, ${tL + 20}%, ${alpha * 0.9})`;
           ctx.lineWidth = 1.5 + alpha * 1.5;
           ctx.stroke();
 
-          // Face with dynamic alpha
+          // Face
           ctx.save();
           ctx.globalAlpha = alpha;
           ctx.beginPath();
@@ -298,6 +361,28 @@ export default function NetworkGraphAnimation() {
       }
 
       animRef.current = requestAnimationFrame(draw);
+    }
+
+    function getNodeAlpha(n: NetNode, t: number): number {
+      const sinVal = Math.sin(t * n.pulseSpeed + n.pulseOffset);
+      const slowBreath = Math.sin(t * 0.15 + n.pulseOffset * 2);
+      let baseAlpha = 0.1 + (sinVal * 0.5 + 0.5) * 0.5 + (slowBreath * 0.5 + 0.5) * 0.4;
+      baseAlpha = Math.min(1, baseAlpha * n.brightness);
+
+      // Lifecycle modulation
+      if (n.lifecycle === "spawning") {
+        const spawnProgress = Math.min(1, n.lifecycleTimer / 1.5); // 1.5s fade in
+        baseAlpha *= spawnProgress;
+        if (spawnProgress >= 1) {
+          n.lifecycle = "alive";
+          n.lifecycleTimer = 0;
+        }
+      } else if (n.lifecycle === "dying") {
+        const dieProgress = Math.min(1, n.lifecycleTimer / 1.5); // 1.5s fade out
+        baseAlpha *= 1 - dieProgress;
+      }
+
+      return baseAlpha;
     }
 
     draw();
