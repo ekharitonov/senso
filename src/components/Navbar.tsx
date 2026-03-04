@@ -11,7 +11,8 @@ const navItems = [
     children: [
       { label: "How It Works", href: "/how-it-works", desc: "Multi-agent architecture" },
       { label: "Use Cases", href: "/use-cases", desc: "Six validated scenarios" },
-      { label: "Interactive Demo", href: "/demo", desc: "Try SENSO live" },
+      { label: "Platform Overview", href: "/demo", desc: "Dashboard previews" },
+      { label: "Live Diagnostic (AI)", href: "/live-demo", desc: "Speak directly to the engine" },
     ],
   },
   {

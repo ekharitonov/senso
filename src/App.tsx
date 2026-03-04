@@ -10,6 +10,7 @@ import HowItWorksPage from "./pages/HowItWorksPage";
 import UseCasesPage from "./pages/UseCasesPage";
 import AboutPage from "./pages/AboutPage";
 import DemoPage from "./pages/DemoPage";
+import LiveDemoPage from "./pages/LiveDemoPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/investors" element={<InvestorsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/demo" element={<DemoPage />} />
+          <Route path="/live-demo" element={<LiveDemoPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           {placeholderRoutes.map((path) => (
             <Route key={path} path={path} element={<PlaceholderPage />} />
