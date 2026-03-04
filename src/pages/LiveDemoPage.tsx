@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, Square, Loader2, Send, Activity, BrainCircuit } from "lucide-react";
+import { Mic, Square, Loader2, Send, Activity, BrainCircuit, Zap, Shield, TrendingDown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 interface ChatMessage {
@@ -11,7 +10,6 @@ interface ChatMessage {
     content: string;
 }
 
-// Mock AI generated report structure
 const mockAnalysis = {
     diagnosis: "Core systemic misalignment between Technical Leadership and Product Vision.",
     rootCause: "Ego clash and lack of shared OKRs. The CTO feels bypassed by the new VP of Product's agile rollout. It's not a framework issue, it's a defensive posture.",
@@ -20,465 +18,539 @@ const mockAnalysis = {
     spokenResponse: "I hear you. The frustration with the CTO blocking the release isn't really about the code. It is a defensive posture against the new VP of Product. They are protecting their territory because they feel bypassed. This invisible friction is costing you about $340,000 this quarter in delays. I recommend an immediate structured alignment session to establish clear swimlanes. Shall I draft the intervention protocol?"
 };
 
-// Graph visualization data placeholder
-const dummyNodes = [
-    { id: "CTO", x: 20, y: 30, label: "CTO", type: "person" },
-    { id: "VP_Prod", x: 80, y: 70, label: "VP Product", type: "person" },
-    { id: "Release", x: 50, y: 15, label: "Release 2.0", type: "project" },
-    { id: "Culture", x: 50, y: 85, label: "Eng Culture", type: "concept" },
+/* ── Graph data ── */
+const graphNodes = [
+    { id: "ceo", label: "CEO", x: 300, y: 60, r: 28, color: "hsl(178, 42%, 48%)", dept: "Executive" },
+    { id: "cto", label: "CTO", x: 140, y: 180, r: 24, color: "hsl(0, 65%, 55%)", dept: "Engineering", highlight: true },
+    { id: "vpp", label: "VP Product", x: 460, y: 180, r: 24, color: "hsl(270, 45%, 60%)", dept: "Product", highlight: true },
+    { id: "eng1", label: "Lead Eng", x: 80, y: 320, r: 18, color: "hsl(213, 50%, 57%)", dept: "Engineering" },
+    { id: "eng2", label: "Sr. Dev", x: 200, y: 340, r: 16, color: "hsl(213, 50%, 57%)", dept: "Engineering" },
+    { id: "pm1", label: "PM", x: 400, y: 320, r: 18, color: "hsl(270, 45%, 60%)", dept: "Product" },
+    { id: "des1", label: "Design Lead", x: 520, y: 310, r: 16, color: "hsl(330, 50%, 60%)", dept: "Design" },
+    { id: "rel", label: "Release 2.0", x: 300, y: 260, r: 22, color: "hsl(45, 80%, 55%)", dept: "Project" },
 ];
 
-const dummyEdges = [
-    { source: "CTO", target: "Release", label: "Blocks" },
-    { source: "VP_Prod", target: "Release", label: "Pushes" },
-    { source: "CTO", target: "VP_Prod", label: "Conflict" },
-    { source: "CTO", target: "Culture", label: "Protects" },
+const graphEdges = [
+    { a: "ceo", b: "cto", tension: "medium" as const },
+    { a: "ceo", b: "vpp", tension: null },
+    { a: "cto", b: "vpp", tension: "high" as const, label: "Conflict" },
+    { a: "cto", b: "rel", tension: "high" as const, label: "Blocks" },
+    { a: "vpp", b: "rel", tension: "medium" as const, label: "Pushes" },
+    { a: "cto", b: "eng1", tension: null },
+    { a: "cto", b: "eng2", tension: null },
+    { a: "vpp", b: "pm1", tension: null },
+    { a: "vpp", b: "des1", tension: null },
+    { a: "eng1", b: "rel", tension: null },
+    { a: "pm1", b: "rel", tension: null },
 ];
 
+const tensionColor = (t: string | null) => {
+    if (t === "high") return "hsl(0, 65%, 55%)";
+    if (t === "medium") return "hsl(45, 80%, 55%)";
+    return "hsla(178, 42%, 48%, 0.15)";
+};
+
+/* ── Interactive Graph Component ── */
+function DiagnosticGraph({ active }: { active: boolean }) {
+    const [hovNode, setHovNode] = useState<string | null>(null);
+
+    const nodeMap: Record<string, typeof graphNodes[0]> = {};
+    graphNodes.forEach(n => { nodeMap[n.id] = n; });
+
+    return (
+        <svg viewBox="0 0 600 400" className="w-full h-full select-none" style={{ minHeight: 300 }}>
+            <defs>
+                <filter id="dglow"><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                <filter id="dpulse">
+                    <feGaussianBlur stdDeviation="5" result="b"><animate attributeName="stdDeviation" values="3;7;3" dur="2.5s" repeatCount="indefinite" /></feGaussianBlur>
+                    <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+                <radialGradient id="bgGrad" cx="50%" cy="40%">
+                    <stop offset="0%" stopColor="hsla(178, 42%, 48%, 0.03)" />
+                    <stop offset="100%" stopColor="transparent" />
+                </radialGradient>
+            </defs>
+
+            <rect width="600" height="400" fill="url(#bgGrad)" rx="16" />
+
+            {/* Background rings */}
+            <circle cx="300" cy="200" r="160" fill="none" stroke="hsla(178, 42%, 48%, 0.04)" strokeWidth="1" />
+            <circle cx="300" cy="200" r="100" fill="none" stroke="hsla(178, 42%, 48%, 0.03)" strokeWidth="1" />
+
+            {/* Edges */}
+            {graphEdges.map((e, i) => {
+                const a = nodeMap[e.a], b = nodeMap[e.b];
+                if (!a || !b) return null;
+                const isConn = hovNode && (e.a === hovNode || e.b === hovNode);
+                const stroke = e.tension === "high" ? tensionColor("high") :
+                    e.tension === "medium" ? "hsla(45, 80%, 55%, 0.4)" :
+                        isConn ? "hsla(178, 42%, 60%, 0.5)" : "hsla(210, 20%, 40%, 0.1)";
+                const width = e.tension === "high" ? 2.5 : e.tension === "medium" ? 1.5 : isConn ? 1.2 : 0.6;
+
+                return (
+                    <g key={i}>
+                        <motion.line
+                            x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                            stroke={stroke} strokeWidth={width}
+                            filter={e.tension === "high" ? "url(#dpulse)" : "none"}
+                            initial={active ? { pathLength: 0, opacity: 0 } : {}}
+                            animate={{ pathLength: 1, opacity: 1 }}
+                            transition={{ duration: 1.2, delay: active ? 0.3 + i * 0.15 : 0 }}
+                        />
+                        {e.label && (
+                            <motion.text
+                                x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 8}
+                                textAnchor="middle" fill={stroke} fontSize="9" fontWeight="600"
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                                initial={active ? { opacity: 0 } : {}}
+                                animate={{ opacity: 0.8 }}
+                                transition={{ delay: active ? 1 + i * 0.15 : 0 }}
+                            >
+                                {e.label}
+                            </motion.text>
+                        )}
+                        {e.tension === "high" && (
+                            <text x={(a.x + b.x) / 2 + 25} y={(a.y + b.y) / 2 - 6} textAnchor="middle"
+                                fill="hsl(0, 65%, 55%)" fontSize="10" fontWeight="700" opacity="0.7">⚡</text>
+                        )}
+                    </g>
+                );
+            })}
+
+            {/* Nodes */}
+            {graphNodes.map((nd, i) => {
+                const isHov = hovNode === nd.id;
+                return (
+                    <motion.g key={nd.id}
+                        initial={active ? { scale: 0, opacity: 0 } : {}}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 120, delay: active ? i * 0.12 : 0 }}
+                        onMouseEnter={() => setHovNode(nd.id)}
+                        onMouseLeave={() => setHovNode(null)}
+                        className="cursor-pointer"
+                    >
+                        {/* Glow ring */}
+                        {(nd.highlight || isHov) && (
+                            <circle cx={nd.x} cy={nd.y} r={nd.r + 8} fill="none" stroke={nd.color}
+                                strokeWidth={1.5} filter={nd.highlight ? "url(#dpulse)" : "url(#dglow)"}
+                                opacity={isHov ? 1 : 0.5}>
+                                {nd.highlight && <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite" />}
+                            </circle>
+                        )}
+                        {/* Node circle */}
+                        <circle cx={nd.x} cy={nd.y} r={nd.r}
+                            fill="hsl(220, 30%, 10%)"
+                            stroke={isHov ? "hsl(178, 42%, 60%)" : nd.highlight ? nd.color : "hsl(220, 20%, 20%)"}
+                            strokeWidth={isHov ? 2.5 : nd.highlight ? 2 : 1}
+                        />
+                        {/* Initials */}
+                        <text x={nd.x} y={nd.y + 1} textAnchor="middle" dominantBaseline="middle"
+                            fill={nd.color} fontSize={nd.r > 22 ? 12 : 10} fontWeight="700"
+                            style={{ pointerEvents: "none", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                            {nd.label.split(" ").map(w => w[0]).join("")}
+                        </text>
+                        {/* Label */}
+                        <text x={nd.x} y={nd.y + nd.r + 14} textAnchor="middle"
+                            fill={isHov ? "hsl(210, 40%, 95%)" : "hsl(210, 15%, 50%)"} fontSize="9" fontWeight="500"
+                            style={{ pointerEvents: "none", fontFamily: "'Plus Jakarta Sans', sans-serif", transition: "fill 0.2s" }}>
+                            {nd.label}
+                        </text>
+                        {/* Dept on hover */}
+                        {isHov && (
+                            <text x={nd.x} y={nd.y + nd.r + 26} textAnchor="middle"
+                                fill="hsl(210, 15%, 40%)" fontSize="7"
+                                style={{ pointerEvents: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+                                {nd.dept}
+                            </text>
+                        )}
+                    </motion.g>
+                );
+            })}
+        </svg>
+    );
+}
+
+/* ── Main Page ── */
 export default function LiveDemoPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [report, setReport] = useState<any>(null);
     const [showGraph, setShowGraph] = useState(false);
-    const [graphData, setGraphData] = useState({ nodes: dummyNodes, edges: dummyEdges });
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-
-    // UX Refinements
     const [turnCount, setTurnCount] = useState(0);
     const [isSessionComplete, setIsSessionComplete] = useState(false);
-
-    // Speech Recognition Ref
     const recognitionRef = useRef<any>(null);
+    const chatEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Check for browser support of Web Speech API
         if (typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
             const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true;
-            recognition.lang = "en-US"; // Can be dynamic
-
+            recognition.lang = "en-US";
             recognition.onresult = (event: any) => {
-                let currentTranscript = "";
-                for (let i = 0; i < event.results.length; i++) {
-                    currentTranscript += event.results[i][0].transcript;
-                }
-                setTranscript(currentTranscript);
+                let t = "";
+                for (let i = 0; i < event.results.length; i++) t += event.results[i][0].transcript;
+                setTranscript(t);
             };
-
             recognition.onerror = (event: any) => {
-                console.error("Speech recognition error", event.error);
-                if (event.error !== 'no-speech') {
-                    toast.error("Microphone error. Please type your input.");
-                    setIsRecording(false);
-                }
+                if (event.error !== 'no-speech') { toast.error("Microphone error. Please type your input."); setIsRecording(false); }
             };
-
             recognitionRef.current = recognition;
         }
     }, []);
 
+    useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
     const toggleRecording = () => {
         if (isRecording) {
-            if (recognitionRef.current) recognitionRef.current.stop();
+            recognitionRef.current?.stop();
             setIsRecording(false);
-            if (transcript.trim().length > 10) {
-                handleAnalyze();
-            }
+            if (transcript.trim().length > 10) handleAnalyze();
         } else {
-            setTranscript("");
-            setReport(null);
-            setShowGraph(false);
+            setTranscript(""); setReport(null);
             setIsRecording(true);
-            if (recognitionRef.current) {
-                try {
-                    recognitionRef.current.start();
-                } catch (e) {
-                    console.error("Rec start error", e);
-                }
-            } else {
-                toast.warning("Speech Recognition not supported in this browser. Please type.");
-                setIsRecording(false);
-            }
+            if (recognitionRef.current) { try { recognitionRef.current.start(); } catch (e) { console.error(e); } }
+            else { toast.warning("Speech Recognition not supported. Please type."); setIsRecording(false); }
         }
     };
 
     const speakResponse = (text: string) => {
         if ("speechSynthesis" in window) {
-            window.speechSynthesis.cancel(); // stop any ongoing speech
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            // Try to find a good authoritative/calm voice (like a coach)
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
             const voices = window.speechSynthesis.getVoices();
-            const preferredVoice = voices.find(v => v.lang.includes("en") && (v.name.includes("Male") || v.name.includes("Daniel") || v.name.includes("Google UK English Male")));
-            if (preferredVoice) utterance.voice = preferredVoice;
-
-            utterance.pitch = 0.9;
-            utterance.rate = 0.95; // slightly slower, more thoughtful
-
-            window.speechSynthesis.speak(utterance);
+            const pref = voices.find(v => v.lang.includes("en") && (v.name.includes("Male") || v.name.includes("Daniel")));
+            if (pref) u.voice = pref;
+            u.pitch = 0.9; u.rate = 0.95;
+            window.speechSynthesis.speak(u);
         }
     };
 
     const handleAnalyze = async () => {
         if (!transcript.trim() && !isRecording) return;
-        setIsAnalyzing(true);
-        setShowGraph(true); // Start showing the graph building process
-
-        // Stop recording if active
-        if (isRecording && recognitionRef.current) {
-            recognitionRef.current.stop();
-            setIsRecording(false);
-        }
-
+        setIsAnalyzing(true); setShowGraph(true);
+        if (isRecording && recognitionRef.current) { recognitionRef.current.stop(); setIsRecording(false); }
         const userMsg: ChatMessage = { role: 'user', content: transcript };
         setMessages(prev => [...prev, userMsg]);
         const currentTranscript = transcript;
-        setTranscript(""); // Clear input early for better UX
+        setTranscript("");
 
         try {
             const res = await fetch("http://localhost:7861/api/v1/diagnostic-booth", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ transcript: currentTranscript, history: messages })
             });
             const data = await res.json();
             setReport(data);
-            if (data.nodes && data.edges) {
-                setGraphData({ nodes: data.nodes, edges: data.edges });
-            }
             if (data.spokenResponse) {
                 speakResponse(data.spokenResponse);
                 setMessages(prev => [...prev, { role: 'assistant', content: data.spokenResponse }]);
                 setTurnCount(prev => prev + 1);
             }
-            if (data.session_complete) {
-                setIsSessionComplete(true);
-            }
-        } catch (error) {
-            console.error("Diagnostic engine error:", error);
+            if (data.session_complete) setIsSessionComplete(true);
+        } catch {
             toast.error("Failed to connect to the Cognitive Engine. Ensure backend is running.");
-        } finally {
-            setIsAnalyzing(false);
-        }
+        } finally { setIsAnalyzing(false); }
     };
 
-    // Stop speech synthesis if user navigates away
-    useEffect(() => {
-        return () => {
-            if ("speechSynthesis" in window) {
-                window.speechSynthesis.cancel();
-            }
-        };
-    }, []);
+    useEffect(() => { return () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }; }, []);
 
     return (
-        <div className="min-h-screen bg-navy-deep flex flex-col relative overflow-hidden">
-            {/* Dynamic Background */}
-            <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-teal/5 blur-[120px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="min-h-screen bg-navy-deep flex flex-col relative overflow-hidden dark">
+            {/* Ambient glow */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[10%] right-[15%] w-[500px] h-[500px] bg-teal/5 blur-[150px] rounded-full" />
+                <div className="absolute bottom-[5%] left-[10%] w-[400px] h-[400px] bg-rose-500/3 blur-[120px] rounded-full" />
+                <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal/2 blur-[200px] rounded-full" />
+            </div>
 
             <Navbar />
 
-            <main className="flex-1 pt-28 pb-20 container mx-auto px-6 max-w-6xl relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-10"
-                >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 mb-6">
-                        <Activity className="w-4 h-4 text-accent" />
-                        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                            Cognitive Engine Live
-                        </span>
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-primary-foreground mb-4">
-                        The Diagnostic Booth
-                    </h1>
-                    <p className="text-primary-foreground/60 text-lg max-w-2xl mx-auto">
-                        Speak your organizational reality. Watch AMOS map the dysfunction, and listen to VED deliver the intervention strategy in real-time.
-                    </p>
-                </motion.div>
+            <main className="flex-1 pt-24 pb-16 relative z-10">
+                {/* Hero Header */}
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
+                        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-8">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                            </span>
+                            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                                Cognitive Engine Live
+                            </span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-foreground mb-5 tracking-tight">
+                            The Diagnostic Booth
+                        </h1>
+                        <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+                            Speak your organizational reality. Watch AMOS map the dysfunction, and listen to VED deliver the intervention strategy in real-time.
+                        </p>
+                    </motion.div>
 
-                <div className="grid lg:grid-cols-2 gap-8">
+                    {/* Main Layout — 3-column on desktop */}
+                    <div className="grid lg:grid-cols-[1fr_1.3fr_1fr] gap-6 items-start">
 
-                    {/* Left Column: Input & Graph */}
-                    <div className="space-y-6 flex flex-col">
+                        {/* ─── Left: Input Panel ─── */}
+                        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}
+                            className="lg:sticky lg:top-28 space-y-5">
 
-                        {/* Input Module */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="bg-card/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 glow-teal-subtle flex-1 flex flex-col"
-                        >
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-heading font-bold text-xl text-primary-foreground flex items-center gap-3">
-                                    Live Cognitive Session
-                                    {turnCount > 0 && !isSessionComplete && (
-                                        <span className="text-xs font-mono font-normal bg-white/10 px-2 py-0.5 rounded-full text-white/70">
-                                            Turn {turnCount}
+                            {/* Chat / Input Card */}
+                            <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl overflow-hidden">
+                                <div className="px-5 py-4 border-b border-border/30 flex items-center justify-between">
+                                    <h3 className="font-heading font-bold text-sm text-foreground flex items-center gap-2.5">
+                                        <div className="w-6 h-6 rounded-lg bg-accent/15 flex items-center justify-center">
+                                            <BrainCircuit className="w-3.5 h-3.5 text-accent" />
+                                        </div>
+                                        Live Session
+                                        {turnCount > 0 && !isSessionComplete && (
+                                            <span className="text-[10px] font-mono bg-muted px-2 py-0.5 rounded-full text-muted-foreground">
+                                                Turn {turnCount}
+                                            </span>
+                                        )}
+                                    </h3>
+                                    {isRecording && (
+                                        <span className="flex h-2.5 w-2.5 relative">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
+                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-destructive" />
                                         </span>
                                     )}
-                                </h3>
-                                {isRecording && (
-                                    <span className="flex h-3 w-3 relative">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Chat History */}
-                            {messages.length > 0 && (
-                                <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 max-h-[400px]">
-                                    {messages.map((msg, i) => (
-                                        <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`p-4 rounded-2xl max-w-[85%] ${msg.role === 'user' ? 'bg-teal/20 border border-teal/30 text-white rounded-br-sm' : 'bg-black/40 border border-white/5 text-primary-foreground/90 rounded-bl-sm'}`}>
-                                                {msg.role === 'assistant' && <BrainCircuit className="w-4 h-4 text-accent/70 mb-2" />}
-                                                <p className="text-sm leading-relaxed">{msg.content}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    {/* Animated typing indicator if analyzing */}
-                                    {isAnalyzing && (
-                                        <div className="flex justify-start">
-                                            <div className="bg-black/40 border border-white/5 text-primary-foreground/90 rounded-2xl p-4 rounded-bl-sm flex items-center gap-2">
-                                                <Loader2 className="w-4 h-4 animate-spin text-accent" />
-                                                <span className="text-[10px] uppercase tracking-widest text-primary-foreground/50">Ved processing...</span>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
-                            )}
 
-                            <textarea
-                                value={transcript}
-                                onChange={(e) => setTranscript(e.target.value)}
-                                placeholder={isSessionComplete ? "Session complete. Analyzing final structural map..." : messages.length > 0 ? "Respond to Ved..." : "Click the microphone and describe a leadership conflict, a blocked project, or a toxic dynamic..."}
-                                className={`bg-black/20 border border-white/5 rounded-2xl p-5 text-base md:text-lg text-primary-foreground/90 font-light mb-6 resize-none focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed ${messages.length > 0 ? "min-h-[80px]" : "flex-1 min-h-[160px]"}`}
-                                disabled={isSessionComplete || isAnalyzing}
-                            />
-
-                            <div className="flex gap-4">
-                                {!isSessionComplete && (
-                                    <Button
-                                        variant={isRecording ? "destructive" : "teal"}
-                                        className="flex-1 h-14 text-lg font-bold rounded-xl shadow-lg shadow-teal/20 transition-all hover:scale-[1.02]"
-                                        onClick={toggleRecording}
-                                        disabled={isAnalyzing}
-                                    >
-                                        {isRecording ? (
-                                            <>
-                                                <Square className="w-5 h-5 mr-2 fill-current" /> Stop Listening
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Mic className="w-5 h-5 mr-2" /> Speak Reality
-                                            </>
+                                {/* Messages */}
+                                {messages.length > 0 && (
+                                    <div className="max-h-[300px] overflow-y-auto px-4 py-3 space-y-3">
+                                        {messages.map((msg, i) => (
+                                            <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                                                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                                <div className={`px-4 py-3 rounded-2xl max-w-[90%] text-[13px] leading-relaxed ${
+                                                    msg.role === 'user'
+                                                        ? 'bg-accent/15 border border-accent/20 text-foreground rounded-br-md'
+                                                        : 'bg-muted/50 border border-border/30 text-foreground/80 rounded-bl-md'
+                                                }`}>
+                                                    {msg.role === 'assistant' && <BrainCircuit className="w-3.5 h-3.5 text-accent/60 mb-1.5" />}
+                                                    {msg.content}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                        {isAnalyzing && (
+                                            <div className="flex justify-start">
+                                                <div className="bg-muted/50 border border-border/30 rounded-2xl px-4 py-3 rounded-bl-md flex items-center gap-2">
+                                                    <Loader2 className="w-3.5 h-3.5 animate-spin text-accent" />
+                                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Processing...</span>
+                                                </div>
+                                            </div>
                                         )}
-                                    </Button>
+                                        <div ref={chatEndRef} />
+                                    </div>
                                 )}
-                                {!isSessionComplete && !isRecording && (
-                                    <Button
-                                        variant="outline"
-                                        className="h-14 px-8 border-white/20 text-primary-foreground hover:bg-white/10 hover:text-white rounded-xl backdrop-blur-md"
-                                        onClick={handleAnalyze}
-                                        disabled={!transcript.trim() || isAnalyzing}
-                                    >
-                                        {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                                    </Button>
-                                )}
+
+                                {/* Input area */}
+                                <div className="p-4">
+                                    <textarea
+                                        value={transcript}
+                                        onChange={(e) => setTranscript(e.target.value)}
+                                        placeholder={isSessionComplete ? "Session complete." : messages.length > 0 ? "Respond to Ved..." : "Describe a leadership conflict, blocked project, or toxic dynamic..."}
+                                        className="w-full bg-muted/30 border border-border/30 rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 resize-none focus:outline-none focus:ring-1 focus:ring-accent/50 leading-relaxed min-h-[100px]"
+                                        disabled={isSessionComplete || isAnalyzing}
+                                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && transcript.trim()) { e.preventDefault(); handleAnalyze(); } }}
+                                    />
+                                    <div className="flex gap-2.5 mt-3">
+                                        {!isSessionComplete && (
+                                            <Button
+                                                variant={isRecording ? "destructive" : "default"}
+                                                className={`flex-1 h-11 text-sm font-semibold rounded-xl transition-all ${
+                                                    !isRecording ? 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20' : ''
+                                                }`}
+                                                onClick={toggleRecording}
+                                                disabled={isAnalyzing}
+                                            >
+                                                {isRecording ? <><Square className="w-4 h-4 mr-2 fill-current" /> Stop</> : <><Mic className="w-4 h-4 mr-2" /> Speak</>}
+                                            </Button>
+                                        )}
+                                        {!isSessionComplete && !isRecording && (
+                                            <Button
+                                                variant="outline"
+                                                className="h-11 px-5 border-border/50 text-foreground hover:bg-muted/50 rounded-xl"
+                                                onClick={handleAnalyze}
+                                                disabled={!transcript.trim() || isAnalyzing}
+                                            >
+                                                {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
 
-                        {/* Live Graph / Mental Map Module */}
-                        <AnimatePresence>
-                            {showGraph && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 280 }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    className="bg-black/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 relative overflow-hidden"
-                                >
-                                    <div className="absolute top-4 left-6 flex items-center gap-2 z-20">
-                                        <BrainCircuit className="w-4 h-4 text-accent/70" />
-                                        <span className="text-[10px] uppercase font-bold tracking-widest text-accent/70">AMOS Network Graph</span>
+                        {/* ─── Center: Network Graph ─── */}
+                        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+                            className="bg-card/40 backdrop-blur-xl border border-border/30 rounded-2xl overflow-hidden relative min-h-[480px]">
+                            
+                            <div className="px-5 py-4 border-b border-border/20 flex items-center justify-between">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center">
+                                        <Activity className="w-3.5 h-3.5 text-accent" />
                                     </div>
-
-                                    {/* SVG Graph Visualization */}
-                                    <div className="absolute inset-0 w-full h-full pt-10 px-4 pb-4">
-                                        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                            {/* Edges */}
-                                            {graphData.edges.map((edge, i) => {
-                                                const sourceNode = graphData.nodes.find(n => n.id === edge.source);
-                                                const targetNode = graphData.nodes.find(n => n.id === edge.target);
-                                                if (!sourceNode || !targetNode) return null;
-
-                                                return (
-                                                    <motion.g key={i}>
-                                                        <motion.line
-                                                            x1={sourceNode.x} y1={sourceNode.y}
-                                                            x2={targetNode.x} y2={targetNode.y}
-                                                            stroke="rgba(45, 212, 191, 0.3)" // Teal
-                                                            strokeWidth="0.5"
-                                                            initial={{ pathLength: 0, opacity: 0 }}
-                                                            animate={{ pathLength: 1, opacity: 1 }}
-                                                            transition={{ duration: 1.5, delay: i * 0.8 }}
-                                                        />
-                                                        <motion.text
-                                                            x={(sourceNode.x + targetNode.x) / 2}
-                                                            y={(sourceNode.y + targetNode.y) / 2 - 2}
-                                                            fill="rgba(255,255,255,0.4)"
-                                                            fontSize="3.5"
-                                                            textAnchor="middle"
-                                                            initial={{ opacity: 0 }}
-                                                            animate={{ opacity: 1 }}
-                                                            transition={{ duration: 0.5, delay: (i * 0.8) + 1.2 }}
-                                                        >
-                                                            {edge.label}
-                                                        </motion.text>
-                                                    </motion.g>
-                                                )
-                                            })}
-
-                                            {/* Nodes */}
-                                            {graphData.nodes.map((node, i) => (
-                                                <motion.g
-                                                    key={node.id}
-                                                    initial={{ scale: 0, opacity: 0 }}
-                                                    animate={{ scale: 1, opacity: 1 }}
-                                                    transition={{ type: "spring", stiffness: 100, delay: i * 0.5 }}
-                                                >
-                                                    <circle cx={node.x} cy={node.y} r="8" fill="rgba(20, 184, 166, 0.3)" className="animate-ping" style={{ animationDuration: '3s' }} />
-                                                    <circle cx={node.x} cy={node.y} r="4" fill="rgba(20, 184, 166, 0.9)" />
-                                                    <circle cx={node.x} cy={node.y} r="9" fill="transparent" stroke="rgba(20, 184, 166, 0.3)" strokeWidth="0.5" />
-                                                    <text x={node.x} y={node.y + 7} fill="white" fontSize="4.5" textAnchor="middle" fontWeight="bold" className="drop-shadow-md">
-                                                        {node.label}
-                                                    </text>
-                                                </motion.g>
-                                            ))}
-                                        </svg>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-
-                    {/* Right Column: AI Output */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="bg-card/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 relative overflow-hidden flex flex-col min-h-[500px]"
-                    >
-                        <h3 className="font-heading font-bold text-2xl mb-8 text-primary-foreground border-b border-white/10 pb-4">
-                            Diagnostic Report
-                            <span className="ml-3 text-xs font-normal text-muted-foreground bg-white/5 px-2 py-1 rounded">Generated in 4.5s</span>
-                        </h3>
-
-                        {isAnalyzing ? (
-                            <div className="flex flex-col items-center justify-center flex-1 space-y-6">
-                                <div className="relative">
-                                    <div className="w-16 h-16 border-4 border-teal/20 border-t-accent rounded-full animate-spin"></div>
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="w-2 h-2 bg-accent rounded-full animate-ping"></span>
-                                    </div>
+                                    <span className="text-sm font-heading font-bold text-foreground">AMOS Network Graph</span>
                                 </div>
-                                <div className="text-center space-y-2">
-                                    <p className="text-primary-foreground font-semibold">Synthesizing Voice Vectors...</p>
-                                    <p className="text-primary-foreground/40 text-sm font-mono">Applying IFS & SCARF models...</p>
-                                    <p className="text-primary-foreground/40 text-sm font-mono">Mapping shadow hierarchy...</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-2 h-2 rounded-full bg-destructive" />
+                                        <span className="text-[9px] text-muted-foreground font-mono">Conflict</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-2 h-2 rounded-full" style={{ background: "hsl(45, 80%, 55%)" }} />
+                                        <span className="text-[9px] text-muted-foreground font-mono">Tension</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-2 h-2 rounded-full bg-accent" />
+                                        <span className="text-[9px] text-muted-foreground font-mono">Healthy</span>
+                                    </div>
                                 </div>
                             </div>
-                        ) : report ? (
-                            <motion.div
-                                className="space-y-6 flex-1 overflow-y-auto pr-2"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.8 }}
-                            >
 
-                                {/* Spoken Response Visualization */}
-                                <div className="bg-accent/10 border border-accent/20 rounded-2xl p-5 mb-8 relative shadow-[0_0_30px_rgba(20,184,166,0.1)]">
-                                    <div className="absolute -left-3 top-5 w-6 h-6 rounded-full bg-accent flex items-center justify-center">
-                                        <Mic className="w-3 h-3 text-navy-deep" />
-                                    </div>
-                                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-accent mb-2 flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-                                        VED Voice Response
-                                    </h4>
-                                    <p className="text-primary-foreground text-sm leading-relaxed italic border-l-2 border-accent/40 pl-4">
-                                        "{report.spokenResponse}"
-                                    </p>
-                                </div>
+                            <div className="p-4">
+                                <DiagnosticGraph active={showGraph} />
+                            </div>
 
-                                {isSessionComplete ? (
-                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                                        {/* Structured Output */}
-                                        <div className="mb-6">
-                                            <h4 className="text-xs uppercase font-bold tracking-widest text-primary-foreground/40 mb-2 flex items-center gap-2">
-                                                <BrainCircuit className="w-3 h-3" />
-                                                Primary Diagnosis
-                                            </h4>
-                                            <p className="text-base text-primary-foreground/90 font-medium leading-relaxed">
-                                                {report.diagnosis}
-                                            </p>
-                                        </div>
-
-                                        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl mb-6 shadow-[0_0_20px_rgba(244,63,94,0.1)]">
-                                            <h4 className="text-xs uppercase font-bold tracking-widest text-rose-400 mb-2">Hidden Root Cause</h4>
-                                            <p className="text-sm text-primary-foreground/80 leading-relaxed">
-                                                {report.rootCause}
-                                            </p>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-4 mb-8">
-                                            <div className="p-4 bg-black/30 rounded-xl border border-white/5">
-                                                <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Cost of Friction</h4>
-                                                <p className="font-mono text-xl text-amber-400">{report.impact.split(' ')[0]}</p>
-                                                <p className="text-xs text-primary-foreground/50 mt-1">Per quarter</p>
-                                            </div>
-                                            <div className="p-4 bg-black/30 rounded-xl border border-white/5">
-                                                <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Suggested Action</h4>
-                                                <p className="text-[11px] text-primary-foreground/80 leading-relaxed">{report.intervention?.split('.')[0] || report.intervention}</p>
+                            {/* Overlay when idle */}
+                            <AnimatePresence>
+                                {!showGraph && !report && (
+                                    <motion.div exit={{ opacity: 0 }}
+                                        className="absolute inset-0 bg-background/60 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-2xl">
+                                        <div className="relative mb-5">
+                                            <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+                                                <BrainCircuit className="w-7 h-7 text-accent/40" />
                                             </div>
                                         </div>
-
-                                        <Button className="w-full bg-white text-black hover:bg-white/90 font-bold h-12 rounded-xl border-none shadow-xl transition-transform hover:scale-[1.02]">
-                                            Send Me Full Action Plan
-                                        </Button>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="border border-white/10 border-dashed rounded-xl p-8 text-center mt-8 bg-black/20"
-                                    >
-                                        <Activity className="w-10 h-10 text-teal/40 mx-auto mb-4 animate-[spin_4s_linear_infinite]" />
-                                        <h4 className="text-sm font-bold text-white mb-2 tracking-wide">Synthesizing Core Blockers...</h4>
-                                        <p className="text-xs text-white/50 leading-relaxed max-w-[200px] mx-auto">
-                                            Final diagnostic report and financial impact will be unlocked upon session completion.
+                                        <p className="text-muted-foreground text-sm max-w-xs text-center leading-relaxed">
+                                            The cognitive engine is standing by.<br />
+                                            <span className="text-foreground/60 font-medium">Inject organizational data to begin mapping.</span>
                                         </p>
                                     </motion.div>
                                 )}
+                            </AnimatePresence>
+                        </motion.div>
 
-                            </motion.div>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center flex-1 text-center px-4 opacity-50">
-                                <BrainCircuit className="w-16 h-16 text-primary-foreground/10 mb-6" />
-                                <p className="text-primary-foreground/60 text-base max-w-sm">
-                                    The cognitive engine is standing by.
-                                    <br />Press the microphone and inject raw organizational data.
-                                </p>
+                        {/* ─── Right: Diagnostic Report ─── */}
+                        <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+                            className="lg:sticky lg:top-28 space-y-5">
+
+                            <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl overflow-hidden min-h-[480px] flex flex-col">
+                                <div className="px-5 py-4 border-b border-border/30 flex items-center justify-between">
+                                    <h3 className="font-heading font-bold text-sm text-foreground flex items-center gap-2.5">
+                                        <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center">
+                                            <Shield className="w-3.5 h-3.5 text-accent" />
+                                        </div>
+                                        Diagnostic Report
+                                    </h3>
+                                    {report && (
+                                        <span className="text-[10px] font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded-full">4.5s</span>
+                                    )}
+                                </div>
+
+                                <div className="p-5 flex-1 flex flex-col">
+                                    {isAnalyzing ? (
+                                        <div className="flex flex-col items-center justify-center flex-1 gap-5">
+                                            <div className="relative">
+                                                <div className="w-14 h-14 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <span className="w-2 h-2 bg-accent rounded-full animate-ping" />
+                                                </div>
+                                            </div>
+                                            <div className="text-center space-y-1.5">
+                                                <p className="text-foreground text-sm font-medium">Synthesizing Vectors...</p>
+                                                <p className="text-muted-foreground text-[11px] font-mono">Applying IFS & SCARF models</p>
+                                            </div>
+                                        </div>
+                                    ) : report ? (
+                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 flex-1 overflow-y-auto">
+                                            
+                                            {/* VED Response */}
+                                            <div className="bg-accent/5 border border-accent/15 rounded-xl p-4 relative">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center">
+                                                        <Mic className="w-2.5 h-2.5 text-accent-foreground" />
+                                                    </div>
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent flex items-center gap-1.5">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                                                        VED Voice
+                                                    </span>
+                                                </div>
+                                                <p className="text-foreground/80 text-[13px] leading-relaxed italic border-l-2 border-accent/30 pl-3">
+                                                    "{report.spokenResponse}"
+                                                </p>
+                                            </div>
+
+                                            {isSessionComplete && (
+                                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                                                    {/* Diagnosis */}
+                                                    <div>
+                                                        <div className="flex items-center gap-1.5 mb-2">
+                                                            <BrainCircuit className="w-3 h-3 text-muted-foreground" />
+                                                            <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">Primary Diagnosis</span>
+                                                        </div>
+                                                        <p className="text-sm text-foreground/90 font-medium leading-relaxed">{report.diagnosis}</p>
+                                                    </div>
+
+                                                    {/* Root Cause */}
+                                                    <div className="p-3.5 bg-destructive/5 border border-destructive/15 rounded-xl">
+                                                        <div className="flex items-center gap-1.5 mb-1.5">
+                                                            <Zap className="w-3 h-3 text-destructive" />
+                                                            <span className="text-[10px] uppercase font-bold tracking-widest text-destructive">Root Cause</span>
+                                                        </div>
+                                                        <p className="text-[13px] text-foreground/70 leading-relaxed">{report.rootCause}</p>
+                                                    </div>
+
+                                                    {/* Metrics */}
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <div className="p-3.5 bg-muted/30 rounded-xl border border-border/30">
+                                                            <TrendingDown className="w-3.5 h-3.5 text-muted-foreground mb-2" />
+                                                            <p className="font-mono text-lg font-bold" style={{ color: "hsl(45, 80%, 55%)" }}>
+                                                                {report.impact?.split(' ')[0]}
+                                                            </p>
+                                                            <p className="text-[10px] text-muted-foreground mt-0.5">Per quarter</p>
+                                                        </div>
+                                                        <div className="p-3.5 bg-muted/30 rounded-xl border border-border/30">
+                                                            <ArrowRight className="w-3.5 h-3.5 text-muted-foreground mb-2" />
+                                                            <p className="text-[11px] text-foreground/70 leading-relaxed">
+                                                                {report.intervention?.split('.')[0]}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold h-11 rounded-xl shadow-lg shadow-accent/15">
+                                                        Send Full Action Plan
+                                                    </Button>
+                                                </motion.div>
+                                            )}
+
+                                            {!isSessionComplete && (
+                                                <div className="border border-border/30 border-dashed rounded-xl p-6 text-center bg-muted/10">
+                                                    <Activity className="w-8 h-8 text-accent/30 mx-auto mb-3 animate-[spin_4s_linear_infinite]" />
+                                                    <p className="text-[11px] text-muted-foreground leading-relaxed max-w-[200px] mx-auto">
+                                                        Continue the session to unlock the full diagnostic report.
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center flex-1 text-center px-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-muted/30 border border-border/30 flex items-center justify-center mb-4">
+                                                <Shield className="w-6 h-6 text-muted-foreground/30" />
+                                            </div>
+                                            <p className="text-muted-foreground text-sm max-w-[200px] leading-relaxed">
+                                                Awaiting organizational data input to generate diagnostics.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        )}
-                    </motion.div>
-
+                        </motion.div>
+                    </div>
                 </div>
             </main>
         </div>
