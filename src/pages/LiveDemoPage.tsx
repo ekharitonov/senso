@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
 import { jsPDF } from "jspdf";
-
+import { generatePremiumReport } from "@/utils/pdfGenerator";
 interface ChatMessage {
     role: 'user' | 'assistant';
     content: string;
@@ -287,57 +287,15 @@ export default function LiveDemoPage() {
 
     const handleDownloadReport = () => {
         if (!report) return;
-        toast.info("Generating PDF report...");
-
-        const doc = new jsPDF();
-        const margin = 20;
-        let y = margin;
-
-        // Header
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(22);
-        doc.setTextColor(20, 184, 166); // Teal color
-        doc.text("SENSO: Organizational Diagnostic Report", margin, y);
-        y += 15;
-
-        // Metadata
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Generated: ${new Date().toLocaleString()}`, margin, y);
-        doc.text("Status: CONFIDENTIAL", 140, y);
-        y += 20;
-
-        // Helper for sections
-        const addSection = (title: string, content: string) => {
-            if (!content) return;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text(title, margin, y);
-            y += 8;
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
-            doc.setTextColor(60, 60, 60);
-
-            const splitContent = doc.splitTextToSize(content, 170);
-            doc.text(splitContent, margin, y);
-            y += (splitContent.length * 6) + 12;
-        };
-
-        addSection("1. Primary Diagnosis", report.diagnosis);
-        addSection("2. Hidden Root Cause", report.rootCause);
-        addSection("3. Financial Impact", report.impact);
-        addSection("4. Recommended Intervention", report.intervention);
-
-        // Footer
-        doc.setFontSize(9);
-        doc.setTextColor(150, 150, 150);
-        doc.text("SENSO Cognitive Engine | aiworkforceos.org", margin, 280);
-
-        doc.save("SENSO_Diagnostic_Report.pdf");
-        toast.success("Report downloaded successfully!");
+        toast.info("Generating Premium Executive Report...");
+        // Delegate to our new dedicated formatting utility
+        try {
+            generatePremiumReport(report);
+            toast.success("Executive Report generated successfully!");
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to generate report.");
+        }
     };
 
     return (
