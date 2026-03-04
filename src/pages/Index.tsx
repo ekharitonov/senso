@@ -18,12 +18,12 @@ const Index = () => {
       <HeroSection />
       <SocialProofBar />
       <ProblemSection />
+      <TestimonialsSection />
       <UseCasesPreview />
       <WedgeSection />
       <SensoFlowSection />
-      <ArchitectureSection />
-      <TestimonialsSection />
       <TractionSection />
+      <ArchitectureSection />
       <SecurityTrustSection />
       <Footer />
     </div>
