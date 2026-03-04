@@ -6,6 +6,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
+interface ChatMessage {
+    role: 'user' | 'assistant';
+    content: string;
+}
+
 // Mock AI generated report structure
 const mockAnalysis = {
     diagnosis: "Core systemic misalignment between Technical Leadership and Product Vision.",
@@ -15,15 +20,15 @@ const mockAnalysis = {
     spokenResponse: "I hear you. The frustration with the CTO blocking the release isn't really about the code. It is a defensive posture against the new VP of Product. They are protecting their territory because they feel bypassed. This invisible friction is costing you about $340,000 this quarter in delays. I recommend an immediate structured alignment session to establish clear swimlanes. Shall I draft the intervention protocol?"
 };
 
-// Graph visualization data
-const initialNodes = [
+// Graph visualization data placeholder
+const dummyNodes = [
     { id: "CTO", x: 20, y: 30, label: "CTO", type: "person" },
     { id: "VP_Prod", x: 80, y: 70, label: "VP Product", type: "person" },
     { id: "Release", x: 50, y: 15, label: "Release 2.0", type: "project" },
     { id: "Culture", x: 50, y: 85, label: "Eng Culture", type: "concept" },
 ];
 
-const initialEdges = [
+const dummyEdges = [
     { source: "CTO", target: "Release", label: "Blocks" },
     { source: "VP_Prod", target: "Release", label: "Pushes" },
     { source: "CTO", target: "VP_Prod", label: "Conflict" },
@@ -36,6 +41,12 @@ export default function LiveDemoPage() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [report, setReport] = useState<any>(null);
     const [showGraph, setShowGraph] = useState(false);
+    const [graphData, setGraphData] = useState({ nodes: dummyNodes, edges: dummyEdges });
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+    // UX Refinements
+    const [turnCount, setTurnCount] = useState(0);
+    const [isSessionComplete, setIsSessionComplete] = useState(false);
 
     // Speech Recognition Ref
     const recognitionRef = useRef<any>(null);
@@ -111,7 +122,7 @@ export default function LiveDemoPage() {
         }
     };
 
-    const handleAnalyze = () => {
+    const handleAnalyze = async () => {
         if (!transcript.trim() && !isRecording) return;
         setIsAnalyzing(true);
         setShowGraph(true); // Start showing the graph building process
@@ -122,12 +133,38 @@ export default function LiveDemoPage() {
             setIsRecording(false);
         }
 
-        // Simulate Ved processing and graph building
-        setTimeout(() => {
-            setReport(mockAnalysis);
+        const userMsg: ChatMessage = { role: 'user', content: transcript };
+        setMessages(prev => [...prev, userMsg]);
+        const currentTranscript = transcript;
+        setTranscript(""); // Clear input early for better UX
+
+        try {
+            const res = await fetch("http://localhost:7861/api/v1/diagnostic-booth", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ transcript: currentTranscript, history: messages })
+            });
+            const data = await res.json();
+            setReport(data);
+            if (data.nodes && data.edges) {
+                setGraphData({ nodes: data.nodes, edges: data.edges });
+            }
+            if (data.spokenResponse) {
+                speakResponse(data.spokenResponse);
+                setMessages(prev => [...prev, { role: 'assistant', content: data.spokenResponse }]);
+                setTurnCount(prev => prev + 1);
+            }
+            if (data.session_complete) {
+                setIsSessionComplete(true);
+            }
+        } catch (error) {
+            console.error("Diagnostic engine error:", error);
+            toast.error("Failed to connect to the Cognitive Engine. Ensure backend is running.");
+        } finally {
             setIsAnalyzing(false);
-            speakResponse(mockAnalysis.spokenResponse);
-        }, 4500); // 4.5 seconds of "thinking" magic
+        }
     };
 
     // Stop speech synthesis if user navigates away
@@ -180,7 +217,14 @@ export default function LiveDemoPage() {
                             className="bg-card/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 glow-teal-subtle flex-1 flex flex-col"
                         >
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-heading font-bold text-xl text-primary-foreground">Raw Audio Signal</h3>
+                                <h3 className="font-heading font-bold text-xl text-primary-foreground flex items-center gap-3">
+                                    Live Cognitive Session
+                                    {turnCount > 0 && !isSessionComplete && (
+                                        <span className="text-xs font-mono font-normal bg-white/10 px-2 py-0.5 rounded-full text-white/70">
+                                            Turn {turnCount}
+                                        </span>
+                                    )}
+                                </h3>
                                 {isRecording && (
                                     <span className="flex h-3 w-3 relative">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
@@ -189,30 +233,57 @@ export default function LiveDemoPage() {
                                 )}
                             </div>
 
+                            {/* Chat History */}
+                            {messages.length > 0 && (
+                                <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 max-h-[400px]">
+                                    {messages.map((msg, i) => (
+                                        <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`p-4 rounded-2xl max-w-[85%] ${msg.role === 'user' ? 'bg-teal/20 border border-teal/30 text-white rounded-br-sm' : 'bg-black/40 border border-white/5 text-primary-foreground/90 rounded-bl-sm'}`}>
+                                                {msg.role === 'assistant' && <BrainCircuit className="w-4 h-4 text-accent/70 mb-2" />}
+                                                <p className="text-sm leading-relaxed">{msg.content}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {/* Animated typing indicator if analyzing */}
+                                    {isAnalyzing && (
+                                        <div className="flex justify-start">
+                                            <div className="bg-black/40 border border-white/5 text-primary-foreground/90 rounded-2xl p-4 rounded-bl-sm flex items-center gap-2">
+                                                <Loader2 className="w-4 h-4 animate-spin text-accent" />
+                                                <span className="text-[10px] uppercase tracking-widest text-primary-foreground/50">Ved processing...</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             <textarea
                                 value={transcript}
                                 onChange={(e) => setTranscript(e.target.value)}
-                                placeholder="Click the microphone and describe a leadership conflict, a blocked project, or a toxic dynamic..."
-                                className="flex-1 bg-black/20 border border-white/5 rounded-2xl p-5 text-base md:text-lg text-primary-foreground/90 font-light mb-6 resize-none focus:outline-none focus:ring-1 focus:ring-accent min-h-[160px] leading-relaxed"
+                                placeholder={isSessionComplete ? "Session complete. Analyzing final structural map..." : messages.length > 0 ? "Respond to Ved..." : "Click the microphone and describe a leadership conflict, a blocked project, or a toxic dynamic..."}
+                                className={`bg-black/20 border border-white/5 rounded-2xl p-5 text-base md:text-lg text-primary-foreground/90 font-light mb-6 resize-none focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed ${messages.length > 0 ? "min-h-[80px]" : "flex-1 min-h-[160px]"}`}
+                                disabled={isSessionComplete || isAnalyzing}
                             />
 
                             <div className="flex gap-4">
-                                <Button
-                                    variant={isRecording ? "destructive" : "teal"}
-                                    className="flex-1 h-14 text-lg font-bold rounded-xl shadow-lg shadow-teal/20 transition-all hover:scale-[1.02]"
-                                    onClick={toggleRecording}
-                                >
-                                    {isRecording ? (
-                                        <>
-                                            <Square className="w-5 h-5 mr-2 fill-current" /> Stop Listening
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Mic className="w-5 h-5 mr-2" /> Speak Reality
-                                        </>
-                                    )}
-                                </Button>
-                                {!isRecording && (
+                                {!isSessionComplete && (
+                                    <Button
+                                        variant={isRecording ? "destructive" : "teal"}
+                                        className="flex-1 h-14 text-lg font-bold rounded-xl shadow-lg shadow-teal/20 transition-all hover:scale-[1.02]"
+                                        onClick={toggleRecording}
+                                        disabled={isAnalyzing}
+                                    >
+                                        {isRecording ? (
+                                            <>
+                                                <Square className="w-5 h-5 mr-2 fill-current" /> Stop Listening
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Mic className="w-5 h-5 mr-2" /> Speak Reality
+                                            </>
+                                        )}
+                                    </Button>
+                                )}
+                                {!isSessionComplete && !isRecording && (
                                     <Button
                                         variant="outline"
                                         className="h-14 px-8 border-white/20 text-primary-foreground hover:bg-white/10 hover:text-white rounded-xl backdrop-blur-md"
@@ -243,9 +314,9 @@ export default function LiveDemoPage() {
                                     <div className="absolute inset-0 w-full h-full pt-10 px-4 pb-4">
                                         <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                                             {/* Edges */}
-                                            {initialEdges.map((edge, i) => {
-                                                const sourceNode = initialNodes.find(n => n.id === edge.source);
-                                                const targetNode = initialNodes.find(n => n.id === edge.target);
+                                            {graphData.edges.map((edge, i) => {
+                                                const sourceNode = graphData.nodes.find(n => n.id === edge.source);
+                                                const targetNode = graphData.nodes.find(n => n.id === edge.target);
                                                 if (!sourceNode || !targetNode) return null;
 
                                                 return (
@@ -276,16 +347,17 @@ export default function LiveDemoPage() {
                                             })}
 
                                             {/* Nodes */}
-                                            {initialNodes.map((node, i) => (
+                                            {graphData.nodes.map((node, i) => (
                                                 <motion.g
                                                     key={node.id}
                                                     initial={{ scale: 0, opacity: 0 }}
                                                     animate={{ scale: 1, opacity: 1 }}
                                                     transition={{ type: "spring", stiffness: 100, delay: i * 0.5 }}
                                                 >
-                                                    <circle cx={node.x} cy={node.y} r="3" fill="rgba(20, 184, 166, 0.8)" />
-                                                    <circle cx={node.x} cy={node.y} r="6" fill="rgba(20, 184, 166, 0.2)" className="animate-pulse" />
-                                                    <text x={node.x} y={node.y + 7} fill="white" fontSize="4.5" textAnchor="middle" fontWeight="bold">
+                                                    <circle cx={node.x} cy={node.y} r="8" fill="rgba(20, 184, 166, 0.3)" className="animate-ping" style={{ animationDuration: '3s' }} />
+                                                    <circle cx={node.x} cy={node.y} r="4" fill="rgba(20, 184, 166, 0.9)" />
+                                                    <circle cx={node.x} cy={node.y} r="9" fill="transparent" stroke="rgba(20, 184, 166, 0.3)" strokeWidth="0.5" />
+                                                    <text x={node.x} y={node.y + 7} fill="white" fontSize="4.5" textAnchor="middle" fontWeight="bold" className="drop-shadow-md">
                                                         {node.label}
                                                     </text>
                                                 </motion.g>
@@ -332,7 +404,7 @@ export default function LiveDemoPage() {
                             >
 
                                 {/* Spoken Response Visualization */}
-                                <div className="bg-accent/10 border border-accent/20 rounded-2xl p-5 mb-8 relative">
+                                <div className="bg-accent/10 border border-accent/20 rounded-2xl p-5 mb-8 relative shadow-[0_0_30px_rgba(20,184,166,0.1)]">
                                     <div className="absolute -left-3 top-5 w-6 h-6 rounded-full bg-accent flex items-center justify-center">
                                         <Mic className="w-3 h-3 text-navy-deep" />
                                     </div>
@@ -345,39 +417,62 @@ export default function LiveDemoPage() {
                                     </p>
                                 </div>
 
-                                {/* Structured Output */}
-                                <div>
-                                    <h4 className="text-xs uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Primary Diagnosis</h4>
-                                    <p className="text-base text-primary-foreground/90 font-medium leading-relaxed">
-                                        {report.diagnosis}
-                                    </p>
-                                </div>
+                                {isSessionComplete ? (
+                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                                        {/* Structured Output */}
+                                        <div className="mb-6">
+                                            <h4 className="text-xs uppercase font-bold tracking-widest text-primary-foreground/40 mb-2 flex items-center gap-2">
+                                                <BrainCircuit className="w-3 h-3" />
+                                                Primary Diagnosis
+                                            </h4>
+                                            <p className="text-base text-primary-foreground/90 font-medium leading-relaxed">
+                                                {report.diagnosis}
+                                            </p>
+                                        </div>
 
-                                <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
-                                    <h4 className="text-xs uppercase font-bold tracking-widest text-rose-400 mb-2">Hidden Root Cause</h4>
-                                    <p className="text-sm text-primary-foreground/80 leading-relaxed">
-                                        {report.rootCause}
-                                    </p>
-                                </div>
+                                        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl mb-6 shadow-[0_0_20px_rgba(244,63,94,0.1)]">
+                                            <h4 className="text-xs uppercase font-bold tracking-widest text-rose-400 mb-2">Hidden Root Cause</h4>
+                                            <p className="text-sm text-primary-foreground/80 leading-relaxed">
+                                                {report.rootCause}
+                                            </p>
+                                        </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-4 bg-black/30 rounded-xl border border-white/5">
-                                        <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Cost of Friction</h4>
-                                        <p className="font-mono text-xl text-amber-400">{report.impact.split(' ')[0]}</p>
-                                        <p className="text-xs text-primary-foreground/50 mt-1">Per quarter</p>
-                                    </div>
-                                    <div className="p-4 bg-black/30 rounded-xl border border-white/5">
-                                        <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Suggested Action</h4>
-                                        <p className="text-xs text-primary-foreground/80 leading-relaxed">{report.intervention.split(':')[0]}</p>
-                                    </div>
-                                </div>
+                                        <div className="grid grid-cols-2 gap-4 mb-8">
+                                            <div className="p-4 bg-black/30 rounded-xl border border-white/5">
+                                                <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Cost of Friction</h4>
+                                                <p className="font-mono text-xl text-amber-400">{report.impact.split(' ')[0]}</p>
+                                                <p className="text-xs text-primary-foreground/50 mt-1">Per quarter</p>
+                                            </div>
+                                            <div className="p-4 bg-black/30 rounded-xl border border-white/5">
+                                                <h4 className="text-[10px] uppercase font-bold tracking-widest text-primary-foreground/40 mb-2">Suggested Action</h4>
+                                                <p className="text-[11px] text-primary-foreground/80 leading-relaxed">{report.intervention?.split('.')[0] || report.intervention}</p>
+                                            </div>
+                                        </div>
+
+                                        <Button className="w-full bg-white text-black hover:bg-white/90 font-bold h-12 rounded-xl border-none shadow-xl transition-transform hover:scale-[1.02]">
+                                            Send Me Full Action Plan
+                                        </Button>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="border border-white/10 border-dashed rounded-xl p-8 text-center mt-8 bg-black/20"
+                                    >
+                                        <Activity className="w-10 h-10 text-teal/40 mx-auto mb-4 animate-[spin_4s_linear_infinite]" />
+                                        <h4 className="text-sm font-bold text-white mb-2 tracking-wide">Synthesizing Core Blockers...</h4>
+                                        <p className="text-xs text-white/50 leading-relaxed max-w-[200px] mx-auto">
+                                            Final diagnostic report and financial impact will be unlocked upon session completion.
+                                        </p>
+                                    </motion.div>
+                                )}
 
                             </motion.div>
                         ) : (
                             <div className="flex flex-col items-center justify-center flex-1 text-center px-4 opacity-50">
                                 <BrainCircuit className="w-16 h-16 text-primary-foreground/10 mb-6" />
                                 <p className="text-primary-foreground/60 text-base max-w-sm">
-                                    The psychological engine is standing by.
+                                    The cognitive engine is standing by.
                                     <br />Press the microphone and inject raw organizational data.
                                 </p>
                             </div>
