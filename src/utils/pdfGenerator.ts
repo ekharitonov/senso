@@ -110,7 +110,7 @@ export const generatePremiumReport = (reportData: any) => {
     doc.setFontSize(11);
     doc.setTextColor(...textColor);
     doc.setFont("helvetica", "normal");
-    const execSummary = `This diagnostic report synthesizes data captured during the live organizational sensing session. SENSO has identified critical systemic misalignments that are actively producing organizational drag, slowing execution, and incurring hidden financial costs. The primary diagnosis isolates the structural or cultural breakdown, while the root cause exposes the behavioral drivers sustaining the dysfunction.`;
+    const execSummary = `This diagnostic report synthesizes behavioral data captured during the live organizational sensing session. Using SENSO's proprietary Triangulation Methodology, the VED engine has identified critical systemic misalignments that are producing structural friction and fueling a "Shadow Decision Architecture" within your team. The primary diagnosis isolates the core organizational breakdown, moving beyond obvious symptoms to expose the true root cause.`;
     const splitExec = doc.splitTextToSize(execSummary, pageWidth - margin * 2);
     doc.text(splitExec, margin, y);
     y += splitExec.length * 5 + 10;
@@ -183,7 +183,7 @@ export const generatePremiumReport = (reportData: any) => {
     doc.setFontSize(11);
     doc.setTextColor(...textColor);
     doc.setFont("helvetica", "normal");
-    const impactIntro = `The financial cost of organizational dysfunction is rarely tracked on a P&L, yet it is often the largest single source of margin erosion. Based on the structural tension identified, the estimated quarterly impact is outlined below. The breakdown illustrates the cascading costs of the specific dysfunction.`;
+    const impactIntro = `The financial cost of organizational dysfunction is rarely tracked on a P&L, yet it is often the largest source of invisible margin erosion. This "Cost of Inaction" model calculates the systemic value leakage driven by the identified patterns, highlighting the compounding financial risk of ignoring structural tension.`;
     const splitImpactIntro = doc.splitTextToSize(impactIntro, pageWidth - margin * 2);
     doc.text(splitImpactIntro, margin, y);
     y += splitImpactIntro.length * 5 + 15;
@@ -225,7 +225,7 @@ export const generatePremiumReport = (reportData: any) => {
     doc.setFontSize(11);
     doc.setTextColor(...textColor);
     doc.setFont("helvetica", "normal");
-    const intIntro = `Interventions are prioritized to address root causes before symptoms. The actions outlined below represent the critical path to de-escalating structural tension and re-establishing organizational alignment.`;
+    const intIntro = `Interventions are prioritized based on SENSO's Homo Amans philosophy—treating organizations as interconnected human systems rather than transactional machines. The critical path outlined below is designed to dismantle shadow architectures and rapidly re-establish systemic trust and execution alignment.`;
     const splitIntIntro = doc.splitTextToSize(intIntro, pageWidth - margin * 2);
     doc.text(splitIntIntro, margin, y);
     y += splitIntIntro.length * 5 + 15;
@@ -279,7 +279,7 @@ export const generatePremiumReport = (reportData: any) => {
     doc.setFontSize(10);
     doc.setTextColor(...secondaryColor);
     doc.setFont("helvetica", "normal");
-    const methodology = `SENSO's diagnostic methodology combines clinical organizational psychology frameworks with multi-agent AI analysis (AMOS & VED). The system is designed to identify convergent patterns across organizational silos without political bias.\n\nAll data captured during this session is processed locally or in secure, ephemeral memory enclaves. No personally identifiable information (PII) is retained in the training basis of the core LLM without explicit programmatic consent. Every finding in this report is synthesized autonomously through SENSO's cross-referential AI engine.`;
+    const methodology = `SENSO's diagnostic methodology combines deep organizational psychology with continuous multi-agent AI analysis (AMOS for network sociology & VED for cognitive psychology). By leveraging Organizational Triangulation, the system maps structural patterns across silos, stripping away political bias and "Artificial Harmony".\n\nAll data is processed within secure memory enclaves following enterprise-grade privacy protocols. This report was generated autonomously by the SENSO AI Cognitive Engine.`;
     const splitMethodology = doc.splitTextToSize(methodology, pageWidth - margin * 2);
     doc.text(splitMethodology, margin, y);
 
