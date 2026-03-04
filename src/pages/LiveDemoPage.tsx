@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
 import { jsPDF } from "jspdf";
 import { generatePremiumReport } from "@/utils/pdfGenerator";
+import ReportContactGate from "@/components/ReportContactGate";
 interface ChatMessage {
     role: 'user' | 'assistant';
     content: string;
@@ -200,6 +201,7 @@ export default function LiveDemoPage() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [turnCount, setTurnCount] = useState(0);
     const [isSessionComplete, setIsSessionComplete] = useState(false);
+    const [showContactGate, setShowContactGate] = useState(false);
     const recognitionRef = useRef<any>(null);
     const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -561,10 +563,10 @@ export default function LiveDemoPage() {
                                                     </div>
 
                                                     <Button
-                                                        onClick={handleDownloadReport}
+                                                        onClick={() => setShowContactGate(true)}
                                                         className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold h-11 rounded-xl shadow-lg shadow-accent/15"
                                                     >
-                                                        Download Full Action Plan (PDF)
+                                                        Get Full Action Plan (PDF)
                                                     </Button>
                                                 </motion.div>
                                             )}
@@ -594,6 +596,15 @@ export default function LiveDemoPage() {
                     </div>
                 </div >
             </main >
+
+            <ReportContactGate
+                open={showContactGate}
+                onClose={() => setShowContactGate(false)}
+                onSubmit={() => {
+                    setShowContactGate(false);
+                    handleDownloadReport();
+                }}
+            />
         </div >
     );
 }
