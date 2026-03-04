@@ -72,7 +72,7 @@ function randomAngle() { return Math.random() * Math.PI * 2; }
 
 function createNode(cx: number, cy: number, imgIndex: number, forceAlive = false): NetNode {
   const angle = randomAngle();
-  const dist = 60 + Math.random() * 280;
+  const dist = 90 + Math.random() * 300;
   const baseRadius = 8 + Math.random() * 22;
   return {
     x: cx + Math.cos(angle) * dist,
@@ -157,7 +157,7 @@ export default function NetworkGraphAnimation() {
       allNodes[i].radius = allNodes[i].baseRadius;
       allNodes[i].brightness = 0.85 + Math.random() * 0.15;
       const angle = (i / 4) * Math.PI * 2 + Math.random() * 0.5;
-      const dist = 110 + Math.random() * 50;
+      const dist = 140 + Math.random() * 60;
       allNodes[i].x = cx + Math.cos(angle) * dist;
       allNodes[i].y = cy + Math.sin(angle) * dist;
     }
@@ -166,7 +166,7 @@ export default function NetworkGraphAnimation() {
       allNodes[i].baseRadius = 17 + Math.random() * 7;
       allNodes[i].radius = allNodes[i].baseRadius;
       const angle = ((i - 4) / 8) * Math.PI * 2 + Math.random() * 0.4;
-      const dist = 180 + Math.random() * 70;
+      const dist = 220 + Math.random() * 80;
       allNodes[i].x = cx + Math.cos(angle) * dist;
       allNodes[i].y = cy + Math.sin(angle) * dist;
     }
