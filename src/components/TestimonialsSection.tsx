@@ -50,6 +50,14 @@ const testimonials = [
     tag: "Conflict → Growth",
     emoji: "👤",
   },
+  {
+    quote:
+      "I've never seen anything like this. You've created a 'monster' that knows things about people they're afraid to admit even to themselves — but that's exactly where growth and forward movement begin.",
+    role: "Head of Federal Training Programs",
+    company: "Major Banking Institution",
+    tag: "Radical Truth",
+    emoji: "🎓",
+  },
 ];
 
 export default function TestimonialsSection() {
