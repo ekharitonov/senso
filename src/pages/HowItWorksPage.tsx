@@ -466,7 +466,117 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      {/* ─── Key Metaphor Banner ─── */}
+      {/* ─── What Makes SENSO Different ─── */}
+      <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-accent/3 blur-[150px] rounded-full" />
+        <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] bg-teal/3 blur-[120px] rounded-full" />
+
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <span className="inline-block text-[10px] font-bold uppercase tracking-[0.25em] text-accent/70 mb-4">
+              Architecture Philosophy
+            </span>
+            <h2 className="text-headline md:text-display-sm text-primary-foreground tracking-tight">
+              What makes SENSO fundamentally different
+              <br />
+              <span className="text-primary-foreground/40">from ChatGPT / Copilot</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-xl mx-auto text-sm leading-relaxed">
+              Not another chatbot wrapper. A structurally independent cognitive system designed for organizational truth.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {[
+              {
+                num: "01",
+                title: "Proactive sensing, not reactive chatting",
+                accent: "hsl(178, 42%, 48%)",
+                icon: "📡",
+                body: "ChatGPT waits for a prompt. SENSO agents initiate. Ved reaches out to stakeholders on a structured cadence, and AMOS triggers follow-up conversations when cross-referential analysis detects emerging patterns — a shift in sentiment, a conflict brewing between two teams, a decision that's been stuck for weeks. This is an organizational radar, not a search engine.",
+                tag: "Organizational radar"
+              },
+              {
+                num: "02",
+                title: "Organizational Knowledge Graph, not isolated chats",
+                accent: "hsl(270, 55%, 60%)",
+                icon: "🕸️",
+                body: "Every ChatGPT conversation is an island — no memory, no connections, no system-level view. SENSO aggregates hundreds of confidential 1-on-1 conversations into a persistent Organizational Knowledge Graph. AMOS maps typed relationships (REPORTS_TO, COLLABORATES_WITH, CONFLICTS_WITH, BLOCKS) with evidence chains. This is how SENSO finds patterns no single person can see.",
+                tag: "Persistent memory"
+              },
+              {
+                num: "03",
+                title: "Psychological depth, not polite assistance",
+                accent: "hsl(340, 65%, 55%)",
+                icon: "🧠",
+                body: "ChatGPT is programmed to be helpful and agreeable. Ved is designed as a structurally neutral provocative diagnostician — informed by cognitive-behavioral, Gestalt, and Internal Family Systems frameworks. Ved doesn't give advice. Ved asks the questions that expose ego-driven decisions, unspoken conflicts, and the gap between what leaders say and what they actually do.",
+                tag: "People tell Ved what they'd never tell HR"
+              },
+              {
+                num: "04",
+                title: "Structural neutrality as architecture",
+                accent: "hsl(45, 80%, 55%)",
+                icon: "⚖️",
+                body: "ChatGPT serves the user who's typing. A human consultant has a career, a firm, political instincts. Ved has none. No agenda, no employer to impress, no next engagement to protect. This structural independence — built into the agent architecture, not bolted on — is what creates the trust environment where organizational truth surfaces.",
+                tag: "Independence by design"
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="group relative bg-card/8 backdrop-blur-xl border border-primary-foreground/10 rounded-2xl p-6 hover:border-accent/30 transition-all duration-500 overflow-hidden"
+              >
+                <div
+                  className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                  style={{ background: item.accent }}
+                />
+
+                <div className="relative z-10">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-2xl">{item.icon}</span>
+                      <span className="text-[10px] font-mono font-bold" style={{ color: item.accent }}>
+                        {item.num}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-heading font-bold text-primary-foreground leading-snug pt-0.5">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-[13px] text-primary-foreground/50 leading-relaxed mb-4 pl-[52px]">
+                    {item.body}
+                  </p>
+
+                  <div className="pl-[52px]">
+                    <span
+                      className="inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border"
+                      style={{
+                        color: item.accent,
+                        borderColor: `color-mix(in srgb, ${item.accent} 25%, transparent)`,
+                        background: `color-mix(in srgb, ${item.accent} 8%, transparent)`,
+                      }}
+                    >
+                      {item.tag}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       <section className="py-12 md:py-16 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute top-0 right-0 w-[500px] h-[300px] rounded-full bg-teal/5 blur-[120px]" />
