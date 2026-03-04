@@ -6,6 +6,8 @@ import UseCasesPreview from "@/components/UseCasesPreview";
 import WedgeSection from "@/components/WedgeSection";
 import SensoFlowSection from "@/components/SensoFlowSection";
 import ArchitectureSection from "@/components/ArchitectureSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import TractionSection from "@/components/TractionSection";
 import SecurityTrustSection from "@/components/SecurityTrustSection";
 import Footer from "@/components/Footer";
 
@@ -20,6 +22,8 @@ const Index = () => {
       <WedgeSection />
       <SensoFlowSection />
       <ArchitectureSection />
+      <TestimonialsSection />
+      <TractionSection />
       <SecurityTrustSection />
       <Footer />
     </div>
