@@ -52,11 +52,27 @@ const tensionColor = (t: string | null) => {
 };
 
 /* ── Interactive Graph Component ── */
-function DiagnosticGraph({ active }: { active: boolean }) {
+function DiagnosticGraph({ active, nodes = [], edges = [] }: { active: boolean, nodes?: any[], edges?: any[] }) {
     const [hovNode, setHovNode] = useState<string | null>(null);
 
-    const nodeMap: Record<string, typeof graphNodes[0]> = {};
-    graphNodes.forEach(n => { nodeMap[n.id] = n; });
+    // Filter/clean up nodes and ensure defaults
+    const validNodes = nodes.map((n, i) => {
+        // Fallback random positions/colors if not provided
+        const colorHue = (i * 137.5) % 360;
+        return {
+            id: n.id || String(i),
+            label: n.label || "Node",
+            x: typeof n.x === 'number' ? (n.x <= 100 ? n.x * 6 : n.x) : 300 + Math.random() * 100 - 50,
+            y: typeof n.y === 'number' ? (n.y <= 100 ? n.y * 4 : n.y) : 200 + Math.random() * 100 - 50,
+            r: n.r || 22,
+            color: n.color || `hsl(${colorHue}, 60%, 55%)`,
+            dept: n.dept || "",
+            highlight: n.highlight || false
+        };
+    });
+
+    const nodeMap: Record<string, typeof validNodes[0]> = {};
+    validNodes.forEach(n => { nodeMap[n.id] = n; });
 
     return (
         <svg viewBox="0 0 600 400" className="w-full h-full select-none" style={{ minHeight: 300 }}>
@@ -79,8 +95,10 @@ function DiagnosticGraph({ active }: { active: boolean }) {
             <circle cx="300" cy="200" r="100" fill="none" stroke="hsla(178, 42%, 48%, 0.03)" strokeWidth="1" />
 
             {/* Edges */}
-            {graphEdges.map((e, i) => {
-                const a = nodeMap[e.a], b = nodeMap[e.b];
+            {edges.map((e, i) => {
+                const sourceId = e.source || e.a;
+                const targetId = e.target || e.b;
+                const a = nodeMap[sourceId], b = nodeMap[targetId];
                 if (!a || !b) return null;
                 const isConn = hovNode && (e.a === hovNode || e.b === hovNode);
                 const stroke = e.tension === "high" ? tensionColor("high") :
@@ -119,7 +137,7 @@ function DiagnosticGraph({ active }: { active: boolean }) {
             })}
 
             {/* Nodes */}
-            {graphNodes.map((nd, i) => {
+            {validNodes.map((nd, i) => {
                 const isHov = hovNode === nd.id;
                 return (
                     <motion.g key={nd.id}
@@ -177,6 +195,7 @@ export default function LiveDemoPage() {
     const [transcript, setTranscript] = useState("");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [report, setReport] = useState<any>(null);
+    const [graphData, setGraphData] = useState<{ nodes: any[], edges: any[] }>({ nodes: graphNodes, edges: graphEdges });
     const [showGraph, setShowGraph] = useState(false);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [turnCount, setTurnCount] = useState(0);
@@ -212,6 +231,7 @@ export default function LiveDemoPage() {
             if (transcript.trim().length > 10) handleAnalyze();
         } else {
             setTranscript(""); setReport(null);
+            setGraphData({ nodes: graphNodes, edges: graphEdges });
             setIsRecording(true);
             if (recognitionRef.current) { try { recognitionRef.current.start(); } catch (e) { console.error(e); } }
             else { toast.warning("Speech Recognition not supported. Please type."); setIsRecording(false); }
@@ -246,6 +266,12 @@ export default function LiveDemoPage() {
             });
             const data = await res.json();
             setReport(data);
+            if (data.nodes || data.edges) {
+                setGraphData({
+                    nodes: data.nodes && data.nodes.length > 0 ? data.nodes : graphData.nodes,
+                    edges: data.edges && data.edges.length > 0 ? data.edges : graphData.edges
+                });
+            }
             if (data.spokenResponse) {
                 speakResponse(data.spokenResponse);
                 setMessages(prev => [...prev, { role: 'assistant', content: data.spokenResponse }]);
@@ -467,7 +493,7 @@ export default function LiveDemoPage() {
                             </div>
 
                             <div className="p-4">
-                                <DiagnosticGraph active={showGraph} />
+                                <DiagnosticGraph active={showGraph} nodes={graphData.nodes} edges={graphData.edges} />
                             </div>
 
                             {/* Overlay when idle */}
