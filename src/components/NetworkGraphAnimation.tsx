@@ -254,21 +254,24 @@ export default function NetworkGraphAnimation() {
           const dx = allNodes[i].x - allNodes[j].x;
           const dy = allNodes[i].y - allNodes[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 180) {
+          if (d < 200) {
             edges.push({ from: i, to: j, dist: d });
           }
         }
       }
 
-      // Edge colors
+      // Edge colors — vivid red, yellow, green + teal
       const edgeColors = [
-        { h: 0, s: 80, l: 55 },
-        { h: 40, s: 95, l: 55 },
-        { h: 130, s: 65, l: 48 },
-        { h: 178, s: 42, l: 48 },
+        { h: 0, s: 90, l: 55 },     // bright red
+        { h: 0, s: 85, l: 50 },     // deeper red
+        { h: 40, s: 100, l: 55 },   // yellow/amber
+        { h: 50, s: 95, l: 50 },    // gold
+        { h: 130, s: 75, l: 48 },   // green
+        { h: 120, s: 70, l: 42 },   // darker green
+        { h: 178, s: 50, l: 52 },   // teal bright
       ];
 
-      // Draw edges
+      // Draw edges — much more visible, varied thickness
       for (let ei = 0; ei < edges.length; ei++) {
         const e = edges[ei];
         const a = allNodes[e.from], b = allNodes[e.to];
@@ -276,15 +279,24 @@ export default function NetworkGraphAnimation() {
         const alphaB = getNodeAlpha(b, time);
         const edgeAlpha = Math.min(alphaA, alphaB);
         
-        const colorPhase = Math.sin(time * 0.25 + ei * 1.7) * 0.5 + 0.5;
-        const colorIdx = Math.floor(colorPhase * edgeColors.length) % edgeColors.length;
+        // Each edge gets a stable color based on its index
+        const colorIdx = ei % edgeColors.length;
         const c = edgeColors[colorIdx];
-        const pulse = Math.sin(time * (0.4 + (ei % 5) * 0.2) + ei * 2.3);
-        const baseOp = Math.max(0, (1 - e.dist / 190)) * 0.45;
-        const op = baseOp * (0.4 + pulse * 0.6) * edgeAlpha;
-        const lw = 1.0 + pulse * 1.2 + (ei % 3 === 0 ? 0.5 : 0);
         
-        if (op > 0.02) {
+        const pulse = Math.sin(time * (0.3 + (ei % 7) * 0.15) + ei * 1.8);
+        const baseOp = Math.max(0, (1 - e.dist / 210)) * 0.7; // much brighter base
+        const op = baseOp * (0.5 + pulse * 0.5) * edgeAlpha;
+        
+        // Varied thickness: some thin (0.8), some medium (2), some thick (3.5)
+        const thicknessClass = ei % 5;
+        let lw: number;
+        if (thicknessClass === 0) lw = 2.5 + pulse * 1.5;       // thick
+        else if (thicknessClass === 1) lw = 1.5 + pulse * 1.0;   // medium
+        else if (thicknessClass === 2) lw = 0.8 + pulse * 0.6;   // thin
+        else if (thicknessClass === 3) lw = 2.0 + pulse * 1.2;   // medium-thick
+        else lw = 1.0 + pulse * 0.8;                              // thin-medium
+        
+        if (op > 0.015) {
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
