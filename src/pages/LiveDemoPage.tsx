@@ -4,6 +4,7 @@ import { Mic, Square, Loader2, Send, Activity, BrainCircuit, Zap, Shield, Trendi
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
+import { jsPDF } from "jspdf";
 
 interface ChatMessage {
     role: 'user' | 'assistant';
@@ -258,6 +259,61 @@ export default function LiveDemoPage() {
 
     useEffect(() => { return () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }; }, []);
 
+    const handleDownloadReport = () => {
+        if (!report) return;
+        toast.info("Generating PDF report...");
+
+        const doc = new jsPDF();
+        const margin = 20;
+        let y = margin;
+
+        // Header
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(20, 184, 166); // Teal color
+        doc.text("SENSO: Organizational Diagnostic Report", margin, y);
+        y += 15;
+
+        // Metadata
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Generated: ${new Date().toLocaleString()}`, margin, y);
+        doc.text("Status: CONFIDENTIAL", 140, y);
+        y += 20;
+
+        // Helper for sections
+        const addSection = (title: string, content: string) => {
+            if (!content) return;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text(title, margin, y);
+            y += 8;
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(60, 60, 60);
+
+            const splitContent = doc.splitTextToSize(content, 170);
+            doc.text(splitContent, margin, y);
+            y += (splitContent.length * 6) + 12;
+        };
+
+        addSection("1. Primary Diagnosis", report.diagnosis);
+        addSection("2. Hidden Root Cause", report.rootCause);
+        addSection("3. Financial Impact", report.impact);
+        addSection("4. Recommended Intervention", report.intervention);
+
+        // Footer
+        doc.setFontSize(9);
+        doc.setTextColor(150, 150, 150);
+        doc.text("SENSO Cognitive Engine | aiworkforceos.org", margin, 280);
+
+        doc.save("SENSO_Diagnostic_Report.pdf");
+        toast.success("Report downloaded successfully!");
+    };
+
     return (
         <div className="min-h-screen bg-navy-deep flex flex-col relative overflow-hidden dark">
             {/* Ambient glow */}
@@ -325,11 +381,10 @@ export default function LiveDemoPage() {
                                         {messages.map((msg, i) => (
                                             <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                                                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`px-4 py-3 rounded-2xl max-w-[90%] text-[13px] leading-relaxed ${
-                                                    msg.role === 'user'
-                                                        ? 'bg-accent/15 border border-accent/20 text-foreground rounded-br-md'
-                                                        : 'bg-muted/50 border border-border/30 text-foreground/80 rounded-bl-md'
-                                                }`}>
+                                                <div className={`px-4 py-3 rounded-2xl max-w-[90%] text-[13px] leading-relaxed ${msg.role === 'user'
+                                                    ? 'bg-accent/15 border border-accent/20 text-foreground rounded-br-md'
+                                                    : 'bg-muted/50 border border-border/30 text-foreground/80 rounded-bl-md'
+                                                    }`}>
                                                     {msg.role === 'assistant' && <BrainCircuit className="w-3.5 h-3.5 text-accent/60 mb-1.5" />}
                                                     {msg.content}
                                                 </div>
@@ -361,9 +416,8 @@ export default function LiveDemoPage() {
                                         {!isSessionComplete && (
                                             <Button
                                                 variant={isRecording ? "destructive" : "default"}
-                                                className={`flex-1 h-11 text-sm font-semibold rounded-xl transition-all ${
-                                                    !isRecording ? 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20' : ''
-                                                }`}
+                                                className={`flex-1 h-11 text-sm font-semibold rounded-xl transition-all ${!isRecording ? 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20' : ''
+                                                    }`}
                                                 onClick={toggleRecording}
                                                 disabled={isAnalyzing}
                                             >
@@ -388,7 +442,7 @@ export default function LiveDemoPage() {
                         {/* ─── Center: Network Graph ─── */}
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
                             className="bg-card/40 backdrop-blur-xl border border-border/30 rounded-2xl overflow-hidden relative min-h-[480px]">
-                            
+
                             <div className="px-5 py-4 border-b border-border/20 flex items-center justify-between">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center">
@@ -468,7 +522,7 @@ export default function LiveDemoPage() {
                                         </div>
                                     ) : report ? (
                                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 flex-1 overflow-y-auto">
-                                            
+
                                             {/* VED Response */}
                                             <div className="bg-accent/5 border border-accent/15 rounded-xl p-4 relative">
                                                 <div className="flex items-center gap-2 mb-2">
@@ -522,8 +576,11 @@ export default function LiveDemoPage() {
                                                         </div>
                                                     </div>
 
-                                                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold h-11 rounded-xl shadow-lg shadow-accent/15">
-                                                        Send Full Action Plan
+                                                    <Button
+                                                        onClick={handleDownloadReport}
+                                                        className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold h-11 rounded-xl shadow-lg shadow-accent/15"
+                                                    >
+                                                        Download Full Action Plan (PDF)
                                                     </Button>
                                                 </motion.div>
                                             )}
@@ -551,8 +608,8 @@ export default function LiveDemoPage() {
                             </div>
                         </motion.div>
                     </div>
-                </div>
-            </main>
-        </div>
+                </div >
+            </main >
+        </div >
     );
 }
